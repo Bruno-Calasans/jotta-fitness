@@ -1,19 +1,21 @@
-import { ChevronRight, House, LayoutDashboard, Timer } from "lucide-react";
-
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarHeader,
-} from "@/components/ui/sidebar";
+  LogIn,
+  House,
+  LayoutDashboard,
+  Timer,
+  CircleDollarSign,
+  HandHelping,
+  Dumbbell,
+} from "lucide-react";
 import Link from "next/link";
-import { Button } from "../ui/button";
 import Image from "next/image";
+import { Button } from "../ui/button";
+import {
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 // Menu items.
 const items = [
@@ -40,48 +42,92 @@ type AppSidebarProps = {
 
 export default function AppSidebar({ onClose }: AppSidebarProps) {
   return (
-    <Sidebar>
-      <SidebarHeader className="flex flex-row items-center">
-        <div className="h-10 w-16 rounded-md relative">
-          <Image
-            fill
-            priority
-            src="/imgs/logo.png"
-            alt="jotta fitness logo"
-            className="rounded-lg"
-          />
+    <SheetContent className="flex flex-col gap-2">
+      <SheetHeader>
+        <SheetTitle asChild className="flex items-center flex-1 gap-1 ">
+          <div>
+            <div className="h-10 w-20 rounded-md relative">
+              <Image
+                fill
+                priority
+                src="/imgs/logo.png"
+                alt="jotta fitness logo"
+                className="aspect-square rounded-sm"
+              />
+            </div>
+            <p>Jotta Fitness</p>
+          </div>
+        </SheetTitle>
+
+        <SheetDescription asChild className="flex">
+          <div className="flex flex-1 gap-2 justify-end items-center font-normal text-sm">
+            <p>Olá, visitante.</p>
+            <Button
+              size="sm"
+              className="bg-orange-500 font-bold hover:bg-orange-600"
+            >
+              <LogIn />
+              Entrar
+            </Button>
+          </div>
+        </SheetDescription>
+      </SheetHeader>
+      {/* Principal */}
+      <div className="flex flex-col gap-2">
+        <p className="text-sm font-bold text-stone-800 border-b-2 border-orange-500">
+          Principal
+        </p>
+        <div className="flex flex-col text-orange-black gap-1 text-black">
+          <Link href="/">
+            <Button className="flex gap-1 items-center transition-all w-full justify-start px-2 bg-white text-ora shadow-none hover:bg-stone-100 hover:text-orange-500">
+              <House />
+              Home
+            </Button>
+          </Link>
+
+          <Link href="#benefits">
+            <Button className="flex gap-1 items-center transition-all w-full justify-start px-2 bg-white text-ora shadow-none hover:bg-stone-100 hover:text-orange-500">
+              <Dumbbell />
+              Benefícios
+            </Button>
+          </Link>
+
+          <Link href="#services">
+            <Button className="flex gap-1 items-center transition-all w-full justify-start px-2 bg-white text-ora shadow-none hover:bg-stone-100 hover:text-orange-500">
+              <HandHelping />
+              Serviços
+            </Button>
+          </Link>
+
+          <Link href="#our-plans">
+            <Button className="flex gap-1 items-center transition-all w-full justify-start px-2 bg-white text-ora shadow-none hover:bg-stone-100 hover:text-orange-500">
+              <CircleDollarSign />
+              Nossos planos
+            </Button>
+          </Link>
         </div>
-        <p className="font-bold">Jotta Fitness</p>
-        <Button
-          onClick={onClose}
-          size="icon"
-          className="group/btn absolute top-1 right-1 bg-orange-500 hover:bg-orange-600 border-none"
-        >
-          <ChevronRight
-            size={25}
-            className="group-hover/btn:translate-x-1 transition-all text-white"
-          />
-        </Button>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Principal</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
+      </div>
+      '{/* Outros */}
+      <div className="flex flex-col gap-2">
+        <p className="text-sm font-bold text-stone-800 border-b-2 border-orange-500">
+          Gerenciamento
+        </p>
+        <div className="flex flex-col text-orange-black gap-1 text-black">
+          <Link href="/dashboard">
+            <Button className="flex gap-1 items-center transition-all w-full justify-start px-2 bg-white text-ora shadow-none hover:bg-stone-100 hover:text-orange-500">
+              <LayoutDashboard />
+              Dashboard
+            </Button>
+          </Link>
+
+          <Link href="/counter">
+            <Button className="flex gap-1 items-center transition-all w-full justify-start px-2 bg-white text-ora shadow-none hover:bg-stone-100 hover:text-orange-500">
+              <Timer />
+              Contador
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </SheetContent>
   );
 }

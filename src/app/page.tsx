@@ -1,9 +1,10 @@
 import ContentContainer from "@/components/general/ContentContainer";
+import Image from "next/image";
 
 export default function Home() {
   return (
     <ContentContainer>
-      <div>Home Page</div>
+      <div>Tese</div>
     </ContentContainer>
   );
 }
