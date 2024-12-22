@@ -1,7 +1,9 @@
 import { Dumbbell, Salad, PiggyBank, BicepsFlexed } from "lucide-react";
-import { Plan } from "./PlanItem";
+import { PlanItemData } from "./PlanItem";
+import { ServiceItemData } from "./ServiceItem";
+import { BenefitItemData } from "./BenefitItem";
 
-export const benefitsItems = [
+export const benefitsItems: BenefitItemData[] = [
   {
     title: "Equipamentos Modernos",
     desc: "Use equipamentos modernos e seguros.",
@@ -24,7 +26,7 @@ export const benefitsItems = [
   },
 ];
 
-export const serviceItems = [
+export const serviceItems: ServiceItemData[] = [
   {
     title: "Musculação",
     desc: "Cresça seus músculos e fique forte.",
@@ -47,7 +49,7 @@ export const serviceItems = [
   },
 ];
 
-export const planItems: Plan[] = [
+export const planItems: PlanItemData[] = [
   {
     title: "Plano 1h",
     desc: "Treine 1h por dia",

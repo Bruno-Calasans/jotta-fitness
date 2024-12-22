@@ -31,7 +31,7 @@ export default function HomeSection({
         <p className="text-lg text-white">{subtitle}</p>
       </header>
       {/* Content */}
-      <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-6 w-full p-10">
+      <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-8 w-full p-8">
         {children}
       </div>
     </section>

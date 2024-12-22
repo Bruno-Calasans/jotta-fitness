@@ -22,14 +22,14 @@ type PlanItemProps = {
 
 export default function PlanItem({ item }: PlanItemProps) {
   return (
-    <div className="flex flex-col justify-between gap-2 h-fit overflow-hidden shadow-sm shadow-black mx-auto hover:opacity-90 w-full bg-stone-800 rounded-sm">
+    <div className="flex flex-col justify-between gap-2 h-full overflow-hidden shadow-sm shadow-black mx-auto hover:opacity-90 w-full bg-stone-800 rounded-sm">
       <div className="flex flex-col items-center flex-1 gap-4">
         {/* Title */}
         <p className="text-xl font-bold text-white text-center  w-full bg-orange-600 p-2 border-b-2 border-orange-300">
           {item.title}
         </p>
         {/* Desc */}
-        <p className="text-lg text-center font-bold text-white">{item.desc}</p>
+        <p className="text-md text-center font-bold text-white">{item.desc}</p>
 
         {/* Features */}
         {item.features.map((feature) => (
@@ -55,7 +55,11 @@ export default function PlanItem({ item }: PlanItemProps) {
           </p>
         </div>
 
-        <Link href={item.url} target="_blank" className="w-full m-0 p-2">
+        <Link
+          href={item.url}
+          target="_blank"
+          className="flex items-end w-full h-full m-0 p-2"
+        >
           <Button className="bg-emerald-500 hover:bg-emerald-600 font-bold rounded-md w-full transition-all">
             Matricular-se
           </Button>

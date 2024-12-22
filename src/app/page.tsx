@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <ContentContainer classname="lg:max-w-[1200px] md:max-w-[1000px] sm:max-w-[500px] my-14">
       <HomeSection
-        id="#benefits"
+        id="benefits"
         title="Por que nos escolher?"
         subtitle="Seja melhor do que ontem."
         className="bg-stone-800 gap-0"
@@ -24,7 +24,7 @@ export default function Home() {
       </HomeSection>
 
       <HomeSection
-        id="#services"
+        id="services"
         title="Nossas Aulas"
         subtitle="O que temos a oferecer?"
       >
@@ -34,7 +34,7 @@ export default function Home() {
       </HomeSection>
 
       <HomeSection
-        id="#our-plans"
+        id="our-plans"
         title="Nossos Planos"
         subtitle="Temos preços acessíveis."
         className="lg:grid-cols-3 xl:grid-cols-4"

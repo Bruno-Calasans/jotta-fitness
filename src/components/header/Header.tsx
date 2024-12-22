@@ -74,7 +74,7 @@ export default function Header({}: HeaderProps) {
         <Sheet>
           <SheetTrigger asChild>
             <Button
-              onClick={toggleSideBarMenu}
+              // onClick={toggleSideBarMenu}
               size="sm"
               className="flex gap-1 items-center bg-orange-400 font-bold hover:bg-orange-500 transition-all cursor-pointer md:flex sm:block"
             >
@@ -94,7 +94,7 @@ export default function Header({}: HeaderProps) {
             Conquiste o corpo que você sempre sonhou!
           </p>
         </div>
-        <Link href="/" className="w-fit">
+        <Link href="#our-plans" className="w-fit">
           <Button
             size="lg"
             className="bg-orange-500 hover:bg-orange-600 font-bold rounded-none w-fit"
