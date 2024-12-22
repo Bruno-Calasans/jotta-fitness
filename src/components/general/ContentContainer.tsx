@@ -10,7 +10,7 @@ export default function ContentContainer({
   classname,
 }: ContentContainerProps) {
   return (
-    <section
+    <main
       id="content-container"
       className={cn(
         "flex flex-col gap-5 flex-1 lg:max-w-[1000px] md:max-w-[800px] sm:max-w-[320px] m-auto p-2 mt-5",
@@ -18,6 +18,6 @@ export default function ContentContainer({
       )}
     >
       {children}
-    </section>
+    </main>
   );
 }
