@@ -1,6 +1,6 @@
 import ContentContainer from "@/components/general/ContentContainer";
-import Image from "next/image";
 import { Dumbbell, Salad, PiggyBank, BicepsFlexed } from "lucide-react";
+import HomeSection from "@/components/home/HomeSection";
 
 const benefitsItems = [
   {
@@ -25,46 +25,80 @@ const benefitsItems = [
   },
 ];
 
+const serviceItems = [
+  {
+    title: "Musculação",
+    desc: "Cresça seus músculos e fique forte.",
+    url: "/imgs/our-classes/class-2.jpg",
+  },
+  {
+    title: "Emagrecimento",
+    desc: "Perca peso de forma eficiente e segura.",
+    url: "/imgs/our-classes/class-1.jpg",
+  },
+  {
+    title: "Aeróbica",
+    desc: "Melhore o condicionamento do seu corpo.",
+    url: "/imgs/our-classes/class-4.jpg",
+  },
+  {
+    title: "Cárdio",
+    desc: "Melhore ssua capacidade respiratória.",
+    url: "/imgs/our-classes/class-3.jpg",
+  },
+];
+
 export default function Home() {
   return (
-    <ContentContainer classname="lg:max-w-[1200px] md:max-w-[1000px] sm:max-w-[500px] ">
-      {/* Benefits Section */}
-      <section
+    <ContentContainer classname="lg:max-w-[1200px] md:max-w-[1000px] sm:max-w-[500px] my-14">
+      <HomeSection
         id="#benefits"
-        className="text-white flex flex-col items-center gap-10 h-full px-5  py-10 bg-stone-800 rounded-sm my-16 mx-5"
+        title="Por que nos escolher?"
+        subtitle="Seja melhor do que ontem."
+        className="bg-stone-800 gap-0"
       >
-        {/* Header */}
-        <header className="flex flex-col items-center">
-          {/* Title */}
-          <p className="text-4xl font-bold text-orange-500">
-            Porque nos Escolher?
-          </p>
-          {/* Subtitle */}
-          <p className="text-xl font-bold text-white">
-            Seja melhor do que ontem.
-          </p>
-        </header>
-        {/* Content */}
-        <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-10">
-          {benefitsItems.map((item) => (
-            <div key={item.title} className="flex flex-col items-center gap-2">
-              <item.icon
-                size={60}
-                className="rounded-full bg-stone-800 text-orange-500 hover:bg-orange-500 hover:text-white p-1 cursor-pointer transition-all"
-              />
-              {/* Desc */}
-              <div className="flex justify-center flex-col items-center">
-                <p className="text-xl font-bold text-white text-center">
-                  {item.title}
-                </p>
-                <p className="text-sm text-stone-300 text-center">
-                  {item.desc}
-                </p>
-              </div>
+        {benefitsItems.map((item) => (
+          <div key={item.title} className="flex flex-col items-center gap-0">
+            <item.icon
+              size={60}
+              className="rounded-full bg-stone-900 text-orange-500 hover:bg-orange-500 hover:text-white p-1 cursor-pointer transition-all"
+            />
+            {/* Desc */}
+            <div className="flex justify-center flex-col items-center">
+              <p className="text-xl font-bold text-white text-center">
+                {item.title}
+              </p>
+              <p className="text-sm text-stone-300 text-center">{item.desc}</p>
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+        ))}
+      </HomeSection>
+
+      <HomeSection
+        id="#services"
+        title="Nossas Aulas"
+        subtitle="O que temos a oferecer?"
+      >
+        {serviceItems.map((item) => (
+          <div
+            key={item.title}
+            className="flex flex-col justify-between gap-2 relative bg-stone-900  h-72 overflow-hidden shadow-sm shadow-black mx-auto hover:opacity-90 cursor-pointer w-full border-b-orange-500 border-b-2"
+          >
+            <img
+              src={item.url}
+              alt={item.title}
+              className="h-40 w-full  border-b-4 border-stone-500 aspect-square min-w-[200px]:"
+            />
+            {/* Desc */}
+            <div className="flex flex-col items-center p-2 flex-1">
+              <p className="text-xl font-bold text-orange-500 text-center">
+                {item.title}
+              </p>
+              <p className="text-sm text-white text-center">{item.desc}</p>
+            </div>
+          </div>
+        ))}
+      </HomeSection>
     </ContentContainer>
   );
 }

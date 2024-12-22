@@ -44,7 +44,7 @@ export default function Header({}: HeaderProps) {
         </div>
 
         {/* Main Buttons */}
-        <div className="flex justify-center gap-4">
+        <div className="justify-center hidden gap-4 lg:flex">
           {mainItems.map((item) => (
             <Link key={item.title} href={item.url}>
               <Button
@@ -58,7 +58,7 @@ export default function Header({}: HeaderProps) {
         </div>
 
         {/* Social media */}
-        <div className="flex gap-3 md:hidden sm:hidden">
+        <div className="hidden gap-3 md:hidden sm:hidden">
           {socialItems.map((item) => (
             <Link key={item.title} href={item.url}>
               <item.icon
@@ -85,6 +85,7 @@ export default function Header({}: HeaderProps) {
         </Sheet>
       </div>
 
+      {/* Hero Text */}
       <div className="text-white flex flex-1 gap-3 justify-center rounded-md w-full flex-col lg:max-w-[1000px] md:max-w-[800px] mx-auto">
         <div>
           <p className="text-8xl text-orange-500 font-bold">Jotta Fitness</p>
