@@ -24,9 +24,11 @@ export default function HomeSection({
       )}
     >
       {/* Header */}
-      <header className="flex flex-col items-center">
+      <header className="flex flex-col justify-center items-center">
         {/* Title */}
-        <p className="text-4xl font-bold text-orange-500">{title}</p>
+        <p className="text-4xl font-bold text-orange-500 text-center">
+          {title}
+        </p>
         {/* Subtitle */}
         <p className="text-lg text-white">{subtitle}</p>
       </header>
