@@ -17,7 +17,7 @@ type AppSidebarProps = {
 
 export default function AppSidebar({ onClose }: AppSidebarProps) {
   return (
-    <SheetContent className="flex flex-col gap-2">
+    <SheetContent className="flex flex-col gap-2 w-[300px]">
       <SheetHeader>
         <SheetTitle asChild className="flex items-center flex-1 gap-1 ">
           <div>
@@ -25,7 +25,7 @@ export default function AppSidebar({ onClose }: AppSidebarProps) {
               <Image
                 fill
                 priority
-                src="/imgs/logo.png"
+                src="/imgs/logos/logo-1.png"
                 alt="jotta fitness logo"
                 className="aspect-square rounded-sm"
               />

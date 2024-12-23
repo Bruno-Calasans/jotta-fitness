@@ -28,16 +28,16 @@ export default function Header({}: HeaderProps) {
     <header
       className={cn(
         "flex  items-start bg-orange-500 text-black h-28 border-b-2 border-b-orange-500 backdrop-blur-md  bg-white/10 p-5 flex-col",
-        canShowHeroImage && "bg-[url('/imgs/hero-1.jpg')] h-[800px]"
+        canShowHeroImage && "bg-[url('/imgs/hero-1.jpg')] h-[800px] pt-0"
       )}
     >
-      <div className="flex justify-between items-center w-full lg:max-w-[1000px] md:max-w-[800px] mx-auto gap-1">
+      <div className="flex justify-between items-center w-full lg:max-w-[1000px] md:max-w-[800px] mx-auto gap-1 backdrop-blur-md">
         {/* Logo */}
-        <div className="h-16 w-24 rounded-md relative">
+        <div className="h-20 w-36 rounded-md relative">
           <Image
             fill
             priority
-            src="/imgs/logo.png"
+            src="/imgs/logos/logo-1.png"
             alt="jotta fitness logo"
             className="aspect-square rounded-sm"
           />
