@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useContext, useEffect, useState } from "react";
 import { WorkoutContext } from "./context/WorkoutContext";
+import useSound from "use-sound";
 
 export type Workout = {
   name: string;
@@ -35,11 +36,15 @@ export default function WorkoutItem({
 }: WorkoutProps) {
   const { finishWorkout } = useContext(WorkoutContext);
   const [leftTime, setLeftTime] = useState(workout.finished ? 0 : workout.time);
+  const [play] = useSound("/sounds/timeout1.wav", { volume: 10 });
 
   useEffect(() => {
     // Counter finishes
     if (leftTime <= minTimeToTimeout && !workout.finished) {
       finishWorkout(workout);
+      play({
+        playbackRate: 1.1,
+      });
     }
 
     // Stops counter
