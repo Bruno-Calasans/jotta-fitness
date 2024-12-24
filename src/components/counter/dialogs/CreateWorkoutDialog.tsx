@@ -13,7 +13,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { ChangeEvent, useContext, useState } from "react";
+import { ChangeEvent, FocusEventHandler, useContext, useState } from "react";
 import { WorkoutContext } from "../context/WorkoutContext";
 import { v4 as uuidv4 } from "uuid";
 import { builtInAddTimeData, builtInRemoveTimeData } from "./dialogData";
@@ -27,7 +27,8 @@ export default function CreateWorkoutDialog() {
   const [name, setName] = useState(selectedWorkout?.name || "");
 
   const changeTimeHandler = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    setTime(Math.max(Number(target.value), minTimeValue));
+    let value = target.value.replace(/^0+/, "");
+    setTime(Math.max(Number(value), minTimeValue));
   };
 
   const changeNameHandler = ({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -63,6 +64,12 @@ export default function CreateWorkoutDialog() {
     }
   };
 
+  const focusHandler: FocusEventHandler<HTMLInputElement> = (e) => {
+    if (time == 0) {
+      e.target.value = String(selectedWorkout?.time) && "";
+    }
+  };
+
   return (
     <Dialog onOpenChange={closeHandler}>
       <DialogTrigger asChild>
@@ -91,6 +98,7 @@ export default function CreateWorkoutDialog() {
             <Input
               required
               id="workout-name"
+              placeholder="Digite o nome do aluno"
               type="text"
               value={name}
               onChange={changeNameHandler}
@@ -103,9 +111,10 @@ export default function CreateWorkoutDialog() {
               required
               id="workout-time"
               type="number"
-              placeholder="Nome do aluno"
-              value={time}
+              placeholder="Digite o tempo de treino"
+              value={String(time)}
               onChange={changeTimeHandler}
+              onFocus={focusHandler}
             />
           </div>
           {/* built-in times */}

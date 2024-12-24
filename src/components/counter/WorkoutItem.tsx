@@ -23,10 +23,9 @@ type WorkoutProps = {
   minTimeToTimeout?: number;
   maxTimeAfterTimeout?: number;
   onEdit?: (workout: Workout) => void;
-  // onDelete?: (workout: Workout) => void;
 };
 
-const msToMinute = 600;
+const msToMinute = 60000;
 
 export default function WorkoutItem({
   workout,
