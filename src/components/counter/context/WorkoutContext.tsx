@@ -1,7 +1,7 @@
 "use client";
 
 import { Workout } from "@/components/counter/WorkoutItem";
-import React, { Dispatch, SetStateAction, useContext, useState } from "react";
+import React, { useState } from "react";
 
 export type WorkoutContext = {
   workouts: Workout[];
@@ -27,18 +27,17 @@ export function WorkoutContextProvider({ children }: useWorkoutContextProps) {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
 
   const addWorkout = (workout: Workout) => {
-    console.log("add workout");
     setWorkouts((w) => [...w, workout]);
   };
 
   const removeWorkout = (workout: Workout) => {
-    const filtedWorkouts = workouts.filter((w) => w.name != workout.name);
+    const filtedWorkouts = workouts.filter((w) => w.id != workout.id);
     setWorkouts(() => filtedWorkouts);
   };
 
   const finishWorkout = (workout: Workout) => {
     const updatedWorkouts = workouts.map((w) => {
-      if (w.name === workout.name) {
+      if (w.id === workout.id) {
         w.finished = true;
       }
       return w;

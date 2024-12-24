@@ -1,3 +1,5 @@
+"use client";
+
 import { Plus, Eraser } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -14,6 +16,7 @@ import {
 import { ChangeEvent, FormEvent, useContext, useState } from "react";
 import { Workout } from "./WorkoutItem";
 import { WorkoutContext } from "./context/WorkoutContext";
+import { v4 as uuidv4 } from "uuid";
 
 const addTimeBtn = [
   {
@@ -93,6 +96,7 @@ export default function CreateWorkout() {
   const createWorkoutHandler = () => {
     // e.preventDefault();
     addWorkout({
+      id: uuidv4(),
       name,
       time,
       finished: false,

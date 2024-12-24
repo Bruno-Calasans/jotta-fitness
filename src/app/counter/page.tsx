@@ -15,6 +15,8 @@ export default function Counter({}: CounterProps) {
   const onGoingWorkouts = workouts.filter((w) => !w.finished);
   const finishedWorkouts = workouts.filter((w) => w.finished);
 
+  console.log(workouts);
+
   return (
     <ContentContainer>
       <section className="flex flex-col gap-5 text-white m-2 bg-stone-800 p-5 rounded-sm">

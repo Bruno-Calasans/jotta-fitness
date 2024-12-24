@@ -12,6 +12,7 @@ import { WorkoutContext } from "./context/WorkoutContext";
 import useSound from "use-sound";
 
 export type Workout = {
+  id: string;
   name: string;
   time: number;
   finished: boolean;
@@ -22,7 +23,7 @@ type WorkoutProps = {
   minTimeToTimeout?: number;
   maxTimeAfterTimeout?: number;
   onEdit?: (workout: Workout) => void;
-  onDelete?: (workout: Workout) => void;
+  // onDelete?: (workout: Workout) => void;
 };
 
 const msToMinute = 600;
@@ -32,9 +33,9 @@ export default function WorkoutItem({
   minTimeToTimeout = 0,
   maxTimeAfterTimeout = 5,
   onEdit,
-  onDelete,
-}: WorkoutProps) {
-  const { finishWorkout } = useContext(WorkoutContext);
+}: // onDelete,
+WorkoutProps) {
+  const { finishWorkout, removeWorkout } = useContext(WorkoutContext);
   const [leftTime, setLeftTime] = useState(workout.finished ? 0 : workout.time);
   const [play] = useSound("/sounds/timeout1.wav", { volume: 10 });
 
@@ -93,7 +94,7 @@ export default function WorkoutItem({
             </DropdownMenuItem>
           )}
           <DropdownMenuItem
-            onClick={() => onDelete && onDelete(workout)}
+            onClick={() => removeWorkout(workout)}
             className="text-red-500 focus:text-red-600 hover:text-red-600 cursor-pointer"
           >
             <Trash2 />
