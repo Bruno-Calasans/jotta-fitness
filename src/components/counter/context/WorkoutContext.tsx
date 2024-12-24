@@ -13,6 +13,7 @@ export type WorkoutContext = {
   editWorkout(workout: Workout, newWorkoutData: Partial<Workout>): void;
   finishWorkout(workout: Workout): void;
   clearWorkouts(): void;
+  clearFinishedWorkouts(): void;
   getGoingOnWorkouts(): Workout[];
   getFinishedWorkouts(): Workout[];
 };
@@ -27,6 +28,7 @@ export const WorkoutContext = React.createContext<WorkoutContext>({
   editWorkout(workout, newWorkoutData) {},
   clearWorkouts() {},
   finishWorkout(workout) {},
+  clearFinishedWorkouts() {},
   getFinishedWorkouts() {
     return [];
   },
@@ -68,13 +70,13 @@ export function WorkoutContextProvider({ children }: useWorkoutContextProps) {
 
   const removeWorkout = (workout: Workout) => {
     const filtedWorkouts = workouts.filter((w) => w.id != workout.id);
-    setWorkouts(() => filtedWorkouts);
+    setWorkouts(filtedWorkouts);
   };
 
   const finishWorkout = (workout: Workout) => {
     const updatedWorkouts = workouts.map((w) => {
       if (w.id === workout.id) {
-        w.finished = true;
+        return { ...w, finished: true };
       }
       return w;
     });
@@ -83,6 +85,10 @@ export function WorkoutContextProvider({ children }: useWorkoutContextProps) {
 
   const clearWorkouts = () => {
     setWorkouts([]);
+  };
+
+  const clearFinishedWorkouts = () => {
+    setWorkouts(getGoingOnWorkouts());
   };
 
   const getGoingOnWorkouts = () => workouts.filter((w) => !w.finished);
@@ -103,6 +109,7 @@ export function WorkoutContextProvider({ children }: useWorkoutContextProps) {
         editWorkout,
         getGoingOnWorkouts,
         getFinishedWorkouts,
+        clearFinishedWorkouts,
       }}
     >
       {children}

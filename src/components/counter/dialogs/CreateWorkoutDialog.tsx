@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { ChangeEvent, FocusEventHandler, useContext, useState } from "react";
 import { WorkoutContext } from "../context/WorkoutContext";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4, } from "uuid";
 import { builtInAddTimeData, builtInRemoveTimeData } from "./dialogData";
 
 const minTimeValue = 0;

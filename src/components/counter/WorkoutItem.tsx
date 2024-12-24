@@ -22,25 +22,23 @@ type WorkoutProps = {
   workout: Workout;
   minTimeToTimeout?: number;
   maxTimeAfterTimeout?: number;
-  onEdit?: (workout: Workout) => void;
 };
 
-const msToMinute = 60000;
+const msToMinute = 600;
 
 export default function WorkoutItem({
   workout,
   minTimeToTimeout = 0,
   maxTimeAfterTimeout = 5,
-  onEdit,
-}: // onDelete,
-WorkoutProps) {
+}: WorkoutProps) {
   const { finishWorkout, removeWorkout, selectWorkout } =
     useContext(WorkoutContext);
+
   const [leftTime, setLeftTime] = useState(workout.finished ? 0 : workout.time);
   const [play] = useSound("/sounds/timeout1.wav", { volume: 10 });
 
   useEffect(() => {
-    // Counter finishes
+    // Timeout
     if (leftTime <= minTimeToTimeout && !workout.finished) {
       finishWorkout(workout);
       play({
@@ -51,14 +49,17 @@ WorkoutProps) {
     // Stops counter
     if (workout.finished && leftTime === maxTimeAfterTimeout) return;
 
-    // Increases Counter
     const timer = setInterval(() => {
+      // forward counter
       if (workout.finished) setLeftTime(leftTime + 1);
+      // backward counter
       else setLeftTime(leftTime - 1);
     }, msToMinute);
 
     return () => clearInterval(timer);
   }, [leftTime]);
+
+  console.log(workout.id.slice(0, 5), leftTime);
 
   return (
     <div className="flex gap-2 bg-black text-orange-500 justify-between rounded-md p-2 hover:bg-black/60 group transition-all cursor-pointer mr-2 items-center delay-75">

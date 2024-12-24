@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { ClockArrowUp, ClockArrowDown, Trash2 } from "lucide-react";
+import { ClockArrowUp, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useContext } from "react";
+import { WorkoutContext } from "./context/WorkoutContext";
 
 type WorkoutSearchBarProps = {};
 
 export default function WorkoutSearchBar({}: WorkoutSearchBarProps) {
+  const { clearFinishedWorkouts } = useContext(WorkoutContext);
   return (
     <div className="flex gap-2">
       <Input
@@ -20,6 +23,7 @@ export default function WorkoutSearchBar({}: WorkoutSearchBarProps) {
         <ClockArrowUp />
       </Button>
       <Button
+        onClick={clearFinishedWorkouts}
         title="Limpar tempo esgotado"
         size="icon"
         className="bg-orange-500 hover:bg-orange-600"
