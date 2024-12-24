@@ -35,7 +35,8 @@ export default function WorkoutItem({
   onEdit,
 }: // onDelete,
 WorkoutProps) {
-  const { finishWorkout, removeWorkout } = useContext(WorkoutContext);
+  const { finishWorkout, removeWorkout, selectWorkout } =
+    useContext(WorkoutContext);
   const [leftTime, setLeftTime] = useState(workout.finished ? 0 : workout.time);
   const [play] = useSound("/sounds/timeout1.wav", { volume: 10 });
 
@@ -86,7 +87,7 @@ WorkoutProps) {
         <DropdownMenuContent side="bottom" align="end">
           {!!!workout.finished && (
             <DropdownMenuItem
-              onClick={() => onEdit && onEdit(workout)}
+              onClick={() => selectWorkout(workout)}
               className="cursor-pointer"
             >
               <Pencil />

@@ -1,8 +1,8 @@
 "use client";
 
 import { Plus, Eraser } from "lucide-react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Dialog,
@@ -10,67 +10,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { ChangeEvent, FormEvent, useContext, useState } from "react";
-import { Workout } from "./WorkoutItem";
-import { WorkoutContext } from "./context/WorkoutContext";
-import { v4 as uuidv4 } from "uuid";
-
-const addTimeBtn = [
-  {
-    text: "+1h",
-    value: 60,
-  },
-  {
-    text: "+1h30min",
-    value: 90,
-  },
-  {
-    text: "+2h",
-    value: 120,
-  },
-  {
-    text: "+2h30min",
-    value: 180,
-  },
-];
-
-const removeTimeBtn = [
-  {
-    text: "-1h",
-    value: 60,
-  },
-  {
-    text: "-1h30min",
-    value: 90,
-  },
-  {
-    text: "-2h",
-    value: 120,
-  },
-  {
-    text: "-2h30min",
-    value: 180,
-  },
-];
+import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { WorkoutContext } from "../context/WorkoutContext";
+import { builtInAddTimeData, builtInRemoveTimeData } from "./dialogData";
 
 const minTimeValue = 0;
 
-type CreateWorkoutProps = {
-  onCreate: (workout: Workout) => void;
-};
-
-export default function CreateWorkout() {
-  const { addWorkout } = useContext(WorkoutContext);
-  const [open, setOpen] = useState(false);
-  const [time, setTime] = useState(minTimeValue);
-  const [name, setName] = useState("");
-
-  const toggleOpen = () => {
-    setOpen((curr) => !curr);
-  };
+export default function EditWorkoutDialog() {
+  const { selectedWorkout, editWorkout, deselectWorkout } =
+    useContext(WorkoutContext);
+  const [time, setTime] = useState(selectedWorkout?.time || minTimeValue);
+  const [name, setName] = useState(selectedWorkout?.name || "");
 
   const changeTimeHandler = ({ target }: ChangeEvent<HTMLInputElement>) => {
     setTime(Math.max(Number(target.value), minTimeValue));
@@ -93,41 +45,35 @@ export default function CreateWorkout() {
     setName("");
   };
 
-  const createWorkoutHandler = () => {
-    // e.preventDefault();
-    addWorkout({
-      id: uuidv4(),
+  const editWorkoutHandler = () => {
+    if (!selectedWorkout) return;
+    editWorkout(selectedWorkout, {
       name,
       time,
-      finished: false,
     });
-    setOpen(false);
   };
 
   const closeHandler = (open: boolean) => {
     if (!open) {
       clearInputs();
+      deselectWorkout();
     }
   };
 
+  useEffect(() => {
+    if (selectedWorkout) {
+      setTime(selectedWorkout.time);
+      setName(selectedWorkout.name);
+    }
+  }, [selectedWorkout]);
+
   return (
-    <Dialog onOpenChange={closeHandler}>
-      <DialogTrigger asChild>
-        <Button
-          onClick={toggleOpen}
-          size="sm"
-          title="Adicionar novo contador de treino"
-          className="flex items-center p-2 justify-center bg-emerald-500 font-bold hover:bg-emerald-600"
-        >
-          <Plus />
-          Adicionar
-        </Button>
-      </DialogTrigger>
+    <Dialog onOpenChange={closeHandler} open={!!selectedWorkout}>
       <DialogContent className="w-fit">
         {/* Title */}
         <DialogHeader>
           <DialogTitle className="border-b-2 border-orange-500">
-            Criar Treino
+            Editar Treino
           </DialogTitle>
         </DialogHeader>
 
@@ -161,7 +107,7 @@ export default function CreateWorkout() {
             <Label className="text-stone-600">Tempos Pré-definidos</Label>
             {/* Add time */}
             <div className="flex gap-1 justify-between">
-              {addTimeBtn.map((btn) => (
+              {builtInAddTimeData.map((btn) => (
                 <Button
                   key={btn.text}
                   onClick={() => increaseTime(btn.value)}
@@ -174,7 +120,7 @@ export default function CreateWorkout() {
               ))}
             </div>
             <div className="flex gap-1 justify-between">
-              {removeTimeBtn.map((btn) => (
+              {builtInRemoveTimeData.map((btn) => (
                 <Button
                   key={btn.text}
                   onClick={() => decreaseTime(btn.value)}
@@ -202,13 +148,13 @@ export default function CreateWorkout() {
             <DialogClose asChild>
               <Button
                 type="submit"
-                onClick={createWorkoutHandler}
+                onClick={editWorkoutHandler}
                 size="sm"
                 title="Adicionar novo contador de treino"
                 className="flex items-center p-2 justify-center bg-emerald-500 font-bold hover:bg-emerald-600 w-full gap-1"
               >
                 <Plus />
-                Criar
+                Salvar
               </Button>
             </DialogClose>
           </DialogFooter>
