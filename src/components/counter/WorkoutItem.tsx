@@ -22,7 +22,6 @@ type WorkoutProps = {
   maxTimeAfterTimeout?: number;
   onEdit?: (workout: Workout) => void;
   onDelete?: (workout: Workout) => void;
-  onTimeout?: (workout: Workout) => void;
 };
 
 const msToMinute = 600;
@@ -33,27 +32,22 @@ export default function WorkoutItem({
   maxTimeAfterTimeout = 5,
   onEdit,
   onDelete,
-  onTimeout,
 }: WorkoutProps) {
   const { finishWorkout } = useContext(WorkoutContext);
-  const [leftTime, setLeftTime] = useState(workout.time);
-  const [finished, setFinished] = useState(false);
+  const [leftTime, setLeftTime] = useState(workout.finished ? 0 : workout.time);
 
   useEffect(() => {
     // Counter finishes
-    if (leftTime <= minTimeToTimeout) {
-      onTimeout && onTimeout(workout);
+    if (leftTime <= minTimeToTimeout && !workout.finished) {
       finishWorkout(workout);
-      setFinished(true);
-      // setLeftTime(0);
     }
 
     // Stops counter
-    if (finished && leftTime === maxTimeAfterTimeout) return;
+    if (workout.finished && leftTime === maxTimeAfterTimeout) return;
 
     // Increases Counter
     const timer = setInterval(() => {
-      if (finished) setLeftTime(leftTime + 1);
+      if (workout.finished) setLeftTime(leftTime + 1);
       else setLeftTime(leftTime - 1);
     }, msToMinute);
 
@@ -69,7 +63,7 @@ export default function WorkoutItem({
       {/*  */}
       {workout.finished ? (
         <p className="text-red-500 group-hover:text-white ">
-          {Math.abs(leftTime)} min atrás
+          {leftTime} min atrás
         </p>
       ) : (
         <p className="text-emerald-500 group-hover:text-white ">
@@ -83,11 +77,7 @@ export default function WorkoutItem({
             <EllipsisVertical />
           </p>
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          side="bottom"
-          // alignOffset={}
-          align="end"
-        >
+        <DropdownMenuContent side="bottom" align="end">
           {!!!workout.finished && (
             <DropdownMenuItem
               onClick={() => onEdit && onEdit(workout)}
