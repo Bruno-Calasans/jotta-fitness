@@ -27,12 +27,13 @@ export default function Header({}: HeaderProps) {
   return (
     <header
       className={cn(
-        "flex  items-start bg-orange-500 text-black h-28 border-b-2 border-b-orange-500 backdrop-blur-md  bg-white/10 p-0 flex-col",
+        "flex   text-black h-28 border-b-2 border-b-orange-500 backdrop-blur-md  bg-white/10 flex-col p-4",
         canShowHeroImage &&
-          "bg-[url('/imgs/hero-1.jpg')] lg:bg-center sm:bg-left h-[900px]  lg:h-[800px] md:h-[600px] sm:h-[600px] pt-0 transition-all"
+          "bg-[url('/imgs/hero-1.jpg')] lg:bg-center sm:bg-left h-[900px]  lg:h-[800px] md:h-[600px] sm:h-[600px] pt-0 transition-all backdrop-blur-lg"
       )}
     >
-      <div className="flex justify-between items-center w-full lg:max-w-[1000px] md:max-w-[800px] mx-auto gap-1 backdrop-blur-md">
+      {/* Items */}
+      <div className="flex justify-between items-center w-full lg:max-w-[1000px] md:max-w-[800px] mx-auto gap-1">
         {/* Logo */}
         <div className="h-20 w-36 rounded-md relative">
           <Image
@@ -87,7 +88,12 @@ export default function Header({}: HeaderProps) {
       </div>
 
       {/* Hero Text */}
-      <div className="text-white flex flex-1 gap-3 justify-center rounded-md w-full flex-col lg:max-w-[1000px] md:max-w-[800px] mx-auto p-6">
+      <div
+        className={cn(
+          "text-white flex flex-1 gap-3 justify-center rounded-md w-full flex-col lg:max-w-[1000px] md:max-w-[800px] mx-auto p-6",
+          !canShowHeroImage && "hidden"
+        )}
+      >
         <div>
           <p className="text-8xl text-orange-500 font-bold">Jotta Fitness</p>
           <p className="text-4xl font-bold">Saúde, Vida & Você</p>
