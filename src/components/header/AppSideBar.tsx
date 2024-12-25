@@ -11,11 +11,7 @@ import {
 
 import { mainItems, socialItems, adminItems } from "./headerMenuData";
 
-type AppSidebarProps = {
-  onClose: () => void;
-};
-
-export default function AppSidebar({ onClose }: AppSidebarProps) {
+export default function AppSidebar() {
   return (
     <SheetContent className="flex flex-col gap-2 w-[300px]">
       <SheetHeader>

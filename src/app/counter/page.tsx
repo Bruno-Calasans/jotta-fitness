@@ -9,9 +9,9 @@ import { useStore } from "zustand";
 import workoutStore from "@/store/workoutStore";
 
 export default function Counter() {
-  const { selectedWorkout, searchWorkouts } = useStore(workoutStore);
-  let onGoingWorkouts = searchWorkouts("ongoing");
-  let finishedWorkouts = searchWorkouts("finished");
+  const { searchWorkouts } = useStore(workoutStore);
+  const onGoingWorkouts = searchWorkouts("ongoing");
+  const finishedWorkouts = searchWorkouts("finished");
 
   return (
     <ContentContainer>

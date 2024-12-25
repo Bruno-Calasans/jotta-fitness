@@ -13,8 +13,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { ChangeEvent, FocusEventHandler, useContext, useState } from "react";
-import { WorkoutContext } from "../context/WorkoutContext";
+import { ChangeEvent, FocusEventHandler, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { builtInAddTimeData, builtInRemoveTimeData } from "./dialogData";
 import workoutStore from "@/store/workoutStore";
@@ -23,9 +22,6 @@ import { useStore } from "zustand";
 const minTimeValue = 0;
 
 export default function CreateWorkoutDialog() {
-  // const { selectedWorkout, addWorkout, deselectWorkout } =
-  //   useContext(WorkoutContext);
-
   const { selectedWorkout, addWorkout, unselectWorkout } =
     useStore(workoutStore);
 

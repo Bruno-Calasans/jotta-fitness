@@ -1,5 +1,4 @@
 import {
-  LogIn,
   House,
   LayoutDashboard,
   Timer,

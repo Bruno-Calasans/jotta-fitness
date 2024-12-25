@@ -5,25 +5,14 @@ import { Button } from "../ui/button";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import AppSideBar from "@/components/header/AppSideBar";
-import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { usePathname } from "next/navigation";
 import { mainItems, socialItems } from "./headerMenuData";
 
-type HeaderProps = {};
-
-export default function Header({}: HeaderProps) {
+export default function Header() {
   const pathname = usePathname();
-
-  const [openSideBarMenu, setOpenSideBarMenu] = useState(false);
-
-  const toggleSideBarMenu = () => {
-    setOpenSideBarMenu((curr) => !curr);
-  };
-
   const canShowHeroImage = pathname === "/";
-  console.log(pathname);
 
   return (
     <header
@@ -78,14 +67,13 @@ export default function Header({}: HeaderProps) {
         <Sheet>
           <SheetTrigger asChild>
             <Button
-              // onClick={toggleSideBarMenu}
               size="sm"
               className="flex gap-1 items-center bg-orange-400 font-bold hover:bg-orange-500 transition-all cursor-pointer md:flex sm:block"
             >
               <Menu />
             </Button>
           </SheetTrigger>
-          <AppSideBar onClose={toggleSideBarMenu} />
+          <AppSideBar />
         </Sheet>
       </div>
 

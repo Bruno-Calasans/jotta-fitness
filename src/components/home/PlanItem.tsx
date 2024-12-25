@@ -33,7 +33,10 @@ export default function PlanItem({ item }: PlanItemProps) {
 
         {/* Features */}
         {item.features.map((feature) => (
-          <div className="flex justify-center items-center gap-1">
+          <div
+            key={feature.title}
+            className="flex justify-center items-center gap-1"
+          >
             {feature.has ? (
               <Check size={16} className="text-emerald-500" />
             ) : (

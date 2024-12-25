@@ -15,11 +15,9 @@ import {
 import {
   ChangeEvent,
   FocusEventHandler,
-  useContext,
   useEffect,
   useState,
 } from "react";
-import { WorkoutContext } from "../context/WorkoutContext";
 import { builtInAddTimeData, builtInRemoveTimeData } from "./dialogData";
 import { useStore } from "zustand";
 import workoutStore from "@/store/workoutStore";
@@ -27,9 +25,6 @@ import workoutStore from "@/store/workoutStore";
 const minTimeValue = 0;
 
 export default function EditWorkoutDialog() {
-  // const { selectedWorkout, editWorkout, deselectWorkout } =
-  //   useContext(WorkoutContext);
-
   const { selectedWorkout, editWorkout, unselectWorkout } =
     useStore(workoutStore);
 
@@ -37,7 +32,7 @@ export default function EditWorkoutDialog() {
   const [name, setName] = useState(selectedWorkout?.name || "");
 
   const changeTimeHandler = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    let value = target.value.replace(/^0+/, "");
+    const value = target.value.replace(/^0+/, "");
     setTime(Math.max(Number(value), minTimeValue));
   };
 

@@ -15,14 +15,11 @@ import ClearWorkoutsConfirmationDialog from "./dialogs/ClearWorkoutsConfirmation
 
 type SortType = "asc" | "desc";
 
-type WorkoutSearchBarProps = {};
-
-export default function WorkoutSearchBar({}: WorkoutSearchBarProps) {
+export default function WorkoutSearchBar() {
   const {
     searchedWorkout,
     sortWorkoutsByDate,
     sortWorkoutsByTime,
-    clearFinishedWorkouts,
     updateSearchedWorkout,
   } = useStore(workoutStore);
 
@@ -117,7 +114,7 @@ export default function WorkoutSearchBar({}: WorkoutSearchBarProps) {
       {searchedWorkout && (
         <div>
           <p className="text text-stone-400 italic">
-            Resultados para '{searchedWorkout}'
+            Resultados para "{searchedWorkout}"
           </p>
         </div>
       )}

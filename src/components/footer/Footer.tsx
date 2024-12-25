@@ -1,5 +1,3 @@
-type FooterProps = {};
-
-export default function Footer({}: FooterProps) {
+export default function Footer() {
   return <div>Footer</div>;
 }
