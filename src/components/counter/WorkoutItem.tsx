@@ -30,7 +30,7 @@ const msToMinute = 600;
 export default function WorkoutItem({
   workout,
   minTimeToTimeout = 0,
-  maxTimeAfterTimeout = 5,
+  maxTimeAfterTimeout = 6,
 }: WorkoutProps) {
   const { finishWorkout, removeWorkout, selectWorkout, updateWorkout } =
     useContext(WorkoutContext);
@@ -41,15 +41,15 @@ export default function WorkoutItem({
   useEffect(() => {
     // Timeout
     if (leftTime <= minTimeToTimeout && !workout.finished) {
-      // finishWorkout(workout);
-      updateWorkout(workout.id, "finished", true);
+      finishWorkout(workout);
       play({
         playbackRate: 1.1,
       });
     }
 
-    // Stops counter
-    if (workout.finished && workout.time === maxTimeAfterTimeout) return;
+    // Remover workout automatically
+    if (workout.finished && leftTime === maxTimeAfterTimeout)
+      removeWorkout(workout);
 
     const timer = setInterval(() => {
       let newTime = 0;
@@ -57,14 +57,14 @@ export default function WorkoutItem({
       if (workout.finished) {
         newTime = leftTime + 1;
         setLeftTime(newTime);
-        updateWorkout(workout.id, "time", newTime);
       }
       // backward counter
       else {
         newTime = leftTime - 1;
         setLeftTime(newTime);
       }
-      updateWorkout(workout.id, "time", newTime);
+
+      // updateWorkout(workout.id, "time", newTime);'
     }, msToMinute);
 
     return () => clearInterval(timer);

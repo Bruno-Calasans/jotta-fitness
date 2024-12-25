@@ -1,13 +1,34 @@
 import { Button } from "@/components/ui/button";
-import { ClockArrowUp, Trash2 } from "lucide-react";
+import {
+  ClockArrowUp,
+  Trash2,
+  CalendarArrowDown,
+  CalendarArrowUp,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { WorkoutContext } from "./context/WorkoutContext";
+import { cn } from "@/lib/utils";
+
+type SortType = "asc" | "desc";
 
 type WorkoutSearchBarProps = {};
 
 export default function WorkoutSearchBar({}: WorkoutSearchBarProps) {
-  const { clearFinishedWorkouts } = useContext(WorkoutContext);
+  const { clearFinishedWorkouts, sortWorkoutsByDate } =
+    useContext(WorkoutContext);
+  const [sortType, setSortType] = useState<SortType>("asc");
+
+  const toggleSortType = () => {
+    if (sortType === "asc") {
+      setSortType("desc");
+      sortWorkoutsByDate("desc");
+    } else {
+      setSortType("asc");
+      sortWorkoutsByDate("asc");
+    }
+  };
+
   return (
     <div className="flex gap-2">
       <Input
@@ -16,11 +37,19 @@ export default function WorkoutSearchBar({}: WorkoutSearchBarProps) {
         placeholder="Pesquise por um nome"
       />
       <Button
-        title="Ordenar por tempo"
+        onClick={toggleSortType}
+        title={
+          sortType === "asc"
+            ? "Ordenar data de decrescente"
+            : "Ordenar data de crescente"
+        }
         size="icon"
-        className="bg-orange-500 hover:bg-orange-600"
+        className={cn(
+          "bg-orange-500 hover:bg-orange-600",
+          sortType === "asc" && "bg-emerald-500 hover:bg-emerald-600"
+        )}
       >
-        <ClockArrowUp />
+        {sortType === "asc" ? <CalendarArrowUp /> : <CalendarArrowDown />}
       </Button>
       <Button
         onClick={clearFinishedWorkouts}

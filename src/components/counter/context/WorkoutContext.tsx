@@ -21,6 +21,7 @@ export type WorkoutContext = {
     property: keyof Workout,
     newValue: Workout[keyof Workout]
   ): void;
+  sortWorkoutsByDate(order: "asc" | "desc"): void;
 };
 
 export const WorkoutContext = React.createContext<WorkoutContext>({
@@ -41,13 +42,34 @@ export const WorkoutContext = React.createContext<WorkoutContext>({
     return [];
   },
   updateWorkout(id, property, newValue) {},
+  sortWorkoutsByDate(order) {},
 });
 
-const compareByDate = (workoutA: Workout, workoutB: Workout) => {
+const compareByDescDate = (workoutA: Workout, workoutB: Workout) => {
   if (workoutA.createdAt < workoutB.createdAt) {
     return -1;
   }
   if (workoutA.createdAt > workoutB.createdAt) {
+    return 1;
+  }
+  return 0;
+};
+
+const compareByAscDate = (workoutA: Workout, workoutB: Workout) => {
+  if (workoutA.createdAt < workoutB.createdAt) {
+    return 1;
+  }
+  if (workoutA.createdAt > workoutB.createdAt) {
+    return -1;
+  }
+  return 0;
+};
+
+const compareByTime = (workoutA: Workout, workoutB: Workout) => {
+  if (workoutA.time < workoutB.time) {
+    return -1;
+  }
+  if (workoutA.time > workoutB.time) {
     return 1;
   }
   return 0;
@@ -81,8 +103,8 @@ export function WorkoutContextProvider({ children }: useWorkoutContextProps) {
   };
 
   const addWorkout = (workout: Workout) => {
-    console.log("add workout", workout);
-    setWorkouts((curr) => [...curr, workout]);
+    const sortedWorkouts = [...workouts, workout];
+    setWorkouts(sortedWorkouts);
   };
 
   const removeWorkout = (workout: Workout) => {
@@ -126,9 +148,13 @@ export function WorkoutContextProvider({ children }: useWorkoutContextProps) {
 
   const getFinishedWorkouts = () => workouts.filter((w) => w.finished);
 
-  const getWorkoutsByDate = (order: "asc" | "desc") => {
-    if (order) {
-      return workouts.sort(compareByDate);
+  const sortWorkoutsByDate = (order: "asc" | "desc") => {
+    if (order == "asc") {
+      const sortedWorkouts = workouts.sort(compareByAscDate);
+      setWorkouts(sortedWorkouts);
+    } else {
+      const sortedWorkouts = workouts.sort(compareByDescDate);
+      setWorkouts(sortedWorkouts);
     }
   };
 
@@ -148,6 +174,7 @@ export function WorkoutContextProvider({ children }: useWorkoutContextProps) {
         getFinishedWorkouts,
         clearFinishedWorkouts,
         updateWorkout,
+        sortWorkoutsByDate,
       }}
     >
       {children}
