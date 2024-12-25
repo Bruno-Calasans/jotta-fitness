@@ -15,10 +15,10 @@ export default function Counter() {
 
   return (
     <ContentContainer>
-      <section className="flex flex-col gap-5 text-white m-2 bg-stone-800 p-5 rounded-sm">
+      <section className="flex flex-col gap-5 text-white m-2 bg-stone-800 p-5 rounded-sm ">
         {/* Title */}
-        <div className="flex md:flex-row sm:flex-col justify-between border-b-2 border-orange-500 p-2">
-          <p className="text-3xl text-center font-bol">Contador de Treino</p>
+        <div className="flex md:flex-row  justify-between items-center border-b-2 border-orange-500 p-2">
+          <p className="text-3xl text-left font-bold">Contador de Treino</p>
           <CreateWorkoutDialog />
         </div>
 

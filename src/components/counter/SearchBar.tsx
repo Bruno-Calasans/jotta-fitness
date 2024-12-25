@@ -56,7 +56,7 @@ export default function WorkoutSearchBar({}: WorkoutSearchBarProps) {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex gap-2">
+      <div className="flex gap-2 md:flex-row sm:flex-col">
         <Input
           className="bg-white text-orange-600 font-bold"
           type="search"
@@ -64,48 +64,54 @@ export default function WorkoutSearchBar({}: WorkoutSearchBarProps) {
           value={searchedWorkout}
           onChange={searchHandler}
         />
-        {/* Sort by time */}
-        <Button
-          onClick={toggleTimeSortType}
-          title={
-            timeSortType === "asc"
-              ? "Ordenar tempo crescente"
-              : "Ordenar tempo decrescente"
-          }
-          size="icon"
-          className={cn(
-            "bg-orange-500 hover:bg-orange-600",
-            timeSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600"
-          )}
-        >
-          {timeSortType === "asc" ? <ClockArrowDown /> : <ClockArrowUp />}
-        </Button>
-
-        {/* Sort by date */}
-        <Button
-          onClick={toggleDateSortTpe}
-          title={
-            dateSortType === "asc"
-              ? "Ordenar data de crescente"
-              : "Ordenar data de decrescente"
-          }
-          size="icon"
-          className={cn(
-            "bg-orange-500 hover:bg-orange-600",
-            dateSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600"
-          )}
-        >
-          {dateSortType === "asc" ? <CalendarArrowDown /> : <CalendarArrowUp />}
-        </Button>
-        <ClearWorkoutsConfirmationDialog>
+        <div className="flex gap-1 items-center sm:justify-center">
+          {/* Sort by time */}
           <Button
-            title="Limpar treinos"
+            onClick={toggleTimeSortType}
+            title={
+              timeSortType === "asc"
+                ? "Ordenar tempo crescente"
+                : "Ordenar tempo decrescente"
+            }
             size="icon"
-            className="bg-red-500 hover:bg-red-600"
+            className={cn(
+              "bg-orange-500 hover:bg-orange-600",
+              timeSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600"
+            )}
           >
-            <Trash2 />
+            {timeSortType === "asc" ? <ClockArrowDown /> : <ClockArrowUp />}
           </Button>
-        </ClearWorkoutsConfirmationDialog>
+
+          {/* Sort by date */}
+          <Button
+            onClick={toggleDateSortTpe}
+            title={
+              dateSortType === "asc"
+                ? "Ordenar data de crescente"
+                : "Ordenar data de decrescente"
+            }
+            size="icon"
+            className={cn(
+              "bg-orange-500 hover:bg-orange-600",
+              dateSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600"
+            )}
+          >
+            {dateSortType === "asc" ? (
+              <CalendarArrowDown />
+            ) : (
+              <CalendarArrowUp />
+            )}
+          </Button>
+          <ClearWorkoutsConfirmationDialog>
+            <Button
+              title="Limpar treinos"
+              size="icon"
+              className="bg-red-500 hover:bg-red-600"
+            >
+              <Trash2 />
+            </Button>
+          </ClearWorkoutsConfirmationDialog>
+        </div>
       </div>
       {/* Search Result */}
       {searchedWorkout && (

@@ -84,7 +84,7 @@ export default function CreateWorkoutDialog() {
         <Button
           size="sm"
           title="Adicionar novo contador de treino"
-          className="flex items-center p-2 justify-center bg-emerald-500 font-bold hover:bg-emerald-600"
+          className="flex items-center p- justify-center bg-emerald-500 font-bold hover:bg-emerald-600"
         >
           <Plus />
           Adicionar
