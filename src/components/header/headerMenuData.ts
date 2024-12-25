@@ -6,7 +6,7 @@ import {
   HandHelping,
   Dumbbell,
 } from "lucide-react";
-import { SiWhatsapp, SiInstagram, SiX } from "@icons-pack/react-simple-icons";
+import { SiWhatsapp, SiInstagram } from "@icons-pack/react-simple-icons";
 
 export const mainItems = [
   {
