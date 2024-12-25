@@ -21,12 +21,18 @@ import {
 } from "react";
 import { WorkoutContext } from "../context/WorkoutContext";
 import { builtInAddTimeData, builtInRemoveTimeData } from "./dialogData";
+import { useStore } from "zustand";
+import workoutStore from "@/store/workoutStore";
 
 const minTimeValue = 0;
 
 export default function EditWorkoutDialog() {
-  const { selectedWorkout, editWorkout, deselectWorkout } =
-    useContext(WorkoutContext);
+  // const { selectedWorkout, editWorkout, deselectWorkout } =
+  //   useContext(WorkoutContext);
+
+  const { selectedWorkout, editWorkout, unselectWorkout } =
+    useStore(workoutStore);
+
   const [time, setTime] = useState(selectedWorkout?.time || minTimeValue);
   const [name, setName] = useState(selectedWorkout?.name || "");
 
@@ -55,7 +61,8 @@ export default function EditWorkoutDialog() {
   const editWorkoutHandler = () => {
     if (!selectedWorkout) return;
     editWorkout(selectedWorkout, {
-      name,
+      name: name,
+      initialTime: time,
       time,
     });
   };
@@ -63,7 +70,7 @@ export default function EditWorkoutDialog() {
   const closeHandler = (open: boolean) => {
     if (!open) {
       clearInputs();
-      deselectWorkout();
+      unselectWorkout();
     }
   };
 

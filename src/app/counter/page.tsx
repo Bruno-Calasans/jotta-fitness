@@ -5,19 +5,15 @@ import WorkoutSearchBar from "@/components/counter/SearchBar";
 import WorkoutList from "@/components/counter/WorkoutList";
 import EditWorkoutDialog from "@/components/counter/dialogs/EditWorkoutDialog";
 import CreateWorkoutDialog from "@/components/counter/dialogs/CreateWorkoutDialog";
-import { WorkoutContext } from "@/components/counter/context/WorkoutContext";
-import { useContext } from "react";
+import { useStore } from "zustand";
+import workoutStore from "@/store/workoutStore";
 
 export default function Counter() {
-  const {workouts, getGoingOnWorkouts, getFinishedWorkouts } =
-    useContext(WorkoutContext);
+  const { selectedWorkout, searchWorkouts } = useStore(workoutStore);
+  let onGoingWorkouts = searchWorkouts("ongoing");
+  let finishedWorkouts = searchWorkouts("finished");
 
-  const onGoingWorkouts = getGoingOnWorkouts();
-  const finishedWorkouts = getFinishedWorkouts();
-
-  console.log(workouts);
-  // console.log("going on", onGoingWorkouts);
-  // console.log("finished", finishedWorkouts);
+  console.log(selectedWorkout);
 
   return (
     <ContentContainer>

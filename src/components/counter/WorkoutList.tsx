@@ -1,6 +1,7 @@
 "use client";
 
-import WorkoutItem, { Workout } from "./WorkoutItem";
+import type { Workout } from "@/types/Workout";
+import WorkoutItem from "./WorkoutItem";
 
 type WorkoutListProps = {
   title: string;

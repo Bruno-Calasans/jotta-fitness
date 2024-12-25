@@ -17,12 +17,18 @@ import { ChangeEvent, FocusEventHandler, useContext, useState } from "react";
 import { WorkoutContext } from "../context/WorkoutContext";
 import { v4 as uuidv4 } from "uuid";
 import { builtInAddTimeData, builtInRemoveTimeData } from "./dialogData";
+import workoutStore from "@/store/workoutStore";
+import { useStore } from "zustand";
 
 const minTimeValue = 0;
 
 export default function CreateWorkoutDialog() {
-  const { selectedWorkout, addWorkout, deselectWorkout } =
-    useContext(WorkoutContext);
+  // const { selectedWorkout, addWorkout, deselectWorkout } =
+  //   useContext(WorkoutContext);
+
+  const { selectedWorkout, addWorkout, unselectWorkout } =
+    useStore(workoutStore);
+
   const [time, setTime] = useState(selectedWorkout?.time || minTimeValue);
   const [name, setName] = useState(selectedWorkout?.name || "");
 
@@ -52,6 +58,7 @@ export default function CreateWorkoutDialog() {
     addWorkout({
       id: uuidv4(),
       name,
+      initialTime: time,
       time,
       finished: false,
       createdAt: Date.now(),
@@ -61,7 +68,7 @@ export default function CreateWorkoutDialog() {
   const closeHandler = (open: boolean) => {
     if (!open) {
       clearInputs();
-      deselectWorkout();
+      unselectWorkout();
     }
   };
 

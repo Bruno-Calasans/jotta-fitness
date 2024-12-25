@@ -7,17 +7,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useContext, useEffect, useState } from "react";
-import { WorkoutContext } from "./context/WorkoutContext";
+import { useEffect } from "react";
 import useSound from "use-sound";
-
-export type Workout = {
-  id: string;
-  name: string;
-  time: number;
-  finished: boolean;
-  createdAt: number;
-};
+import type { Workout } from "@/types/Workout";
+import { useStore } from "zustand";
+import workoutStore from "@/store/workoutStore";
 
 type WorkoutProps = {
   workout: Workout;
@@ -32,15 +26,22 @@ export default function WorkoutItem({
   minTimeToTimeout = 0,
   maxTimeAfterTimeout = 6,
 }: WorkoutProps) {
-  const { finishWorkout, removeWorkout, selectWorkout, updateWorkout } =
-    useContext(WorkoutContext);
+  const {
+    selectedWorkout,
+    finishWorkout,
+    removeWorkout,
+    selectWorkout,
+    updateWorkoutTime,
+  } = useStore(workoutStore);
 
-  const [leftTime, setLeftTime] = useState(workout.finished ? 0 : workout.time);
   const [play] = useSound("/sounds/timeout1.wav", { volume: 10 });
 
   useEffect(() => {
+    // Stops the workout if it's editing it
+    if (selectedWorkout && selectedWorkout.id === workout.id) return;
+
     // Timeout
-    if (leftTime <= minTimeToTimeout && !workout.finished) {
+    if (workout.time <= minTimeToTimeout && !workout.finished) {
       finishWorkout(workout);
       play({
         playbackRate: 1.1,
@@ -48,27 +49,27 @@ export default function WorkoutItem({
     }
 
     // Remover workout automatically
-    if (workout.finished && leftTime === maxTimeAfterTimeout)
+    if (workout.finished && workout.time === maxTimeAfterTimeout)
       removeWorkout(workout);
 
     const timer = setInterval(() => {
       let newTime = 0;
       // forward counter
       if (workout.finished) {
-        newTime = leftTime + 1;
-        setLeftTime(newTime);
+        newTime = workout.time + 1;
+        // setLeftTime(newTime);
       }
       // backward counter
       else {
-        newTime = leftTime - 1;
-        setLeftTime(newTime);
+        newTime = workout.time - 1;
+        // setLeftTime(newTime);
       }
 
-      // updateWorkout(workout.id, "time", newTime);'
+      updateWorkoutTime(workout.id, newTime);
     }, msToMinute);
 
     return () => clearInterval(timer);
-  }, [leftTime]);
+  }, [workout.time, selectedWorkout]);
 
   return (
     <div className="flex gap-2 bg-black text-orange-500 justify-between rounded-md p-2 hover:bg-black/60 group transition-all cursor-pointer mr-2 items-center delay-75">
@@ -79,11 +80,11 @@ export default function WorkoutItem({
       {/*  */}
       {workout.finished ? (
         <p className="text-red-500 group-hover:text-white ">
-          {leftTime} min atrás
+          {workout.time} min atrás
         </p>
       ) : (
         <p className="text-emerald-500 group-hover:text-white ">
-          {leftTime} min restantes
+          {workout.time} min restantes
         </p>
       )}
       {/* Dropdown menu */}
