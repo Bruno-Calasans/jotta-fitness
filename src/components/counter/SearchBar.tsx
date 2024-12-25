@@ -114,7 +114,7 @@ export default function WorkoutSearchBar() {
       {searchedWorkout && (
         <div>
           <p className="text text-stone-400 italic">
-            Resultados para "{searchedWorkout}"
+            Resultados para &#34;{searchedWorkout}&#34;
           </p>
         </div>
       )}

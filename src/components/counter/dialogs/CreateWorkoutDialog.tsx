@@ -29,7 +29,7 @@ export default function CreateWorkoutDialog() {
   const [name, setName] = useState(selectedWorkout?.name || "");
 
   const changeTimeHandler = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    let value = target.value.replace(/^0+/, "");
+    const value = target.value.replace(/^0+/, "");
     setTime(Math.max(Number(value), minTimeValue));
   };
 
