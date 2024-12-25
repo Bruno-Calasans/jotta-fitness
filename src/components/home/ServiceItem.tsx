@@ -12,7 +12,7 @@ export default function ServiceItem({ item }: ServiceItemProps) {
   return (
     <div
       key={item.title}
-      className="flex flex-col justify-between gap-2 relative bg-stone-900  h-full overflow-hidden shadow-sm shadow-black mx-auto hover:opacity-90 cursor-pointer w-full border-b-orange-500 border-b-2"
+      className="flex flex-1 flex-col justify-between gap-2 relative bg-stone-900  h-full overflow-hidden shadow-sm shadow-black mx-auto hover:opacity-90 cursor-pointer w-full border-b-orange-500 border-b-2"
     >
       <img src={item.url} alt={item.title} className="h-42 " />
       {/* Desc */}

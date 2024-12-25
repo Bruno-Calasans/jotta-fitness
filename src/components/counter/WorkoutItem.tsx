@@ -19,7 +19,7 @@ type WorkoutProps = {
   maxTimeAfterTimeout?: number;
 };
 
-const msToMinute = 60000;
+const msToMinute = 6000;
 
 export default function WorkoutItem({
   workout,
@@ -34,7 +34,7 @@ export default function WorkoutItem({
     updateWorkoutTime,
   } = useStore(workoutStore);
 
-  const [play] = useSound("/sounds/timeout1.wav", { volume: 10 });
+  const [play] = useSound("/sounds/timeout.wav", { volume: 1 });
 
   useEffect(() => {
     // Stops the workout if it's editing it

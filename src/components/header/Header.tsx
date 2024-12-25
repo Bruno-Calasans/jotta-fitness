@@ -19,12 +19,13 @@ export default function Header() {
       className={cn(
         "flex  text-black h-24 border-b-2 border-b-orange-500 backdrop-blur-md  bg-white/10 flex-col px-4",
         canShowHeroImage &&
-          "bg-[url('/imgs/hero-1.jpg')] lg:bg-center sm:bg-left h-[900px]  lg:h-[800px] md:h-[600px] sm:h-[600px] pt-0 transition-all backdrop-blur-lg"
+          "bg-[url('/imgs/hero-1.jpg')] lg:bg-center sm:bg-left h-[900px]  lg:h-[800px] md:h-[600px] sm:h-[600px] pt-0 transition-all backdrop-blur-lg",
+        !canShowHeroImage && "justify-center"
       )}
     >
       {/* Items */}
       <div className="flex justify-between items-center w-full lg:max-w-[1000px] md:max-w-[800px] mx-auto gap-1">
-        {/* Logo */}
+        {/* Header Logo */}
         <div className="h-20 w-36 rounded-md relative">
           <Image
             fill

@@ -21,7 +21,7 @@ export default function AppSidebar() {
               <Image
                 fill
                 priority
-                src="/imgs/logos/logo-1.png"
+                src="/imgs/logos/logo-2.png"
                 alt="jotta fitness logo"
                 className="aspect-square rounded-sm"
               />
