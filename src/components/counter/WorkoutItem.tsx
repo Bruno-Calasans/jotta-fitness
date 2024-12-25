@@ -16,6 +16,7 @@ export type Workout = {
   name: string;
   time: number;
   finished: boolean;
+  createdAt: number;
 };
 
 type WorkoutProps = {
@@ -31,7 +32,7 @@ export default function WorkoutItem({
   minTimeToTimeout = 0,
   maxTimeAfterTimeout = 5,
 }: WorkoutProps) {
-  const { finishWorkout, removeWorkout, selectWorkout } =
+  const { finishWorkout, removeWorkout, selectWorkout, updateWorkout } =
     useContext(WorkoutContext);
 
   const [leftTime, setLeftTime] = useState(workout.finished ? 0 : workout.time);
@@ -40,26 +41,34 @@ export default function WorkoutItem({
   useEffect(() => {
     // Timeout
     if (leftTime <= minTimeToTimeout && !workout.finished) {
-      finishWorkout(workout);
+      // finishWorkout(workout);
+      updateWorkout(workout.id, "finished", true);
       play({
         playbackRate: 1.1,
       });
     }
 
     // Stops counter
-    if (workout.finished && leftTime === maxTimeAfterTimeout) return;
+    if (workout.finished && workout.time === maxTimeAfterTimeout) return;
 
     const timer = setInterval(() => {
+      let newTime = 0;
       // forward counter
-      if (workout.finished) setLeftTime(leftTime + 1);
+      if (workout.finished) {
+        newTime = leftTime + 1;
+        setLeftTime(newTime);
+        updateWorkout(workout.id, "time", newTime);
+      }
       // backward counter
-      else setLeftTime(leftTime - 1);
+      else {
+        newTime = leftTime - 1;
+        setLeftTime(newTime);
+      }
+      updateWorkout(workout.id, "time", newTime);
     }, msToMinute);
 
     return () => clearInterval(timer);
   }, [leftTime]);
-
-  console.log(workout.id.slice(0, 5), leftTime);
 
   return (
     <div className="flex gap-2 bg-black text-orange-500 justify-between rounded-md p-2 hover:bg-black/60 group transition-all cursor-pointer mr-2 items-center delay-75">

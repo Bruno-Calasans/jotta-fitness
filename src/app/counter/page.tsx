@@ -9,7 +9,7 @@ import { WorkoutContext } from "@/components/counter/context/WorkoutContext";
 import { useContext } from "react";
 
 export default function Counter() {
-  const { workouts, getGoingOnWorkouts, getFinishedWorkouts } =
+  const { getGoingOnWorkouts, getFinishedWorkouts } =
     useContext(WorkoutContext);
 
   const onGoingWorkouts = getGoingOnWorkouts();

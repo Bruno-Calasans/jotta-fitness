@@ -16,6 +16,11 @@ export type WorkoutContext = {
   clearFinishedWorkouts(): void;
   getGoingOnWorkouts(): Workout[];
   getFinishedWorkouts(): Workout[];
+  updateWorkout(
+    id: string,
+    property: keyof Workout,
+    newValue: Workout[keyof Workout]
+  ): void;
 };
 
 export const WorkoutContext = React.createContext<WorkoutContext>({
@@ -35,7 +40,18 @@ export const WorkoutContext = React.createContext<WorkoutContext>({
   getGoingOnWorkouts() {
     return [];
   },
+  updateWorkout(id, property, newValue) {},
 });
+
+const compareByDate = (workoutA: Workout, workoutB: Workout) => {
+  if (workoutA.createdAt < workoutB.createdAt) {
+    return -1;
+  }
+  if (workoutA.createdAt > workoutB.createdAt) {
+    return 1;
+  }
+  return 0;
+};
 
 type useWorkoutContextProps = {
   children: React.ReactNode;
@@ -65,7 +81,8 @@ export function WorkoutContextProvider({ children }: useWorkoutContextProps) {
   };
 
   const addWorkout = (workout: Workout) => {
-    setWorkouts((w) => [...w, workout]);
+    console.log("add workout", workout);
+    setWorkouts((curr) => [...curr, workout]);
   };
 
   const removeWorkout = (workout: Workout) => {
@@ -77,6 +94,20 @@ export function WorkoutContextProvider({ children }: useWorkoutContextProps) {
     const updatedWorkouts = workouts.map((w) => {
       if (w.id === workout.id) {
         return { ...w, finished: true };
+      }
+      return w;
+    });
+    setWorkouts(updatedWorkouts);
+  };
+
+  const updateWorkout = (
+    id: string,
+    property: keyof Workout,
+    newValue: Workout[keyof Workout]
+  ) => {
+    const updatedWorkouts = workouts.map((w) => {
+      if (w.id === id) {
+        return { ...w, [property]: newValue };
       }
       return w;
     });
@@ -95,6 +126,12 @@ export function WorkoutContextProvider({ children }: useWorkoutContextProps) {
 
   const getFinishedWorkouts = () => workouts.filter((w) => w.finished);
 
+  const getWorkoutsByDate = (order: "asc" | "desc") => {
+    if (order) {
+      return workouts.sort(compareByDate);
+    }
+  };
+
   return (
     <WorkoutContext
       value={{
@@ -110,6 +147,7 @@ export function WorkoutContextProvider({ children }: useWorkoutContextProps) {
         getGoingOnWorkouts,
         getFinishedWorkouts,
         clearFinishedWorkouts,
+        updateWorkout,
       }}
     >
       {children}
