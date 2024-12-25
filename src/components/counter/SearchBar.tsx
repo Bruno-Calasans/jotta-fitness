@@ -11,6 +11,7 @@ import { ChangeEvent, useState } from "react";
 import { cn } from "@/lib/utils";
 import workoutStore from "@/store/workoutStore";
 import { useStore } from "zustand";
+import ClearWorkoutsConfirmationDialog from "./dialogs/ClearWorkoutsConfirmationDialog";
 
 type SortType = "asc" | "desc";
 
@@ -96,14 +97,15 @@ export default function WorkoutSearchBar({}: WorkoutSearchBarProps) {
         >
           {dateSortType === "asc" ? <CalendarArrowDown /> : <CalendarArrowUp />}
         </Button>
-        <Button
-          onClick={clearFinishedWorkouts}
-          title="Limpar tempo esgotado"
-          size="icon"
-          className="bg-orange-500 hover:bg-orange-600"
-        >
-          <Trash2 />
-        </Button>
+        <ClearWorkoutsConfirmationDialog>
+          <Button
+            title="Limpar treinos"
+            size="icon"
+            className="bg-red-500 hover:bg-red-600"
+          >
+            <Trash2 />
+          </Button>
+        </ClearWorkoutsConfirmationDialog>
       </div>
       {/* Search Result */}
       {searchedWorkout && (
