@@ -23,11 +23,12 @@ export default function Header({}: HeaderProps) {
   };
 
   const canShowHeroImage = pathname === "/";
+  console.log(pathname);
 
   return (
     <header
       className={cn(
-        "flex   text-black h-28 border-b-2 border-b-orange-500 backdrop-blur-md  bg-white/10 flex-col p-4",
+        "flex  text-black h-24 border-b-2 border-b-orange-500 backdrop-blur-md  bg-white/10 flex-col p-0",
         canShowHeroImage &&
           "bg-[url('/imgs/hero-1.jpg')] lg:bg-center sm:bg-left h-[900px]  lg:h-[800px] md:h-[600px] sm:h-[600px] pt-0 transition-all backdrop-blur-lg"
       )}
@@ -47,16 +48,17 @@ export default function Header({}: HeaderProps) {
 
         {/* Main Buttons */}
         <div className="justify-center hidden gap-4 lg:flex">
-          {mainItems.map((item) => (
-            <Link key={item.title} href={item.url}>
-              <Button
-                variant="link"
-                className="flex gap-1 items-center font-bold bg-transparent hover:bg-transparent text-white hover:text-orange-500 transition-all text-2xl p-0"
-              >
-                <p>{item.title}</p>
-              </Button>
-            </Link>
-          ))}
+          {canShowHeroImage &&
+            mainItems.map((item) => (
+              <Link key={item.title} href={item.url}>
+                <Button
+                  variant="link"
+                  className="flex gap-1 items-center font-bold bg-transparent hover:bg-transparent text-white hover:text-orange-500 transition-all text-2xl p-0"
+                >
+                  <p>{item.title}</p>
+                </Button>
+              </Link>
+            ))}
         </div>
 
         {/* Social media */}

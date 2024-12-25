@@ -13,8 +13,6 @@ export default function Counter() {
   let onGoingWorkouts = searchWorkouts("ongoing");
   let finishedWorkouts = searchWorkouts("finished");
 
-  console.log(selectedWorkout);
-
   return (
     <ContentContainer>
       <section className="flex flex-col gap-5 text-white m-2 bg-stone-800 p-5 rounded-sm">
