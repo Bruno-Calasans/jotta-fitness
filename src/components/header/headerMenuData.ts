@@ -40,13 +40,8 @@ export const socialItems = [
   },
   {
     title: "Instagram",
-    url: "https://www.instagram.com",
+    url: "https://www.instagram.com/jfitness_personal/",
     icon: SiInstagram,
-  },
-  {
-    title: "Twitter",
-    url: "https://www.x.com",
-    icon: SiX,
   },
 ];
 

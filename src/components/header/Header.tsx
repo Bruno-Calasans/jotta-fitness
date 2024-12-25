@@ -53,7 +53,7 @@ export default function Header() {
         {/* Social media */}
         <div className="hidden gap-3 md:hidden sm:hidden">
           {socialItems.map((item) => (
-            <Link key={item.title} href={item.url}>
+            <Link key={item.title} href={item.url} target="_blank">
               <item.icon
                 title={item.title}
                 size={20}
