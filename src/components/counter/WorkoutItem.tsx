@@ -85,20 +85,20 @@ export default function WorkoutItem({
       )}
     >
       {/* Name */}
-      <p className="font-bold group-hover:text-white text-lg flex-1">
+      <p className="font-bold group-hover:text-white text-lg uppercase">
         {workout.name}
       </p>
       {/* Left time */}
 
       {/*  */}
       {workout.finished ? (
-        <p className="text-red-500 group-hover:text-white flex-1 text-end">
+        <p className="text-red-500 group-hover:text-white flex-1 text-end text-lg uppercase">
           {workout.time} min atrás
         </p>
       ) : (
         <p
           className={cn(
-            "text-emerald-500 group-hover:text-white flex-1 text-end",
+            "text-emerald-500 group-hover:text-white flex-1 text-end text-lg uppercase",
             workout.time <= minTimeToWarning && "text-red-500"
           )}
         >
