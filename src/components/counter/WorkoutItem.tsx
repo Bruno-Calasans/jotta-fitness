@@ -20,7 +20,7 @@ type WorkoutProps = {
   maxTimeAfterTimeout?: number;
 };
 
-const msToMinute = 600;
+const msToMinute = 60000;
 const minTimeToWarning = 5;
 
 export default function WorkoutItem({
