@@ -58,6 +58,7 @@ export default function CreateWorkoutDialog() {
       time,
       finished: false,
       createdAt: Date.now(),
+      running: true,
     });
   };
 

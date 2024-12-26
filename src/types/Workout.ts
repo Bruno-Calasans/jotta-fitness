@@ -5,4 +5,5 @@ export type Workout = {
   time: number;
   finished: boolean;
   createdAt: number;
+  running: boolean;
 };

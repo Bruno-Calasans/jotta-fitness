@@ -11,6 +11,7 @@ import {
 } from "./workoutStoreUtils";
 
 interface WorkoutState {
+  running: boolean;
   searchedWorkout: string;
   selectedWorkout: Workout | null;
   workouts: Workout[];
@@ -34,12 +35,15 @@ interface WorkoutState {
   updateWorkoutTime(id: string, time: number): void;
   updateSearchedWorkout(keyword: string): void;
   searchWorkouts(type: "ongoing" | "finished" | "all"): Workout[];
+  playWorkout(id: string): void;
+  stopWorkout(id: string): void;
 }
 
 const workoutStore = create<WorkoutState>()(
   devtools(
     persist(
       (set, get) => ({
+        running: false,
         searchedWorkout: "",
         selectedWorkout: null,
         workouts: [],
@@ -148,6 +152,25 @@ const workoutStore = create<WorkoutState>()(
                 )
               : workouts;
           }
+        },
+        playWorkout(id) {
+          const updatedWorkouts = get().workouts.map((w) => {
+            if (w.id === id) {
+              return { ...w, running: true };
+            }
+            return w;
+          });
+          set(() => ({ workouts: updatedWorkouts }));
+        },
+        stopWorkout(id) {
+          const updatedWorkouts = get().workouts.map((w) => {
+            if (w.id === id) {
+              console.log(get().running);
+              return { ...w, running: false };
+            }
+            return w;
+          });
+          set(() => ({ workouts: updatedWorkouts }));
         },
       }),
       {

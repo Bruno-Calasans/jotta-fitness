@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil, Trash2, EllipsisVertical } from "lucide-react";
+import { Pencil, Trash2, EllipsisVertical, Pause, Play } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +20,7 @@ type WorkoutProps = {
   maxTimeAfterTimeout?: number;
 };
 
-const msToMinute = 60000;
+const msToMinute = 600;
 const minTimeToWarning = 5;
 
 export default function WorkoutItem({
@@ -34,18 +34,22 @@ export default function WorkoutItem({
     removeWorkout,
     selectWorkout,
     updateWorkoutTime,
+    playWorkout,
+    stopWorkout,
   } = useStore(workoutStore);
 
-  const [play] = useSound("/sounds/timeout.wav", { volume: 1 });
+  const [playSound] = useSound("/sounds/timeout.wav", { volume: 1 });
 
   useEffect(() => {
+    if (!workout.running) return;
+
     // Stops the workout if it's editing it
     if (selectedWorkout && selectedWorkout.id === workout.id) return;
 
     // Timeout
     if (workout.time <= minTimeToTimeout && !workout.finished) {
       finishWorkout(workout);
-      play({
+      playSound({
         playbackRate: 1.1,
       });
     }
@@ -71,10 +75,15 @@ export default function WorkoutItem({
     }, msToMinute);
 
     return () => clearInterval(timer);
-  }, [workout.time, selectedWorkout]);
+  }, [workout.time, selectedWorkout, workout.running]);
 
   return (
-    <div className="flex gap-1 bg-black text-orange-500 justify-between rounded-md p-2 hover:bg-black/60 group transition-all cursor-pointer mr-2 items-center delay-75">
+    <div
+      className={cn(
+        "flex gap-1 bg-black text-orange-500 justify-between rounded-md p-2 hover:bg-black/60 group transition-all cursor-pointer mr-2 items-center delay-75",
+        !workout.running && "border-2 border-red-500"
+      )}
+    >
       {/* Name */}
       <p className="font-bold group-hover:text-white text-lg flex-1">
         {workout.name}
@@ -104,13 +113,31 @@ export default function WorkoutItem({
           </p>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="bottom" align="end">
-          {!!!workout.finished && (
+          {!workout.finished && (
             <DropdownMenuItem
               onClick={() => selectWorkout(workout)}
               className="cursor-pointer"
             >
               <Pencil />
               Editar
+            </DropdownMenuItem>
+          )}
+          {!workout.finished && workout.running && (
+            <DropdownMenuItem
+              onClick={() => stopWorkout(workout.id)}
+              className="cursor-pointer"
+            >
+              <Pause />
+              Pausar
+            </DropdownMenuItem>
+          )}
+          {!workout.finished && !workout.running && (
+            <DropdownMenuItem
+              onClick={() => playWorkout(workout.id)}
+              className="cursor-pointer"
+            >
+              <Play />
+              Iniciar
             </DropdownMenuItem>
           )}
           <DropdownMenuItem
