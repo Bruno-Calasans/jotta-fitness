@@ -11,7 +11,7 @@ import {
 
 import { mainItems, socialItems, adminItems } from "./headerMenuData";
 
-export default function AppSidebar() {
+export default function MainSideMenuContent() {
   return (
     <SheetContent className="flex flex-col gap-2 w-[300px]">
       <SheetHeader>
