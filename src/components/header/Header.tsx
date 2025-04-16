@@ -25,10 +25,10 @@ export default function Header() {
       {/* Header Items */}
       <div className="flex justify-between items-center w-full lg:max-w-[1000px] md:max-w-[800px] mx-auto gap-1">
         {/* Header Logo */}
-        {!canShowDashboard && <HeaderLogo />}
+        <HeaderLogo />
 
         {/* Dashboard Menu */}
-        {canShowDashboard && <DashboardSideMenu />}
+        {/* {canShowDashboard && <DashboardSideMenu />} */}
 
         {/* Header Center Buttons for larger screens */}
         {canShowHeroImage && <HeaderButtons />}

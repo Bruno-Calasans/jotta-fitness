@@ -7,7 +7,7 @@ import {
   profitItems,
   lossItems,
   memberItems,
-} from "./dashboardMenuData";
+} from "./dashboardSideMenuData";
 
 type DashboardSideMenuContentProps = {};
 
