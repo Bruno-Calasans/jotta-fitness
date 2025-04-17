@@ -8,6 +8,8 @@ import {
   getPaginationRowModel,
   SortingState,
   getSortedRowModel,
+  ColumnFiltersState,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
 
 import {
@@ -19,19 +21,27 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import DataTablePagination from "./DataTablePagination";
 import { useState } from "react";
+import DataTablePagination from "./DataTablePagination";
+import DataTableSearch from "./DataTableSearch";
 
-interface DataTableProps<TData, TValue> {
+type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-}
+  noResultMsg?: React.ReactNode;
+  columnNameFilter?: string;
+  startPageSize?: number;
+};
 
 export default function DataTable<TData, TValue>({
   columns,
   data,
+  noResultMsg,
+  columnNameFilter,
+  startPageSize,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     data,
@@ -40,10 +50,12 @@ export default function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
-    state: { sorting },
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: { sorting, columnFilters },
     initialState: {
       pagination: {
-        pageSize: 5,
+        pageSize: startPageSize || 5,
       },
     },
   });
@@ -51,6 +63,12 @@ export default function DataTable<TData, TValue>({
   return (
     <div className="flex flex-col gap-2">
       <div className="rounded-md border">
+        {/* Component for searching */}
+        <DataTableSearch
+          table={table}
+          columnName={columnNameFilter || "name"}
+        />
+        {/* Table itself */}
         <Table>
           <TableHeader className="bg-orange-500 hover:bg-orange-500">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -92,18 +110,20 @@ export default function DataTable<TData, TValue>({
                 </TableRow>
               ))
             ) : (
+              // No rows
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {noResultMsg || "Nada encontrado."}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
+      {/* Component for pagination */}
       <DataTablePagination table={table} />
     </div>
   );
