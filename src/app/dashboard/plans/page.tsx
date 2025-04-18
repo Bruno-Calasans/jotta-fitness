@@ -2,19 +2,14 @@
 
 import DataTable from "@/components/custom/DataTable/DataTable";
 import ContentContainer from "@/components/general/ContentContainer";
-import {
-  PlanRowActionFn,
-  createColumns,
-} from "@/components/dashboard/Plans/PlansTableColumns";
-import CreatePlanDialog from "@/components/dashboard/Plans/CreatePlanDialog";
+import { planColumns } from "@/components/dashboard/Plans/PlansTableColumns";
 import { usePlanStore } from "@/store/planStore";
+import CreatePlanDialog from "@/components/dashboard/Plans/CreatePlanDialog";
 
 type DashboardPlansProps = {};
 
 export default function DashboardPlans({}: DashboardPlansProps) {
   const { plans } = usePlanStore();
-
-  const planRowActionHandler: PlanRowActionFn = (action, plan) => {};
 
   return (
     <ContentContainer>
@@ -23,7 +18,11 @@ export default function DashboardPlans({}: DashboardPlansProps) {
         <CreatePlanDialog />
       </div>
 
-      <DataTable columns={createColumns(planRowActionHandler)} data={plans} />
+      <DataTable
+        columns={planColumns}
+        data={plans}
+        noResultMsg="Nenhum plano encontrado"
+      />
     </ContentContainer>
   );
 }

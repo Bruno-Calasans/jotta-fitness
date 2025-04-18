@@ -9,15 +9,21 @@ import PlanForm from "./PlanForm";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { Plan } from "@/types/Plan.type";
-import PlanEditForm from "./PlanEditForm";
+import { useState } from "react";
 
 type EditPlanModalProps = {
   plan: Plan;
 };
 
 export default function EditPlanDialog({ plan }: EditPlanModalProps) {
+  const [open, setOpen] = useState(false);
+
+  const submitFormHandler = (success: boolean) => {
+    if (success) setOpen(false);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           variant="ghost"
@@ -30,8 +36,8 @@ export default function EditPlanDialog({ plan }: EditPlanModalProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Editar Plano</DialogTitle>
-          <PlanEditForm plan={plan} />
         </DialogHeader>
+        <PlanForm plan={plan} onSubmit={submitFormHandler} />
       </DialogContent>
     </Dialog>
   );

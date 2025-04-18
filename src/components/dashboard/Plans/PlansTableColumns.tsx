@@ -1,4 +1,4 @@
-import DataTableRowActions, {
+import {
   RowActionFn,
   TableRowActionData,
 } from "@/components/custom/DataTable/DataTableRowActions";
@@ -14,76 +14,77 @@ export type PlanRowActions = "Edit" | "Delete";
 
 export type PlanRowActionFn = RowActionFn<Plan, PlanRowActions>;
 
-export const planRowActionsData: TableRowActionData<PlanRowActions>[] = [
+// export const planRowActionsData: TableRowActionData<PlanRowActions>[] = [
+//   {
+//     name: "Edit",
+//     label: "Editar",
+//     icon: Pencil,
+//   },
+//   {
+//     name: "Delete",
+//     label: "Remover",
+//     icon: Trash,
+//   },
+// ];
+
+export const planColumns: ColumnDef<Plan>[] = [
   {
-    name: "Edit",
-    label: "Editar",
-    icon: Pencil,
+    accessorKey: "name",
+    header: ({ column }) => (
+      <DataTableSortableHeader column={column} headerName="Nome" />
+    ),
   },
   {
-    name: "Delete",
-    label: "Remover",
-    icon: Trash,
+    accessorKey: "trainTime",
+    header: ({ column }) => (
+      <DataTableSortableHeader
+        column={column}
+        headerName="Tempo de Treino"
+        type="numeral"
+      />
+    ),
+  },
+  {
+    accessorKey: "price",
+    header: ({ column }) => (
+      <DataTableSortableHeader
+        column={column}
+        headerName="Preço"
+        type="numeral"
+      />
+    ),
+  },
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => (
+      <DataTableSortableHeader
+        column={column}
+        headerName="Data de Criação"
+        type="date"
+      />
+    ),
+    cell: ({ row }) => {
+      const plan = row.original;
+      return (
+        <p>
+          {`${plan.createdAt.toLocaleDateString()} às ${plan.createdAt.toLocaleTimeString()}`}
+        </p>
+      );
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const plan = row.original;
+
+      return (
+        <MoreOptionsDropdown>
+          <div className="flex flex-col gap-1">
+            <EditPlanDialog plan={plan} />
+            <RemovePlanDialog plan={plan} />
+          </div>
+        </MoreOptionsDropdown>
+      );
+    },
   },
 ];
-
-export const createColumns = (onAction: PlanRowActionFn) => {
-  const PLAN_COLUMNS: ColumnDef<Plan>[] = [
-    {
-      accessorKey: "name",
-      header: ({ column }) => (
-        <DataTableSortableHeader column={column} headerName="Nome" />
-      ),
-    },
-    {
-      accessorKey: "trainTime",
-      header: ({ column }) => (
-        <DataTableSortableHeader
-          column={column}
-          headerName="Tempo de Treino"
-          type="numeral"
-        />
-      ),
-    },
-    {
-      accessorKey: "price",
-      header: ({ column }) => (
-        <DataTableSortableHeader
-          column={column}
-          headerName="Preço"
-          type="numeral"
-        />
-      ),
-    },
-    {
-      accessorKey: "createdAt",
-      header: ({ column }) => (
-        <DataTableSortableHeader
-          column={column}
-          headerName="Data de Criação"
-          type="date"
-        />
-      ),
-      cell: ({ row }) => {
-        const plan = row.original;
-        return <p>{plan.createdAt.toLocaleTimeString()}</p>;
-      },
-    },
-    {
-      id: "actions",
-      cell: ({ row }) => {
-        const plan = row.original;
-
-        return (
-          <MoreOptionsDropdown>
-            <div className="flex flex-col gap-1">
-              <EditPlanDialog plan={plan} />
-              <RemovePlanDialog plan={plan} />
-            </div>
-          </MoreOptionsDropdown>
-        );
-      },
-    },
-  ];
-  return PLAN_COLUMNS;
-};

@@ -2,19 +2,25 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
 import PlanForm from "./PlanForm";
+import { useState } from "react";
 
 type CreatePlanModalProps = {};
 
 export default function CreatePlanDialog({}: CreatePlanModalProps) {
+  const [open, setOpen] = useState(false);
+
+  const submitFormHandler = (success: boolean) => {
+    if (success) setOpen(false);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-emerald-500 hover:bg-emerald-600 font-bold">
           <Plus />
@@ -24,8 +30,8 @@ export default function CreatePlanDialog({}: CreatePlanModalProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Novo Plano</DialogTitle>
-          <PlanForm />
         </DialogHeader>
+        <PlanForm onSubmit={submitFormHandler} />
       </DialogContent>
     </Dialog>
   );

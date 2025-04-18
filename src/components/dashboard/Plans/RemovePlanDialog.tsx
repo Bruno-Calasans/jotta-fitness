@@ -11,28 +11,23 @@ import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 import { Plan } from "@/types/Plan.type";
 import { usePlanStore } from "@/store/planStore";
-import { useToast } from "@/hooks/use-toast";
+import useCustomToast from "@/hooks/use-custom-toast";
 
 type RemovePlanDialogProps = {
   plan: Plan;
 };
 
 export default function RemovePlanDialog({ plan }: RemovePlanDialogProps) {
-  const { toast } = useToast();
+  const { successToast, errorToast } = useCustomToast();
   const { remove } = usePlanStore();
 
   const removePlanHandler = () => {
     try {
       remove(plan.id);
-      toast({
-        title: "Exclusão de Plano",
-        description: "Plano removido com sucesso!",
-      });
+      successToast("Exclusão de Plano", "Plano removido com sucesso!");
+      
     } catch (error) {
-      toast({
-        title: "Exclusão de Plano",
-        description: "Erro ao remover plano",
-      });
+      errorToast("Exclusão de Plano", "Erro ao remover plano");
     }
   };
 
