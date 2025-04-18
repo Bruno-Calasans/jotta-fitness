@@ -1,4 +1,5 @@
 import type { Plan } from "@/types/Plan.type";
+import { v4 } from "uuid";
 
 function createSequentialDate() {
   // Data inicial: agora
@@ -20,26 +21,36 @@ function createSequentialDate() {
 const sequentialDates = createSequentialDate();
 
 export const DATA_PLANS: Plan[] = [
-  { name: "Plano 1h", price: 50, trainTime: 60, createdAt: sequentialDates[0] },
   {
+    id: v4(),
+    name: "Plano 1h",
+    price: 50,
+    trainTime: 60,
+    createdAt: sequentialDates[0],
+  },
+  {
+    id: v4(),
     name: "Plano 1h30m",
     price: 70,
     trainTime: 90,
     createdAt: sequentialDates[1],
   },
   {
+    id: v4(),
     name: "Plano 2h",
     price: 80,
     trainTime: 120,
     createdAt: sequentialDates[2],
   },
   {
+    id: v4(),
     name: "Plano 3h",
     price: 80,
     trainTime: 120,
     createdAt: sequentialDates[3],
   },
   {
+    id: v4(),
     name: "Plano 4h",
     price: 80,
     trainTime: 120,
