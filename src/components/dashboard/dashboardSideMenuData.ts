@@ -43,7 +43,7 @@ export const DashboardSidebarItems = {
   Prejuízo: [
     {
       title: "Despesas",
-      url: "expensives",
+      url: "expenses",
       icon: BanknoteArrowDown,
     },
     {
