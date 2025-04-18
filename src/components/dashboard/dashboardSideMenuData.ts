@@ -48,7 +48,7 @@ export const DashboardSidebarItems = {
     },
     {
       title: "Investimentos",
-      url: "investiments",
+      url: "investments",
       icon: CircleDollarSign,
     },
   ],
