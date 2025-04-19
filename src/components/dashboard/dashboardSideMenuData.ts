@@ -52,10 +52,10 @@ export const DashboardSidebarItems = {
       icon: CircleDollarSign,
     },
   ],
-  Membros: [
+  Usuários: [
     {
-      title: "Alunos",
-      url: "users",
+      title: "Membros",
+      url: "members",
       icon: User,
     },
     {

@@ -1,6 +1,5 @@
-export type Expense = {
-  id: string;
+import type { DB } from "./Db.typ";
+
+export type Expense = DB & {
   name: string;
-  createdAt: Date;
-  updatedAt: Date;
 };

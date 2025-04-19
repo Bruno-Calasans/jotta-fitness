@@ -20,13 +20,14 @@ function createSequentialDate() {
 
 const sequentialDates = createSequentialDate();
 
-export const DATA_PLANS: Plan[] = [
+export const PLANS_DATA: Plan[] = [
   {
     id: v4(),
     name: "Plano 1h",
     price: 50,
     trainTime: 60,
     createdAt: sequentialDates[0],
+    updatedAt: sequentialDates[0],
   },
   {
     id: v4(),
@@ -34,6 +35,7 @@ export const DATA_PLANS: Plan[] = [
     price: 70,
     trainTime: 90,
     createdAt: sequentialDates[1],
+    updatedAt: sequentialDates[1],
   },
   {
     id: v4(),
@@ -41,6 +43,7 @@ export const DATA_PLANS: Plan[] = [
     price: 80,
     trainTime: 120,
     createdAt: sequentialDates[2],
+    updatedAt: sequentialDates[2],
   },
   {
     id: v4(),
@@ -48,6 +51,7 @@ export const DATA_PLANS: Plan[] = [
     price: 80,
     trainTime: 120,
     createdAt: sequentialDates[3],
+    updatedAt: sequentialDates[3],
   },
   {
     id: v4(),
@@ -55,5 +59,6 @@ export const DATA_PLANS: Plan[] = [
     price: 80,
     trainTime: 120,
     createdAt: sequentialDates[4],
+    updatedAt: sequentialDates[4],
   },
 ];

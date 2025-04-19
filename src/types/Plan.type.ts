@@ -1,7 +1,7 @@
-export type Plan = {
-  id: string;
+import type { DB } from "./Db.typ";
+
+export type Plan = DB & {
   name: string;
   trainTime: number;
   price: number;
-  createdAt: Date;
 };

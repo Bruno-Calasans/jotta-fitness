@@ -1,19 +1,28 @@
 "use client";
 
-import { DATA_PLANS } from "@/data/DATA_PLANS";
+import { PLANS_DATA } from "@/data/PLANS_DATA";
 import { Plan } from "@/types/Plan.type";
 import { v4 } from "uuid";
 import { create } from "zustand";
 
 type PlanState = {
   plans: Plan[];
+  getByName: (name: string) => Plan | null;
   add: (input: Omit<Plan, "id" | "createdAt">) => void;
   remove: (id: string) => void;
   update: (id: string, input: Partial<Omit<Plan, "id">>) => void;
 };
 
 export const usePlanStore = create<PlanState>((set, get) => ({
-  plans: [],
+  plans: PLANS_DATA,
+  getByName(name) {
+    const foundPlan = get().plans.find(
+      (plan) => plan.name.toLowerCase() === name.toLowerCase()
+    );
+    if (!foundPlan) return null;
+
+    return foundPlan;
+  },
   add(input) {
     set((state) => ({
       plans: [...state.plans, { id: v4(), createdAt: new Date(), ...input }],
