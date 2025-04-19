@@ -5,9 +5,13 @@ import ContentContainer from "@/components/general/ContentContainer";
 import { useMemberStore } from "@/store/memberStore";
 import CreateMemberDialog from "@/components/dashboard/Members/CreateMemberDialog";
 import { memberColumns } from "@/components/dashboard/Members/MemberTableColumns";
+import MembersTab from "@/components/dashboard/Members/MembersTab";
+import { useState } from "react";
+import { Member } from "@/types/Member.type";
 
 export default function DashboardMembers() {
   const { members } = useMemberStore();
+  const [selectedMember, setSelectedMember] = useState<Member | null>();
 
   return (
     <ContentContainer>
@@ -20,7 +24,9 @@ export default function DashboardMembers() {
         columns={memberColumns}
         data={members}
         noResultMsg="Nenhum membro encontrado"
+        onRowSelection={setSelectedMember}
       />
+      {selectedMember && <MembersTab member={selectedMember} />}
     </ContentContainer>
   );
 }

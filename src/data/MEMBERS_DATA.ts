@@ -19,6 +19,11 @@ function createSequentialDate() {
   return datas;
 }
 
+function createDayAfterDate(date: Date, days: number) {
+  const newDate = new Date(date.getTime() + days * 24 * 60 * 60 * 1000 );
+  return newDate;
+}
+
 const sequentialDates = createSequentialDate();
 
 export const MEMBERS_DATA: Member[] = [
@@ -28,7 +33,30 @@ export const MEMBERS_DATA: Member[] = [
     phone: "81 9 12345678",
     plan: PLANS_DATA[0],
     role: null,
-    payments: null,
+    payments: {
+      plans: [
+        {
+          id: v4(),
+          createdAt: sequentialDates[0],
+          updatedAt: sequentialDates[0],
+          amount: 1,
+          createdBy: {
+            id: v4(),
+            name: "Carlos",
+            phone: "81 9 12345678",
+            plan: PLANS_DATA[1],
+            role: null,
+            payments: null,
+            createdAt: sequentialDates[0],
+            updatedAt: sequentialDates[0],
+          },
+          plan: PLANS_DATA[0],
+          startsIn: new Date(),
+          expiresIn: createDayAfterDate(new Date(), 10),
+        },
+      ],
+      products: [],
+    },
     createdAt: sequentialDates[0],
     updatedAt: sequentialDates[0],
   },
