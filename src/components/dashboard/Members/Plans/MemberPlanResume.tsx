@@ -1,0 +1,110 @@
+import { useMemberStore } from "@/store/memberStore";
+import { differenceInDays } from "date-fns";
+import PlanStatus from "./PlanStatus";
+import InfoMsg from "@/components/custom/InfoMsg";
+import ErrorMsg from "@/components/custom/ErrorMsg";
+
+export default function MemberPlanResume() {
+  const { selectedMember } = useMemberStore();
+
+  if (!selectedMember) return null;
+
+  const planPayments = selectedMember.planPayments;
+  const hasPlansPayments = planPayments.length > 0;
+  const lastPayment = planPayments[planPayments.length - 1];
+  const canChangePlanWithoutFullPayment =
+    hasPlansPayments &&
+    differenceInDays(lastPayment.startsIn, new Date()) <= 15;
+
+  const totalDays = hasPlansPayments
+    ? differenceInDays(lastPayment.expiresIn, lastPayment.startsIn)
+    : 0;
+
+  const leftDays = hasPlansPayments
+    ? differenceInDays(lastPayment.expiresIn, new Date())
+    : 0;
+
+  const usedDays = totalDays - leftDays;
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex  justify-between text-4xl font-bold border-b-2 border-orange-400">
+        <p>Resumo do Plano</p>
+        {/* Plan Status */}
+        <div className="flex p-1">
+          <div className="flex items-center gap-1 text-lg">
+            Situação: <PlanStatus planPayment={lastPayment} />
+          </div>
+        </div>
+      </div>
+
+      {/* Plan Info */}
+      <div className="flex flex-col gap-1">
+        {/* Current plan */}
+        <p className="text-md text-stone-300">
+          <span className="font-bold">Plano Atual:</span>{" "}
+          {hasPlansPayments ? lastPayment.plan.name : "Nenhum"}
+        </p>
+
+        {/* Last payment date */}
+        <p className="text-md text-stone-300">
+          <span className="font-bold">Última Data de Pagamento:</span>{" "}
+          {hasPlansPayments
+            ? lastPayment.startsIn.toLocaleDateString()
+            : "Nenhum"}
+        </p>
+
+        {/* Expire date */}
+        <p className="text-md text-stone-300">
+          <span className="font-bold">Data de Vencimento:</span>{" "}
+          {hasPlansPayments
+            ? lastPayment.expiresIn.toLocaleDateString()
+            : "Nenhum"}
+        </p>
+
+        {/* Total days */}
+        <p className="text-md text-stone-300">
+          <span className="font-bold">Dias Totais:</span> {totalDays}
+        </p>
+
+        {/* Left days */}
+        <p className="text-md text-stone-300">
+          <span className="font-bold">Dias Restantes:</span> {leftDays}
+        </p>
+
+        {/* Used days */}
+        <p className="text-md text-stone-300">
+          <span className="font-bold">Dias Utilizados:</span> {usedDays}
+        </p>
+
+        {/* Messages */}
+        <div className="mt-2">
+          {hasPlansPayments && canChangePlanWithoutFullPayment && (
+            <InfoMsg>
+              <p>
+                Usuário utilizou seu plano por menos que 15 dias, por isso,
+                ainda pode trocar de plano{" "}
+                <span className="font-bold underline">
+                  sem pagar o valor integral
+                </span>
+                .
+              </p>
+            </InfoMsg>
+          )}
+
+          {hasPlansPayments && !canChangePlanWithoutFullPayment && (
+            <ErrorMsg>
+              <p>
+                Usuário utilizou seu plano por{" "}
+                <span className="font-bold underline">mais que 15 dia</span>s,
+                por isso, terá que pagar{" "}
+                <span className="font-bold underline">valor integral</span> para
+                trocar de plano.
+              </p>
+            </ErrorMsg>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

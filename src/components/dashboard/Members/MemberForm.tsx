@@ -70,9 +70,8 @@ export default function MemberForm({ member, onSubmit }: MemberFormProps) {
         // Save to database
         memberDb.add({
           ...input,
-          payments: null,
+          payments: { plans: [], products: [] },
           role: null,
-          plan: null,
         });
 
         successToast("Criação de Membro", "Membro criado com sucesso!");

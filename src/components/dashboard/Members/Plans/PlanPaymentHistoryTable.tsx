@@ -1,23 +1,25 @@
 import DataTable from "@/components/custom/DataTable/DataTable";
-import { Member } from "@/types/Member.type";
 import { planPaymentColumns } from "./PlanPaymentColumnTable";
+import { useMemberStore } from "@/store/memberStore";
+import SubscribePlanDialog from "./SubscribePlanDialog";
 
-type PlanPaymentHistoryTableProps = {
-  member: Member;
-};
+export default function PlanPaymentHistoryTable() {
+  const { selectedMember } = useMemberStore();
 
-export default function PlanPaymentHistoryTable({
-  member,
-}: PlanPaymentHistoryTableProps) {
+  if (!selectedMember) return null;
+  const planPayments = selectedMember.planPayments;
+
   return (
-    <DataTable
-      columns={planPaymentColumns}
-      data={
-        member.payments && member.payments.plans.length > 0
-          ? member.payments.plans
-          : []
-      }
-      noResultMsg="Nenhum pagamento encontrado"
-    />
+    <div>
+      <div className="flex justify-between text-4xl border-b-2 border-b-orange-500 py-2 mb-3">
+        <p>Histórico de Inscrições</p>
+        <SubscribePlanDialog />
+      </div>
+      <DataTable
+        columns={planPaymentColumns}
+        data={planPayments.length > 0 ? planPayments : []}
+        noResultMsg="Nenhuma inscrição encontrada"
+      />
+    </div>
   );
 }

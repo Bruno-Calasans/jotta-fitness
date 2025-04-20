@@ -6,6 +6,7 @@ import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
 import RemoveMemberDialog from "./RemoveMemberDialog";
 import { Badge } from "@/components/ui/badge";
 import phoneMask from "@/utils/phoneMask";
+import PlanStatus from "./Plans/PlanStatus";
 
 export const memberColumns: ColumnDef<Member>[] = [
   {
@@ -13,16 +14,6 @@ export const memberColumns: ColumnDef<Member>[] = [
     header: ({ column }) => (
       <DataTableSortableHeader column={column} headerName="Nome" />
     ),
-  },
-  {
-    accessorKey: "plan",
-    header: ({ column }) => (
-      <DataTableSortableHeader column={column} headerName="Plano" />
-    ),
-    cell: ({ row }) => {
-      const member = row.original;
-      return <p>{member.plan ? member.plan.name : "Nenhum"}</p>;
-    },
   },
   {
     accessorKey: "phone",
@@ -62,23 +53,33 @@ export const memberColumns: ColumnDef<Member>[] = [
     },
   },
   {
-    accessorKey: "createdAt",
+    accessorKey: "planPayments",
     header: ({ column }) => (
-      <DataTableSortableHeader
-        column={column}
-        headerName="Data de Criação"
-        type="date"
-      />
+      <DataTableSortableHeader column={column} headerName="Plano" />
     ),
     cell: ({ row }) => {
-      const member = row.original;
-      return (
-        <p>
-          {`${member.createdAt.toLocaleDateString()} às ${member.createdAt.toLocaleTimeString()}`}
-        </p>
-      );
+      const { planPayments } = row.original;
+      return <PlanStatus planPayment={planPayments[planPayments.length - 1]} />;
     },
   },
+// {
+//   accessorKey: "createdAt",
+//   header: ({ column }) => (
+//     <DataTableSortableHeader
+//       column={column}
+//       headerName="Data de Criação"
+//       type="date"
+//     />
+//   ),
+//   cell: ({ row }) => {
+//     const member = row.original;
+//     return (
+//       <p>
+//         {`${member.createdAt.toLocaleDateString()} às ${member.createdAt.toLocaleTimeString()}`}
+//       </p>
+//     );
+//   },
+// },
   {
     id: "actions",
     cell: ({ row }) => {

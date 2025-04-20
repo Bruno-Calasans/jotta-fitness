@@ -12,12 +12,14 @@ import { usePlanStore } from "@/store/planStore";
 import { Plan } from "@/types/Plan.type";
 
 type PlanSelectorProps = {
+  value: string;
   defaultValue: string;
   onValueChange: (value: string) => void;
   onSelected: (plan: Plan) => void;
 };
 
 export function PlanSelector({
+  value,
   defaultValue,
   onValueChange,
   onSelected,
@@ -31,7 +33,11 @@ export function PlanSelector({
   };
 
   return (
-    <Select defaultValue={defaultValue} onValueChange={changeHandler}>
+    <Select
+      value={value}
+      defaultValue={defaultValue}
+      onValueChange={changeHandler}
+    >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Selecione um plano" />
       </SelectTrigger>

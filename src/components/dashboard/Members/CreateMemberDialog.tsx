@@ -1,3 +1,5 @@
+"use lient";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,9 +12,7 @@ import { Plus } from "lucide-react";
 import MemberForm from "./MemberForm";
 import { useState } from "react";
 
-type CreateMemberModalProps = {};
-
-export default function CreateMemberDialog({}: CreateMemberModalProps) {
+export default function CreateMemberDialog() {
   const [open, setOpen] = useState(false);
 
   const submitFormHandler = (success: boolean) => {

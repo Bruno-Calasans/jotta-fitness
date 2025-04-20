@@ -1,11 +1,10 @@
 import DataTableSortableHeader from "@/components/custom/DataTable/DataTableSortableHeader";
-import type { Member } from "@/types/Member.type";
 import type { ColumnDef } from "@tanstack/react-table";
-// import EditMemberDialog from "./EditMemberDialog";
 import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
-// import RemoveMemberDialog from "./RemoveMemberDialog";
-import phoneMask from "@/utils/phoneMask";
 import { PlanPayment } from "@/types/Payment.type";
+import RemovePlanSubscriptionDialog from "./RemovePlanSubscriptionDialog";
+import EditPlanSubscriptionDialog from "./EditPlanSubscriptionDialog";
+import PlanStatus from "./PlanStatus";
 
 export const planPaymentColumns: ColumnDef<PlanPayment>[] = [
   {
@@ -16,10 +15,21 @@ export const planPaymentColumns: ColumnDef<PlanPayment>[] = [
     ),
   },
   {
-    accessorKey: "amount",
+    accessorKey: "months",
     header: ({ column }) => (
-      <DataTableSortableHeader column={column} headerName="Quantidade" />
+      <DataTableSortableHeader column={column} headerName="Meses" />
     ),
+  },
+  {
+    id: "Status",
+    accessorKey: "plan",
+    header: ({ column }) => (
+      <DataTableSortableHeader column={column} headerName="Status" />
+    ),
+    cell: ({ row }) => {
+      const planPayment = row.original;
+      return <PlanStatus planPayment={planPayment} />;
+    },
   },
   {
     accessorKey: "startsIn",
@@ -30,6 +40,10 @@ export const planPaymentColumns: ColumnDef<PlanPayment>[] = [
         type="date"
       />
     ),
+    cell: ({ row }) => {
+      const startsIn = row.original.startsIn;
+      return <p>{startsIn.toLocaleDateString()}</p>;
+    },
   },
   {
     accessorKey: "expiresIn",
@@ -40,17 +54,21 @@ export const planPaymentColumns: ColumnDef<PlanPayment>[] = [
         type="date"
       />
     ),
+    cell: ({ row }) => {
+      const expiresIn = row.original.expiresIn;
+      return <p>{expiresIn.toLocaleDateString()}</p>;
+    },
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const member = row.original;
+      const planPayment = row.original;
 
       return (
         <MoreOptionsDropdown>
           <div className="flex flex-col gap-1">
-            {/* <EditMemberDialog member={member} /> */}
-            {/* <RemoveMemberDialog member={member} /> */}
+            <EditPlanSubscriptionDialog planPayment={planPayment} />
+            <RemovePlanSubscriptionDialog planPayment={planPayment} />
           </div>
         </MoreOptionsDropdown>
       );

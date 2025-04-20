@@ -5,7 +5,7 @@ import type { Product } from "./Product.type";
 
 export type PlanPayment = DB & {
   plan: Plan;
-  amount: number;
+  months: number;
   startsIn: Date;
   expiresIn: Date;
   createdBy: Member;
