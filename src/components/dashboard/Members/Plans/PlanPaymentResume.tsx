@@ -1,4 +1,6 @@
+import { useMemberStore } from "@/store/memberStore";
 import { Plan } from "@/types/Plan.type";
+import { differenceInDays } from "date-fns";
 
 type PlanPaymentResumeProps = {
   plan: Plan;
@@ -9,13 +11,36 @@ export default function PlanPaymentResume({
   plan,
   months,
 }: PlanPaymentResumeProps) {
+  const { selectedMember } = useMemberStore();
+
+  if (!selectedMember) return null;
+
+  const planPayments = selectedMember.planPayments;
+  const hasPlansPayments = planPayments.length > 0;
+  const lastPayment = planPayments[planPayments.length - 1];
+
+  const leftDays = hasPlansPayments
+    ? differenceInDays(lastPayment.expiresIn, new Date())
+    : 0;
+
+  const penalyDelay = leftDays < 0 ? Math.abs(1.5 * leftDays) : 0;
+
   return (
     <div>
-      <p className="text-lg font-bold">Resumo de pagamento</p>
-      <p className="text-stone-700">Valor do plano: R$ {plan.price}</p>
-      <p className="text-stone-700">Meses a pagar: {months} mese(s)</p>
-      <p className="font-semibold italic border-t-2 border-orange-500 mt-2">
-        Total a pagar: R${months * plan.price}
+      <p className="text-2xl font-bold border-b-2 border-orange-500 mb-2">
+        Resumo de pagamento
+      </p>
+      <p className="text-stone-800 text-lg">
+        Valor do plano: R$ {plan.price.toFixed(2)}
+      </p>
+      <p className="text-stone-800 text-lg">Meses a pagar: {months} mese(s)</p>
+      {leftDays < 0 && (
+        <p className="text-red-700 font-semibold text-lg">
+          Multa por atraso: R${penalyDelay.toFixed(2)}
+        </p>
+      )}
+      <p className="font-semibold italic border-t-2 border-orange-500 mt-2 text-lg">
+        Total a pagar: R${(months * plan.price + penalyDelay).toFixed(2)}
       </p>
     </div>
   );

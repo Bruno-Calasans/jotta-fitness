@@ -12,9 +12,6 @@ export default function MemberPlanResume() {
   const planPayments = selectedMember.planPayments;
   const hasPlansPayments = planPayments.length > 0;
   const lastPayment = planPayments[planPayments.length - 1];
-  const canChangePlanWithoutFullPayment =
-    hasPlansPayments &&
-    differenceInDays(lastPayment.startsIn, new Date()) <= 15;
 
   const totalDays = hasPlansPayments
     ? differenceInDays(lastPayment.expiresIn, lastPayment.startsIn)
@@ -25,6 +22,8 @@ export default function MemberPlanResume() {
     : 0;
 
   const usedDays = totalDays - leftDays;
+
+  const canChangePlanWithoutFullPayment = hasPlansPayments && usedDays <= 15;
 
   return (
     <div className="flex flex-col gap-2">
@@ -69,7 +68,7 @@ export default function MemberPlanResume() {
 
         {/* Left days */}
         <p className="text-md text-stone-300">
-          <span className="font-bold">Dias Restantes:</span> {leftDays}
+          <span className="font-bold">Dias Restantes:</span> {leftDays}{" "}
         </p>
 
         {/* Used days */}
@@ -78,7 +77,7 @@ export default function MemberPlanResume() {
         </p>
 
         {/* Messages */}
-        <div className="mt-2">
+        <div className="flex flex-col gap-2 mt-2">
           {hasPlansPayments && canChangePlanWithoutFullPayment && (
             <InfoMsg>
               <p>
@@ -100,6 +99,18 @@ export default function MemberPlanResume() {
                 por isso, terá que pagar{" "}
                 <span className="font-bold underline">valor integral</span> para
                 trocar de plano.
+              </p>
+            </ErrorMsg>
+          )}
+
+          {leftDays < 0 && (
+            <ErrorMsg>
+              <p>
+                Seu plano expirou a {Math.abs(leftDays)} dia atrás. Você deve
+                pagar R$ 1,50 a mais por cada dia de atraso, totalizando{" "}
+                <span className="font-bold underline">
+                  R$ {Math.abs(1.5 * leftDays).toFixed(2)}
+                </span>
               </p>
             </ErrorMsg>
           )}

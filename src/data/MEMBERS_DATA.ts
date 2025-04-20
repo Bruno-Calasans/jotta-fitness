@@ -1,5 +1,7 @@
 import { Member } from "@/types/Member.type";
 import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
+import { addDays } from "date-fns";
+import { PLANS_DATA } from "./PLANS_DATA";
 
 export const MEMBERS_DATA: Member[] = [
   {
@@ -15,7 +17,24 @@ export const MEMBERS_DATA: Member[] = [
     name: "Carlos",
     phone: "81 9 12345678",
     role: null,
-    planPayments: [],
+    planPayments: [
+      {
+        ...generateDefaultDbFields(),
+        months: 1,
+        plan: PLANS_DATA[1],
+        createdAt: addDays(new Date(), -31),
+        startsIn: addDays(new Date(), -31),
+        expiresIn: addDays(new Date(), -1),
+        createdBy: {
+          ...generateDefaultDbFields(),
+          name: "James",
+          phone: "81 9 12345678",
+          role: null,
+          planPayments: [],
+          productPayments: [],
+        },
+      },
+    ],
     productPayments: [],
   },
   {
