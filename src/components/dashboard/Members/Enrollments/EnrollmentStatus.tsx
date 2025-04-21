@@ -1,15 +1,17 @@
 import { differenceInHours } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import { PlanPayment } from "@/types/Payment.type";
+import { Enrollment } from "@/types/Enrollment.type";
 
-type PlanStatusProps = {
-  planPayment?: PlanPayment;
+type SubscriptionStatusProps = {
+  enrollment?: Enrollment;
 };
 
-export default function PlanStatus({ planPayment }: PlanStatusProps) {
-  if (!planPayment) return <Badge>Sem Plano</Badge>;
+export default function SubscriptionStatus({
+  enrollment,
+}: SubscriptionStatusProps) {
+  if (!enrollment) return <Badge>Sem Plano</Badge>;
 
-  const diff = differenceInHours(planPayment.expiresIn, new Date());
+  const diff = differenceInHours(enrollment.expiresIn, new Date());
 
   if (diff > 0) {
     return (

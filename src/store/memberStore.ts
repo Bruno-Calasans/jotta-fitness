@@ -2,43 +2,55 @@
 
 import { MEMBERS_DATA } from "@/data/MEMBERS_DATA";
 import { DB } from "@/types/Db.typ";
-import { Member } from "@/types/Member.type";
-import { PlanPayment } from "@/types/Payment.type";
+import type { Member } from "@/types/Member.type";
+import type { Enrollment } from "@/types/Enrollment.type";
 import { create } from "zustand";
 import { add as addDate, differenceInDays } from "date-fns";
-import { Plan } from "@/types/Plan.type";
+import type { Plan } from "@/types/Plan.type";
 import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
+import type { Purchase } from "@/types/Purchase.type";
 
 type MemberState = {
   members: Member[];
   selectedMember: Member | null;
-  selectedPlanPayment: PlanPayment | null;
-  setSelectedPlanPayment: (planPayment: PlanPayment | null) => void;
+  selectedEnrollment: Enrollment | null;
+  setSelectedEnrollment: (enrollment: Enrollment | null) => void;
   setSelectedMember: (member: Member | null) => void;
   getById: (id: string) => Member | null;
   add: (input: Omit<Member, keyof DB>) => void;
   remove: (id: string) => void;
-  update: (id: string, input: Partial<Omit<Member, keyof DB>>) => Member | null;
+  update: (
+    memberId: string,
+    input: Partial<Omit<Member, keyof DB>>
+  ) => Member | null;
   subscribe: (
     memberId: string,
-    input: Omit<PlanPayment, keyof DB | "startsIn" | "expiresIn">
+    input: Omit<Enrollment, keyof DB | "startsIn" | "expiresIn">
   ) => void;
-  unsubscribe: (memberId: string, planPaymentId: string) => void;
-  updatePlanPayment: (
+  unsubscribe: (memberId: string, enrollmentId: string) => void;
+  updateEnrollment: (
     memberId: string,
-    planPaymentId: string,
+    enrollmentId: string,
     input: Partial<{ plan: Plan; months: number }>
   ) => void;
   getLeftDays: (member: Member, excludes?: string[]) => number;
-  getActivePlanPayments: (memberId: string) => PlanPayment[];
+  getActiveEnrollments: (memberId: string) => Enrollment[];
+  addPurchase: (memberId: string, input: Omit<Purchase, keyof DB>) => void;
+  updatePurchase: (
+    memberId: string,
+    purchaseId: string,
+    input: Partial<Omit<Purchase, keyof DB>>
+  ) => void;
+  removePurchase: (memberId: string, purchaseId: string) => void;
+  getPurchaseById: (id: string) => Purchase | null;
 };
 
 export const useMemberStore = create<MemberState>((set, get) => ({
   members: MEMBERS_DATA,
   selectedMember: null,
-  selectedPlanPayment: null,
-  setSelectedPlanPayment(planPayment) {
-    set(() => ({ selectedPlanPayment: planPayment }));
+  selectedEnrollment: null,
+  setSelectedEnrollment(enrollment) {
+    set(() => ({ selectedEnrollment: enrollment }));
   },
   setSelectedMember(member) {
     set(() => ({ selectedMember: member }));
@@ -75,16 +87,16 @@ export const useMemberStore = create<MemberState>((set, get) => ({
   getLeftDays(member: Member, excludes = []) {
     // Check if there's left days at the last plan payment
     let totalLeftDays = 0;
-    const activePlanPayments = get().getActivePlanPayments(member.id);
-    if (activePlanPayments.length === 0) return totalLeftDays;
+    const activeEnrollments = get().getActiveEnrollments(member.id);
+    if (activeEnrollments.length === 0) return totalLeftDays;
 
-    const filteredActivePlanPayments = activePlanPayments.filter(
-      (planPayment) => !excludes.includes(planPayment.id)
+    const filteredActiveEnrollments = activeEnrollments.filter(
+      (enrollment) => !excludes.includes(enrollment.id)
     );
-    if (filteredActivePlanPayments.length === 0) return totalLeftDays;
+    if (filteredActiveEnrollments.length === 0) return totalLeftDays;
 
     const lasActivePayment =
-      filteredActivePlanPayments[filteredActivePlanPayments.length - 1];
+      filteredActiveEnrollments[filteredActiveEnrollments.length - 1];
 
     // Calc left days
     let leftDays = differenceInDays(lasActivePayment.expiresIn, new Date());
@@ -102,20 +114,18 @@ export const useMemberStore = create<MemberState>((set, get) => ({
     if (!member) return;
 
     // Check if there's left days at the last plan payment
-    const leftDaysLastPlanPayment = get().getLeftDays(member);
-
-    console.log(input.months * 30, leftDaysLastPlanPayment);
+    const leftDaysLastEnrollment = get().getLeftDays(member);
 
     const updatedMember = get().update(memberId, {
       ...member,
-      planPayments: [
-        ...member.planPayments,
+      enrollments: [
+        ...member.enrollments,
         {
           ...input,
           ...generateDefaultDbFields(),
           startsIn: new Date(),
           expiresIn: addDate(new Date(), {
-            days: input.months * 30 + leftDaysLastPlanPayment,
+            days: input.months * 30 + leftDaysLastEnrollment,
           }),
         },
       ],
@@ -124,25 +134,25 @@ export const useMemberStore = create<MemberState>((set, get) => ({
     // Update selected member
     if (updatedMember) get().setSelectedMember(updatedMember);
   },
-  unsubscribe(memberId, planPaymentId) {
+  unsubscribe(memberId, enrollmentId) {
     // Found member
     const foundMember = get().getById(memberId);
     if (!foundMember) return;
 
     // Change specific plan payment
-    const updatedPlanPayments = foundMember.planPayments.filter(
-      (planPayment) => planPayment.id != planPaymentId
+    const updatedEnrollments = foundMember.enrollments.filter(
+      (enrollment) => enrollment.id != enrollmentId
     );
 
     // Update plan payments
     const updatedMember = get().update(memberId, {
-      planPayments: updatedPlanPayments,
+      enrollments: updatedEnrollments,
     });
 
     // Update selected member
     get().setSelectedMember(updatedMember);
   },
-  updatePlanPayment(memberId, planPaymentId, input) {
+  updateEnrollment(memberId, enrollmentId, input) {
     // Found member
     const foundMember = get().getById(memberId);
     if (!foundMember) return;
@@ -150,48 +160,110 @@ export const useMemberStore = create<MemberState>((set, get) => ({
     const currentDate = new Date();
 
     // Update specific plan payment
-    const updatedPlanPayments = foundMember.planPayments.map((planPayment) => {
+    const updatedEnrollments = foundMember.enrollments.map((enrollment) => {
       // Find specific plan payment
-      if (planPayment.id === planPaymentId) {
-        let leftDaysLastPlanPayment = get().getLeftDays(foundMember, [
-          planPayment.id,
+      if (enrollment.id === enrollmentId) {
+        let leftDaysLastEnrollment = get().getLeftDays(foundMember, [
+          enrollment.id,
         ]);
 
-        const isMonthsDiff = input.months && input.months != planPayment.months;
-        const pastDays = differenceInDays(planPayment.startsIn, new Date());
+        const isMonthsDiff = input.months && input.months != enrollment.months;
+        const pastDays = differenceInDays(enrollment.startsIn, new Date());
 
         return {
-          ...planPayment,
+          ...enrollment,
           ...input,
-          startsIn: isMonthsDiff ? currentDate : planPayment.startsIn,
+          startsIn: isMonthsDiff ? currentDate : enrollment.startsIn,
           expiresIn: isMonthsDiff
             ? addDate(currentDate, {
-                days: input.months! * 30 + leftDaysLastPlanPayment - pastDays,
+                days: input.months! * 30 + leftDaysLastEnrollment - pastDays,
               })
-            : planPayment.expiresIn,
+            : enrollment.expiresIn,
         };
       }
       // Return others plan payments
-      return planPayment;
+      return enrollment;
     });
 
     const updatedMember = get().update(foundMember.id, {
       ...foundMember,
-      planPayments: updatedPlanPayments,
+      enrollments: updatedEnrollments,
     });
 
     get().setSelectedMember(updatedMember);
   },
-  getActivePlanPayments(memberId) {
-    let activePlanPayments: PlanPayment[] = [];
+  getActiveEnrollments(memberId) {
+    let activeEnrollments: Enrollment[] = [];
     const foundMember = get().getById(memberId);
 
-    if (!foundMember) return activePlanPayments;
+    if (!foundMember) return activeEnrollments;
 
-    activePlanPayments = foundMember.planPayments.filter((payment) => {
+    activeEnrollments = foundMember.enrollments.filter((payment) => {
       return differenceInDays(payment.expiresIn, new Date()) > 0;
     });
 
-    return activePlanPayments;
+    return activeEnrollments;
+  },
+  addPurchase(memberId, input) {
+    const foundMember = get().getById(memberId);
+    if (!foundMember) return;
+
+    const updatedMember = get().update(memberId, {
+      purchases: [
+        ...foundMember.purchases,
+        {
+          ...generateDefaultDbFields(),
+          ...input,
+        },
+      ],
+    });
+
+    get().setSelectedMember(updatedMember);
+  },
+  updatePurchase(memberId, purchaseId, input) {
+    const foundMember = get().getById(memberId);
+    if (!foundMember) return;
+
+    const updatedPurchases = foundMember.purchases.map((purchase) => {
+      if (purchase.id === purchaseId) {
+        return {
+          ...purchase,
+          ...input,
+        };
+      }
+      return purchase;
+    });
+
+    const updatedMember = get().update(foundMember.id, {
+      purchases: updatedPurchases,
+    });
+
+    get().setSelectedMember(updatedMember);
+  },
+  getPurchaseById(id) {
+    let foundPurchase: Purchase | null = null;
+
+    for (let member of get().members) {
+      const purchase = member.purchases.find((purchase) => purchase.id === id);
+      if (purchase) {
+        foundPurchase = purchase;
+        break;
+      }
+    }
+    return foundPurchase;
+  },
+  removePurchase(memberId, purchaseId) {
+    const foundMember = get().getById(memberId);
+    if (!foundMember) return;
+
+    const updatedPurchases = foundMember.purchases.filter(
+      (purchase) => purchase.id !== purchaseId
+    );
+
+    const updatedMember = get().update(foundMember.id, {
+      purchases: updatedPurchases,
+    });
+
+    get().setSelectedMember(updatedMember);
   },
 }));

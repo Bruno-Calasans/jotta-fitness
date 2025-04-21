@@ -1,17 +1,17 @@
 import { useMemberStore } from "@/store/memberStore";
 import { differenceInDays } from "date-fns";
-import PlanStatus from "./PlanStatus";
+import PlanStatus from "./EnrollmentStatus";
 import InfoMsg from "@/components/custom/InfoMsg";
 import ErrorMsg from "@/components/custom/ErrorMsg";
 
-export default function MemberPlanResume() {
+export default function CurrentEnrollmentResume() {
   const { selectedMember } = useMemberStore();
 
   if (!selectedMember) return null;
 
-  const planPayments = selectedMember.planPayments;
-  const hasPlansPayments = planPayments.length > 0;
-  const lastPayment = planPayments[planPayments.length - 1];
+  const enrollments = selectedMember.enrollments;
+  const hasPlansPayments = enrollments.length > 0;
+  const lastPayment = enrollments[enrollments.length - 1];
 
   const totalDays = hasPlansPayments
     ? differenceInDays(lastPayment.expiresIn, lastPayment.startsIn)
@@ -32,7 +32,7 @@ export default function MemberPlanResume() {
         {/* Plan Status */}
         <div className="flex p-1">
           <div className="flex items-center gap-1 text-lg">
-            Situação: <PlanStatus planPayment={lastPayment} />
+            Situação: <PlanStatus enrollment={lastPayment} />
           </div>
         </div>
       </div>

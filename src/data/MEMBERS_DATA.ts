@@ -2,6 +2,16 @@ import { Member } from "@/types/Member.type";
 import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
 import { addDays } from "date-fns";
 import { PLANS_DATA } from "./PLANS_DATA";
+import { PRODUCTS_DATA } from "./PRODUCTS_DATA";
+
+export const STAFF: Member = {
+  ...generateDefaultDbFields(),
+  name: "Jota",
+  phone: "81 9 12345678",
+  role: null,
+  enrollments: [],
+  purchases: [],
+};
 
 export const MEMBERS_DATA: Member[] = [
   {
@@ -9,15 +19,15 @@ export const MEMBERS_DATA: Member[] = [
     name: "James",
     phone: "81 9 12345678",
     role: null,
-    planPayments: [],
-    productPayments: [],
+    enrollments: [],
+    purchases: [],
   },
   {
     ...generateDefaultDbFields(),
     name: "Carlos",
     phone: "81 9 12345678",
     role: null,
-    planPayments: [
+    enrollments: [
       {
         ...generateDefaultDbFields(),
         months: 1,
@@ -25,33 +35,39 @@ export const MEMBERS_DATA: Member[] = [
         createdAt: addDays(new Date(), -31),
         startsIn: addDays(new Date(), -31),
         expiresIn: addDays(new Date(), -1),
-        createdBy: {
-          ...generateDefaultDbFields(),
-          name: "James",
-          phone: "81 9 12345678",
-          role: null,
-          planPayments: [],
-          productPayments: [],
-        },
+        createdBy: STAFF,
       },
     ],
-    productPayments: [],
+    purchases: [
+      {
+        ...generateDefaultDbFields(),
+        amount: 1,
+        product: PRODUCTS_DATA[0],
+        createdBy: STAFF,
+      },
+      {
+        ...generateDefaultDbFields(),
+        amount: 2,
+        product: PRODUCTS_DATA[1],
+        createdBy: STAFF,
+      },
+    ],
   },
   {
     ...generateDefaultDbFields(),
     name: "Jota",
     phone: "81 9 12345678",
     role: null,
-    planPayments: [],
-    productPayments: [],
+    enrollments: [],
+    purchases: [],
   },
   {
     ...generateDefaultDbFields(),
     name: "Frederico",
     phone: "81 9 12345678",
     role: null,
-    planPayments: [],
-    productPayments: [],
+    enrollments: [],
+    purchases: [],
   },
   {
     ...generateDefaultDbFields(),
@@ -68,7 +84,7 @@ export const MEMBERS_DATA: Member[] = [
         },
       ],
     },
-    planPayments: [],
-    productPayments: [],
+    enrollments: [],
+    purchases: [],
   },
 ];

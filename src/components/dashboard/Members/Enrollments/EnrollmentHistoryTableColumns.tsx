@@ -1,12 +1,12 @@
 import DataTableSortableHeader from "@/components/custom/DataTable/DataTableSortableHeader";
 import type { ColumnDef } from "@tanstack/react-table";
 import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
-import { PlanPayment } from "@/types/Payment.type";
-import RemovePlanSubscriptionDialog from "./RemovePlanSubscriptionDialog";
-import EditPlanSubscriptionDialog from "./EditPlanSubscriptionDialog";
-import PlanStatus from "./PlanStatus";
+import { Enrollment } from "@/types/Enrollment.type";
+import RemoveSubscriptionDialog from "./RemoveEnrollmentDialog";
+import EditSubscriptionDialog from "./EditEnrollmentDialog";
+import PlanStatus from "./EnrollmentStatus";
 
-export const planPaymentColumns: ColumnDef<PlanPayment>[] = [
+export const enrollmentColumns: ColumnDef<Enrollment>[] = [
   {
     id: "name",
     accessorKey: "plan.name",
@@ -27,8 +27,8 @@ export const planPaymentColumns: ColumnDef<PlanPayment>[] = [
       <DataTableSortableHeader column={column} headerName="Status" />
     ),
     cell: ({ row }) => {
-      const planPayment = row.original;
-      return <PlanStatus planPayment={planPayment} />;
+      const enrollment = row.original;
+      return <PlanStatus enrollment={enrollment} />;
     },
   },
   {
@@ -62,13 +62,13 @@ export const planPaymentColumns: ColumnDef<PlanPayment>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const planPayment = row.original;
+      const enrollment = row.original;
 
       return (
         <MoreOptionsDropdown>
           <div className="flex flex-col gap-1">
-            <EditPlanSubscriptionDialog planPayment={planPayment} />
-            <RemovePlanSubscriptionDialog planPayment={planPayment} />
+            <EditSubscriptionDialog enrollment={enrollment} />
+            <RemoveSubscriptionDialog enrollment={enrollment} />
           </div>
         </MoreOptionsDropdown>
       );

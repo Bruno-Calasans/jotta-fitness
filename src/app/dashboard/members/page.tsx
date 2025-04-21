@@ -1,12 +1,12 @@
 import ContentContainer from "@/components/general/ContentContainer";
-import MemberTabs from "@/components/dashboard/Members/MemberTabs";
 import MembersTable from "@/components/dashboard/Members/MembersTable";
+import MembersPageBreadcrumbs from "@/components/dashboard/Members/MembersPageBreadcrumbs";
 
 export default function DashboardMembersPage() {
   return (
     <ContentContainer>
+      <MembersPageBreadcrumbs />
       <MembersTable />
-      {/* <MemberTabs /> */}
     </ContentContainer>
   );
 }

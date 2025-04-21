@@ -1,7 +1,7 @@
 "use client";
 
 import DataTable from "@/components/custom/DataTable/DataTable";
-import { memberColumns } from "@/components/dashboard/Members/MemberTableColumns";
+import { membersColumns } from "@/components/dashboard/Members/MembersTableColumns";
 import { useMemberStore } from "@/store/memberStore";
 import CreateMemberDialog from "./CreateMemberDialog";
 import { useRouter } from "next/navigation";
@@ -23,7 +23,7 @@ export default function MembersTable() {
         <CreateMemberDialog />
       </div>
       <DataTable
-        columns={memberColumns}
+        columns={membersColumns}
         data={members}
         noResultMsg="Nenhum membro encontrado"
         onRowSelection={clickMemberRowHandler}

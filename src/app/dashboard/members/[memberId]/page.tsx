@@ -1,52 +1,35 @@
 "use client";
 
+import MemberPageBreadcrumbs from "@/components/dashboard/Members/MemberPageBreadcrumbs";
 import MemberTabs from "@/components/dashboard/Members/MemberTabs";
 import ContentContainer from "@/components/general/ContentContainer";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { useMemberStore } from "@/store/memberStore";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-type MemberInfoPageProps = {};
+type MemberInfoPageProps = {
+  params: Promise<{ memberId: string }>;
+};
 
-export default function MemberInfoPage({}: MemberInfoPageProps) {
-  const { selectedMember } = useMemberStore();
+export default function MemberInfoPage({ params }: MemberInfoPageProps) {
+  const { getById, setSelectedMember } = useMemberStore();
+  const router = useRouter();
+
+  const loadMember = async () => {
+    const { memberId } = await params;
+    if (!memberId) return;
+    const foundMember = getById(memberId);
+    if (!foundMember) return router.push("/dashboard/members");
+    setSelectedMember(foundMember);
+  };
+
+  useEffect(() => {
+    loadMember();
+  }, []);
+
   return (
     <ContentContainer>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink
-              asChild
-              className="text-white hover:text-orange-500 transition-all"
-            >
-              <Link href="/dashboard">Dashboard</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink
-              asChild
-              className="text-white hover:text-orange-500 transition-all"
-            >
-              <Link href="/dashboard/members">Membros</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage className="text-white">
-              {selectedMember ? selectedMember.name : "Membro"}
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-
+      <MemberPageBreadcrumbs />
       <MemberTabs />
     </ContentContainer>
   );

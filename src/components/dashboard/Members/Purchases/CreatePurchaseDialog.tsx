@@ -7,11 +7,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
-import SubscribePlanForm from "./SubscribePlanForm";
+import PurchaseForm from "./PurchaseForm";
 import { useState } from "react";
 import { useMemberStore } from "@/store/memberStore";
 
-export default function SubscribePlanDialog() {
+export default function CreatePurchaseDialog() {
   const [open, setOpen] = useState(false);
   const { selectedMember } = useMemberStore();
 
@@ -27,15 +27,15 @@ export default function SubscribePlanDialog() {
       <DialogTrigger asChild>
         <Button className="bg-emerald-500 hover:bg-emerald-600 font-bold">
           <Plus />
-          {selectedMember.planPayments.length === 0 ? "Inscrever" : "Renovar"}
+          Comprar
         </Button>
       </DialogTrigger>
       {/* Subscribe form */}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Inscrever</DialogTitle>
+          <DialogTitle>Comprar Produto</DialogTitle>
         </DialogHeader>
-        <SubscribePlanForm onSubmit={submitFormHandler} />
+        <PurchaseForm onSubmit={submitFormHandler} />
       </DialogContent>
     </Dialog>
   );

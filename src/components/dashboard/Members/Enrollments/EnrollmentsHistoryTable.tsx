@@ -1,23 +1,24 @@
 import DataTable from "@/components/custom/DataTable/DataTable";
-import { planPaymentColumns } from "./PlanPaymentColumnTable";
+import { enrollmentColumns } from "./EnrollmentHistoryTableColumns";
 import { useMemberStore } from "@/store/memberStore";
-import SubscribePlanDialog from "./SubscribePlanDialog";
+import CreateSubscriptionDialog from "./CreateEnrollmentDialog";
 
-export default function PlanPaymentHistoryTable() {
+export default function EnrollmentsHistoryTable() {
   const { selectedMember } = useMemberStore();
 
   if (!selectedMember) return null;
-  const planPayments = selectedMember.planPayments;
+
+  const enrollments = selectedMember.enrollments;
 
   return (
     <div>
       <div className="flex justify-between text-4xl border-b-2 border-b-orange-500 py-2 mb-3">
         <p>Histórico de Inscrições</p>
-        <SubscribePlanDialog />
+        <CreateSubscriptionDialog />
       </div>
       <DataTable
-        columns={planPaymentColumns}
-        data={planPayments.length > 0 ? planPayments : []}
+        columns={enrollmentColumns}
+        data={enrollments.length > 0 ? enrollments : []}
         noResultMsg="Nenhuma inscrição encontrada"
       />
     </div>

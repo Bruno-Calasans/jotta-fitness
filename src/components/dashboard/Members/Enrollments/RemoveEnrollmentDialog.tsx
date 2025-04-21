@@ -11,23 +11,23 @@ import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { useMemberStore } from "@/store/memberStore";
-import { PlanPayment } from "@/types/Payment.type";
+import { Enrollment } from "@/types/Enrollment.type";
 
-type RemovePlanSubscriptionDialogProps = {
-  planPayment: PlanPayment;
+type RemoveEnrollmentDialogProps = {
+  enrollment: Enrollment;
 };
 
-export default function RemovePlanSubscriptionDialog({
-  planPayment,
-}: RemovePlanSubscriptionDialogProps) {
+export default function RemoveEnrollmentDialog({
+  enrollment,
+}: RemoveEnrollmentDialogProps) {
   const { successToast, errorToast } = useCustomToast();
   const { selectedMember, unsubscribe } = useMemberStore();
 
   if (!selectedMember) return null;
 
-  const removePlanSubscriptionHandler = () => {
+  const removeSubscriptionHandler = () => {
     try {
-      unsubscribe(selectedMember.id, planPayment.id);
+      unsubscribe(selectedMember.id, enrollment.id);
       successToast("Desiscrição de Plano", "Plano desiscrito com sucesso!");
     } catch (error) {
       errorToast("Desiscrição de Plano", "Erro ao desiscrever do Plano!");
@@ -50,7 +50,7 @@ export default function RemovePlanSubscriptionDialog({
           <DialogTitle>Desiscrever</DialogTitle>
           <div>
             Tem certeza que deseja excluir a inscrição no plano{" "}
-            <span className="font-bold">"{planPayment.plan.name}"</span>?
+            <span className="font-bold">"{enrollment.plan.name}"</span>?
           </div>
         </DialogHeader>
         <DialogFooter>
@@ -64,7 +64,7 @@ export default function RemovePlanSubscriptionDialog({
           </DialogClose>
           <DialogClose asChild>
             <Button
-              onClick={removePlanSubscriptionHandler}
+              onClick={removeSubscriptionHandler}
               className="bg-red-500 hover:bg-red-600 transition-all"
               type="submit"
             >

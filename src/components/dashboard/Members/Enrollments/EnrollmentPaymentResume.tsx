@@ -2,22 +2,22 @@ import { useMemberStore } from "@/store/memberStore";
 import { Plan } from "@/types/Plan.type";
 import { differenceInDays } from "date-fns";
 
-type PlanPaymentResumeProps = {
+type EnrollmentResumeProps = {
   plan: Plan;
   months: number;
 };
 
-export default function PlanPaymentResume({
+export default function EnrollmentPaymentResume({
   plan,
   months,
-}: PlanPaymentResumeProps) {
+}: EnrollmentResumeProps) {
   const { selectedMember } = useMemberStore();
 
   if (!selectedMember) return null;
 
-  const planPayments = selectedMember.planPayments;
-  const hasPlansPayments = planPayments.length > 0;
-  const lastPayment = planPayments[planPayments.length - 1];
+  const enrollments = selectedMember.enrollments;
+  const hasPlansPayments = enrollments.length > 0;
+  const lastPayment = enrollments[enrollments.length - 1];
 
   const leftDays = hasPlansPayments
     ? differenceInDays(lastPayment.expiresIn, new Date())

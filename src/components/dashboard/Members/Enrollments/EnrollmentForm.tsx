@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import {
   Form,
@@ -18,52 +18,53 @@ import { useMemberStore } from "@/store/memberStore";
 import { PlanSelector } from "../PlanSelector";
 import { useState } from "react";
 import { Plan } from "@/types/Plan.type";
-import PlanPaymentResume from "./PlanPaymentResume";
-import { PlanPayment } from "@/types/Payment.type";
+import EnrollmentPaymentResume from "./EnrollmentPaymentResume";
+import { Enrollment } from "@/types/Enrollment.type";
 
-const subscribeplanFormSchema = z.object({
+const subscriptionFormSchema = z.object({
   plan: z.string().min(1, "Plano é obrigatório"),
   months: z.coerce.number().min(1, "Meses deve ser maior ou igual a 1"),
 });
 
-type SubscribePlanFormInputs = z.infer<typeof subscribeplanFormSchema>;
+type SubscribePlanFormInputs = z.infer<typeof subscriptionFormSchema>;
 
-type SubscribePlanFormProps = {
-  planPayment?: PlanPayment;
+type SubscriptionFormProps = {
+  enrollment?: Enrollment;
   onSubmit: (success: boolean) => void;
 };
 
-export default function SubscribePlanForm({
-  planPayment,
+export default function SubscriptionForm({
+  enrollment,
   onSubmit,
-}: SubscribePlanFormProps) {
+}: SubscriptionFormProps) {
   const { successToast, errorToast } = useCustomToast();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(
-    planPayment ? planPayment.plan : null
+    enrollment ? enrollment.plan : null
   );
-  const [months, setMonths] = useState(planPayment ? planPayment.months : 1);
   const { selectedMember } = useMemberStore();
   const memberDb = useMemberStore();
 
   const form = useForm<SubscribePlanFormInputs>({
-    resolver: zodResolver(subscribeplanFormSchema),
+    resolver: zodResolver(subscriptionFormSchema),
     defaultValues: {
-      plan: planPayment ? planPayment.plan.name : "",
-      months: planPayment ? planPayment.months : 1,
+      plan: enrollment ? enrollment.plan.name : "",
+      months: enrollment ? enrollment.months : 1,
     },
   });
+
+  const months = useWatch({ name: "months", control: form.control });
 
   const submitHandler = (input: SubscribePlanFormInputs) => {
     if (!selectedPlan || !selectedMember) return;
 
     // Update plan payment
-    if (planPayment) {
+    if (enrollment) {
       try {
         form.reset();
         // start loading
 
         // Save to database
-        memberDb.updatePlanPayment(selectedMember.id, planPayment.id, {
+        memberDb.updateEnrollment(selectedMember.id, enrollment.id, {
           plan: selectedPlan,
           months: input.months,
         });
@@ -74,7 +75,6 @@ export default function SubscribePlanForm({
         );
         onSubmit(true);
       } catch (error) {
-        console.log(error);
         errorToast("Atualização de Plano", "Erro ao realizar atualização!");
         onSubmit(false);
       }
@@ -112,15 +112,7 @@ export default function SubscribePlanForm({
             <FormItem>
               <FormLabel>Meses</FormLabel>
               <FormControl>
-                <Input
-                  type="number"
-                  placeholder="Meses"
-                  {...field}
-                  onChange={(e) => {
-                    field.onChange(e);
-                    setMonths(Number(e.target.value));
-                  }}
-                />
+                <Input type="number" placeholder="Meses" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -149,7 +141,7 @@ export default function SubscribePlanForm({
 
         {/* Payment resume */}
         {selectedPlan && months > 0 && (
-          <PlanPaymentResume plan={selectedPlan} months={months} />
+          <EnrollmentPaymentResume plan={selectedPlan} months={months} />
         )}
 
         {/* Form Actions */}

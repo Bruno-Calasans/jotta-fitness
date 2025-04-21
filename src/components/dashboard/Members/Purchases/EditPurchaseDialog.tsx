@@ -8,16 +8,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
-import SubscribePlanForm from "./SubscribePlanForm";
-import { PlanPayment } from "@/types/Payment.type";
+import SubscriptionForm from "./PurchaseForm";
+import { Purchase } from "@/types/Purchase.type";
 
-type EditPlanSubscriptionDialogProps = {
-  planPayment: PlanPayment;
+type EditPurchaseDialogProps = {
+  purchase: Purchase;
 };
 
-export default function EditPlanSubscriptionDialog({
-  planPayment,
-}: EditPlanSubscriptionDialogProps) {
+export default function EditPurchaseDialog({
+  purchase,
+}: EditPurchaseDialogProps) {
   const [open, setOpen] = useState(false);
 
   const submitFormHandler = (success: boolean) => {
@@ -37,12 +37,9 @@ export default function EditPlanSubscriptionDialog({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Editar Plano</DialogTitle>
+          <DialogTitle>Editar Compra</DialogTitle>
         </DialogHeader>
-        <SubscribePlanForm
-          planPayment={planPayment}
-          onSubmit={submitFormHandler}
-        />
+        <SubscriptionForm purchase={purchase} onSubmit={submitFormHandler} />
       </DialogContent>
     </Dialog>
   );

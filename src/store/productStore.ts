@@ -1,24 +1,27 @@
 "use client";
 
+import { PRODUCTS_DATA } from "@/data/PRODUCTS_DATA";
 import { Product } from "@/types/Product.type";
-import { v4 } from "uuid";
 import { create } from "zustand";
+import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
+import type { DB } from "@/types/Db.typ";
 
 type ProductState = {
   products: Product[];
-  add: (input: Omit<Product, "id" | "createdAt" | "updatedAt">) => void;
-  remove: (id: string) => void;
-  update: (id: string, input: Partial<Omit<Product, "id">>) => void;
+  add: (input: Omit<Product, keyof DB>) => void;
+  remove: (productId: string) => void;
+  update: (productId: string, input: Partial<Omit<Product, keyof DB>>) => void;
+  getById: (productId: string) => Product | null;
+  getByName: (name: string) => Product | null;
+  increaseAmount: (productId: string, amount: number) => void;
+  decreaseAmount: (productId: string, amount: number) => void;
 };
 
 export const useProductStore = create<ProductState>((set, get) => ({
-  products: [],
+  products: PRODUCTS_DATA,
   add(input) {
     set((state) => ({
-      products: [
-        ...state.products,
-        { id: v4(), createdAt: new Date(), updatedAt: new Date(), ...input },
-      ],
+      products: [...state.products, { ...generateDefaultDbFields(), ...input }],
     }));
   },
   remove(id) {
@@ -36,5 +39,37 @@ export const useProductStore = create<ProductState>((set, get) => ({
     });
 
     set((state) => ({ ...state, products: updatedProducts }), true);
+  },
+  getByName(name) {
+    const foundProduct = get().products.find(
+      (product) => product.name.toLowerCase() === name.toLowerCase()
+    );
+    if (!foundProduct) return null;
+    return foundProduct;
+  },
+  getById(productId) {
+    const foundProduct = get().products.find(
+      (product) => product.id === productId
+    );
+
+    if (!foundProduct) return null;
+
+    return foundProduct;
+  },
+  decreaseAmount(productId, amount) {
+    const foundProduct = get().getById(productId);
+    if (!foundProduct) return;
+
+    get().update(productId, {
+      amount: Math.max(foundProduct.amount - amount, 0),
+    });
+  },
+  increaseAmount(productId, amount) {
+    const foundProduct = get().getById(productId);
+    if (!foundProduct) return;
+
+    get().update(productId, {
+      amount: foundProduct.amount + amount,
+    });
   },
 }));
