@@ -34,6 +34,21 @@ export const purchasesColumns: ColumnDef<Purchase>[] = [
     ),
   },
   {
+    id: "total",
+    accessorKey: "product.price",
+    header: ({ column }) => (
+      <DataTableSortableHeader
+        column={column}
+        headerName="Total (R$)"
+        type="numeral"
+      />
+    ),
+    cell: ({ row }) => {
+      const { product, amount } = row.original;
+      return <p>{(product.price * amount).toFixed(2)}</p>;
+    },
+  },
+  {
     accessorKey: "createdAt",
     header: ({ column }) => (
       <DataTableSortableHeader

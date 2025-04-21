@@ -41,7 +41,7 @@ export const MEMBERS_DATA: Member[] = [
     purchases: [
       {
         ...generateDefaultDbFields(),
-        amount: 1,
+        amount: 4,
         product: PRODUCTS_DATA[0],
         createdBy: STAFF,
       },
