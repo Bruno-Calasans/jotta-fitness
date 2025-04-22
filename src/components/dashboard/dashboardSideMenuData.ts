@@ -8,6 +8,7 @@ import {
   Calendar1,
   CalendarDays,
   Dumbbell,
+  HandCoins
 } from "lucide-react";
 
 export const DashboardSidebarItems = {
@@ -38,6 +39,11 @@ export const DashboardSidebarItems = {
       title: "Planos",
       url: "plans",
       icon: Dumbbell,
+    },
+    {
+      title: "Adesão",
+      url: "adhesion",
+      icon: HandCoins,
     },
   ],
   Prejuízo: [

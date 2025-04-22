@@ -12,6 +12,9 @@ export default function CurrentEnrollmentResume() {
   const enrollments = selectedMember.enrollments;
   const hasPlansPayments = enrollments.length > 0;
   const lastPayment = enrollments[enrollments.length - 1];
+  const currentAdhesion = selectedMember.adhesions.find(
+    (adhesion) => adhesion.year === new Date().getFullYear()
+  );
 
   const totalDays = hasPlansPayments
     ? differenceInDays(lastPayment.expiresIn, lastPayment.startsIn)
@@ -112,6 +115,12 @@ export default function CurrentEnrollmentResume() {
                   R$ {Math.abs(1.5 * leftDays).toFixed(2)}
                 </span>
               </p>
+            </ErrorMsg>
+          )}
+
+          {!currentAdhesion && hasPlansPayments && (
+            <ErrorMsg>
+              <p>Este usuário ainda não pagou a adesão deste ano.</p>
             </ErrorMsg>
           )}
         </div>

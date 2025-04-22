@@ -9,4 +9,10 @@ export type Member = DB & {
   role: Role | null;
   enrollments: Enrollment[];
   purchases: Purchase[];
+  adhesions: AnualAdhesion[];
+};
+
+export type AnualAdhesion = DB & {
+  year: number;
+  isPaid: boolean;
 };

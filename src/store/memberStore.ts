@@ -2,7 +2,7 @@
 
 import { MEMBERS_DATA } from "@/data/MEMBERS_DATA";
 import { DB } from "@/types/Db.typ";
-import type { Member } from "@/types/Member.type";
+import type { AnualAdhesion, Member } from "@/types/Member.type";
 import type { Enrollment } from "@/types/Enrollment.type";
 import { create } from "zustand";
 import { add as addDate, differenceInDays } from "date-fns";
@@ -43,6 +43,7 @@ type MemberState = {
   ) => void;
   removePurchase: (memberId: string, purchaseId: string) => void;
   getPurchaseById: (id: string) => Purchase | null;
+  payAdhesion: (memberId: string, year: number) => void;
 };
 
 export const useMemberStore = create<MemberState>((set, get) => ({
@@ -265,5 +266,20 @@ export const useMemberStore = create<MemberState>((set, get) => ({
     });
 
     get().setSelectedMember(updatedMember);
+  },
+  payAdhesion(memberId, year) {
+    const foundMember = get().getById(memberId);
+    if (!foundMember) return;
+
+    const newAdhesion: AnualAdhesion = {
+      ...generateDefaultDbFields(),
+      year,
+      isPaid: true,
+    };
+
+    get().update(foundMember.id, {
+      ...foundMember,
+      adhesions: [...foundMember.adhesions, newAdhesion],
+    });
   },
 }));

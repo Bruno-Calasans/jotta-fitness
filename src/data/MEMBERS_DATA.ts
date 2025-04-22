@@ -11,6 +11,7 @@ export const STAFF: Member = {
   role: null,
   enrollments: [],
   purchases: [],
+  adhesions: [],
 };
 
 export const MEMBERS_DATA: Member[] = [
@@ -21,6 +22,7 @@ export const MEMBERS_DATA: Member[] = [
     role: null,
     enrollments: [],
     purchases: [],
+    adhesions: [],
   },
   {
     ...generateDefaultDbFields(),
@@ -52,6 +54,7 @@ export const MEMBERS_DATA: Member[] = [
         createdBy: STAFF,
       },
     ],
+    adhesions: [],
   },
   {
     ...generateDefaultDbFields(),
@@ -60,6 +63,7 @@ export const MEMBERS_DATA: Member[] = [
     role: null,
     enrollments: [],
     purchases: [],
+    adhesions: [],
   },
   {
     ...generateDefaultDbFields(),
@@ -68,6 +72,7 @@ export const MEMBERS_DATA: Member[] = [
     role: null,
     enrollments: [],
     purchases: [],
+    adhesions: [],
   },
   {
     ...generateDefaultDbFields(),
@@ -86,5 +91,6 @@ export const MEMBERS_DATA: Member[] = [
     },
     enrollments: [],
     purchases: [],
+    adhesions: [],
   },
 ];
