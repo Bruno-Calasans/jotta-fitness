@@ -32,7 +32,6 @@ const adhesionFormSchema: AdhesionFormSchema = z.object({
       new Date().getFullYear(),
       "Ano da adesão não pode ser inferior ao ano atual"
     ),
-  price: z.coerce.number().min(1, "Preço é obrigatório"),
   discountMaxDate: z.coerce
     .date()
     .min(new Date(), "Data deve ser maior ou igual a data de hoje"),
@@ -58,7 +57,6 @@ export default function AdhesionForm({
     resolver: zodResolver(adhesionFormSchema),
     defaultValues: {
       year: adhesion ? adhesion.year : new Date().getFullYear(),
-      price: adhesion ? adhesion.price : 1,
       newbieDiscount: adhesion ? adhesion.newbieDiscount : 0,
       veteranDiscount: adhesion ? adhesion.veteranDiscount : 0,
       discountMaxDate: adhesion ? adhesion.discountMaxDate : new Date(),
@@ -141,26 +139,6 @@ export default function AdhesionForm({
                   placeholder="Ano da adesão"
                   onFocus={focusHandler}
                   min={new Date().getFullYear()}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Price input */}
-        <FormField
-          control={form.control}
-          name="price"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Preço (R$)*</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder="Valor da adesão"
-                  onFocus={focusHandler}
                   {...field}
                 />
               </FormControl>

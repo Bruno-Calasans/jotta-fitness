@@ -1,3 +1,4 @@
+import { AdhesionPayment } from "./AdhesionPayment.type";
 import type { DB } from "./Db.typ";
 import type { Enrollment } from "./Enrollment.type";
 import type { Purchase } from "./Purchase.type";
@@ -9,10 +10,6 @@ export type Member = DB & {
   role: Role | null;
   enrollments: Enrollment[];
   purchases: Purchase[];
-  adhesions: AnualAdhesion[];
+  adhesionsPayments: AdhesionPayment[];
 };
 
-export type AnualAdhesion = DB & {
-  year: number;
-  isPaid: boolean;
-};

@@ -2,13 +2,15 @@
 
 import { MEMBERS_DATA } from "@/data/MEMBERS_DATA";
 import { DB } from "@/types/Db.typ";
-import type { AnualAdhesion, Member } from "@/types/Member.type";
+import type { Member } from "@/types/Member.type";
 import type { Enrollment } from "@/types/Enrollment.type";
 import { create } from "zustand";
 import { add as addDate, differenceInDays } from "date-fns";
 import type { Plan } from "@/types/Plan.type";
 import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
 import type { Purchase } from "@/types/Purchase.type";
+import { AdhesionPayment } from "@/types/AdhesionPayment.type";
+import { Adhesion } from "@/types/Adhesion.type";
 
 type MemberState = {
   members: Member[];
@@ -44,6 +46,10 @@ type MemberState = {
   removePurchase: (memberId: string, purchaseId: string) => void;
   getPurchaseById: (id: string) => Purchase | null;
   payAdhesion: (memberId: string, year: number) => void;
+  getAdhesionPaymentByYear: (
+    memberId: string,
+    year: number
+  ) => AdhesionPayment | null;
 };
 
 export const useMemberStore = create<MemberState>((set, get) => ({
@@ -271,15 +277,29 @@ export const useMemberStore = create<MemberState>((set, get) => ({
     const foundMember = get().getById(memberId);
     if (!foundMember) return;
 
-    const newAdhesion: AnualAdhesion = {
+    const newAdhesion: AdhesionPayment = {
       ...generateDefaultDbFields(),
       year,
-      isPaid: true,
+      paidAt: new Date(),
     };
 
-    get().update(foundMember.id, {
+    const updatedMember = get().update(foundMember.id, {
       ...foundMember,
-      adhesions: [...foundMember.adhesions, newAdhesion],
+      adhesionsPayments: [...foundMember.adhesionsPayments, newAdhesion],
     });
+
+    get().setSelectedMember(updatedMember);
+  },
+  getAdhesionPaymentByYear(memberId, year) {
+    const foundMember = get().getById(memberId);
+    if (!foundMember) return null;
+
+    const foundAdhesion = foundMember.adhesionsPayments.find(
+      (adhesionPayment) => adhesionPayment.year === year
+    );
+
+    if (!foundAdhesion) return null;
+
+    return foundAdhesion;
   },
 }));

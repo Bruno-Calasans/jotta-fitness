@@ -1,23 +1,26 @@
 "use client";
 
+import { ADHESION_DATA } from "@/data/ADHESION_DATA";
 import type { Adhesion } from "@/types/Adhesion.type";
-import { v4 } from "uuid";
+import { DB } from "@/types/Db.typ";
 import { create } from "zustand";
+import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
 
 type AdhesionState = {
   adhesions: Adhesion[];
-  add: (input: Omit<Adhesion, "id" | "createdAt" | "updatedAt">) => void;
+  add: (input: Omit<Adhesion, keyof DB>) => void;
   remove: (id: string) => void;
   update: (id: string, input: Partial<Omit<Adhesion, "id">>) => void;
+  getCurretYearAdhesion: () => Adhesion | null;
 };
 
 export const useAdhesionStore = create<AdhesionState>((set, get) => ({
-  adhesions: [],
+  adhesions: ADHESION_DATA,
   add(input) {
     set((state) => ({
       adhesions: [
         ...state.adhesions,
-        { id: v4(), createdAt: new Date(), updatedAt: new Date(), ...input },
+        { ...generateDefaultDbFields(), ...input },
       ],
     }));
   },
@@ -36,5 +39,14 @@ export const useAdhesionStore = create<AdhesionState>((set, get) => ({
     });
 
     set((state) => ({ ...state, adhesions: updatedAdhesions }), true);
+  },
+  getCurretYearAdhesion() {
+    const currentYearAdhesion = get().adhesions.find(
+      (adhesion) => adhesion.year === new Date().getFullYear()
+    );
+
+    if (!currentYearAdhesion) return null;
+
+    return currentYearAdhesion;
   },
 }));

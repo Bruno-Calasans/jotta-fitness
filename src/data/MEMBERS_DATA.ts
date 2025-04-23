@@ -1,5 +1,5 @@
-import { Member } from "@/types/Member.type";
 import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
+import type { Member } from "@/types/Member.type";
 import { addDays } from "date-fns";
 import { PLANS_DATA } from "./PLANS_DATA";
 import { PRODUCTS_DATA } from "./PRODUCTS_DATA";
@@ -11,7 +11,7 @@ export const STAFF: Member = {
   role: null,
   enrollments: [],
   purchases: [],
-  adhesions: [],
+  adhesionsPayments: [],
 };
 
 export const MEMBERS_DATA: Member[] = [
@@ -22,7 +22,7 @@ export const MEMBERS_DATA: Member[] = [
     role: null,
     enrollments: [],
     purchases: [],
-    adhesions: [],
+    adhesionsPayments: [],
   },
   {
     ...generateDefaultDbFields(),
@@ -54,7 +54,7 @@ export const MEMBERS_DATA: Member[] = [
         createdBy: STAFF,
       },
     ],
-    adhesions: [],
+    adhesionsPayments: [],
   },
   {
     ...generateDefaultDbFields(),
@@ -63,7 +63,7 @@ export const MEMBERS_DATA: Member[] = [
     role: null,
     enrollments: [],
     purchases: [],
-    adhesions: [],
+    adhesionsPayments: [],
   },
   {
     ...generateDefaultDbFields(),
@@ -72,7 +72,7 @@ export const MEMBERS_DATA: Member[] = [
     role: null,
     enrollments: [],
     purchases: [],
-    adhesions: [],
+    adhesionsPayments: [],
   },
   {
     ...generateDefaultDbFields(),
@@ -91,6 +91,6 @@ export const MEMBERS_DATA: Member[] = [
     },
     enrollments: [],
     purchases: [],
-    adhesions: [],
+    adhesionsPayments: [],
   },
 ];
