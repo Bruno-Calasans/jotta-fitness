@@ -8,4 +8,5 @@ export type Enrollment = DB & {
   startsIn: Date;
   expiresIn: Date;
   createdBy: Member;
+  lateFee: number;
 };

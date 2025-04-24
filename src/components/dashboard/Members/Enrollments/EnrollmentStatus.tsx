@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Enrollment } from "@/types/Enrollment.type";
 
 type SubscriptionStatusProps = {
-  enrollment?: Enrollment;
+  enrollment?: Enrollment | null;
 };
 
 export default function SubscriptionStatus({

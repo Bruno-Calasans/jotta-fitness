@@ -20,6 +20,7 @@ import { useState } from "react";
 import { Plan } from "@/types/Plan.type";
 import EnrollmentPaymentResume from "./EnrollmentPaymentResume";
 import { Enrollment } from "@/types/Enrollment.type";
+import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
 
 const subscriptionFormSchema = z.object({
   plan: z.string().min(1, "Plano é obrigatório"),
@@ -37,6 +38,7 @@ export default function SubscriptionForm({
   enrollment,
   onSubmit,
 }: SubscriptionFormProps) {
+  const { lateFee } = useEnrollmentResume();
   const { successToast, errorToast } = useCustomToast();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(
     enrollment ? enrollment.plan : null
@@ -88,6 +90,7 @@ export default function SubscriptionForm({
           months: input.months,
           plan: selectedPlan,
           createdBy: selectedMember,
+          lateFee,
         });
 
         successToast("Inscrição de Plano", "Inscrição realizada com sucesso");
