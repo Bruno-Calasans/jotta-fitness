@@ -41,7 +41,7 @@ export function ProductSelector({
       onValueChange={changeHandler}
     >
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Selecione um producto" />
+        <SelectValue placeholder="Selecione um produto" />
       </SelectTrigger>
       <SelectContent className="w-full">
         <SelectGroup>

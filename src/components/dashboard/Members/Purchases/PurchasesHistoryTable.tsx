@@ -23,7 +23,7 @@ export default function PurchasesHistoryTable({}: PurchasesHistoryTableProps) {
       <DataTable
         columns={purchasesColumns}
         data={purchases.length > 0 ? purchases : []}
-        noResultMsg="Nenhuma inscrição encontrada"
+        noResultMsg="Nenhuma compra encontrada"
       />
     </div>
   );

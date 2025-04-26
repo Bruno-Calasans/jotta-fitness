@@ -155,7 +155,12 @@ export default function SubscriptionForm({
             <FormItem>
               <FormLabel>Quantidade</FormLabel>
               <FormControl>
-                <Input type="number" {...field} max={selectedProduct?.amount} />
+                <Input
+                  type="number"
+                  {...field}
+                  max={selectedProduct?.amount}
+                  onPaste={(e) => e.preventDefault()}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
