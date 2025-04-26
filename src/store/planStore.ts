@@ -1,14 +1,16 @@
 "use client";
 
 import { PLANS_DATA } from "@/data/PLANS_DATA";
+import { DB } from "@/types/Db.typ";
 import { Plan } from "@/types/Plan.type";
 import { v4 } from "uuid";
 import { create } from "zustand";
+import generateDbFields from "@/utils/generateDefaultDbFields";
 
 type PlanState = {
   plans: Plan[];
   getByName: (name: string) => Plan | null;
-  add: (input: Omit<Plan, "id" | "createdAt">) => void;
+  add: (input: Omit<Plan, keyof DB>) => void;
   remove: (id: string) => void;
   update: (id: string, input: Partial<Omit<Plan, "id">>) => void;
 };
@@ -25,7 +27,7 @@ export const usePlanStore = create<PlanState>((set, get) => ({
   },
   add(input) {
     set((state) => ({
-      plans: [...state.plans, { id: v4(), createdAt: new Date(), ...input }],
+      plans: [...state.plans, { ...generateDbFields(), ...input }],
     }));
   },
   remove(id) {

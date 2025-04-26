@@ -1,11 +1,7 @@
-import {
-  RowActionFn,
-  TableRowActionData,
-} from "@/components/custom/DataTable/DataTableRowActions";
+import { RowActionFn } from "@/components/custom/DataTable/DataTableRowActions";
 import DataTableSortableHeader from "@/components/custom/DataTable/DataTableSortableHeader";
 import type { Plan } from "@/types/Plan.type";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Pencil, Trash } from "lucide-react";
 import EditPlanDialog from "./EditPlanDialog";
 import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
 import RemovePlanDialog from "./RemovePlanDialog";
@@ -13,19 +9,6 @@ import RemovePlanDialog from "./RemovePlanDialog";
 export type PlanRowActions = "Edit" | "Delete";
 
 export type PlanRowActionFn = RowActionFn<Plan, PlanRowActions>;
-
-// export const planRowActionsData: TableRowActionData<PlanRowActions>[] = [
-//   {
-//     name: "Edit",
-//     label: "Editar",
-//     icon: Pencil,
-//   },
-//   {
-//     name: "Delete",
-//     label: "Remover",
-//     icon: Trash,
-//   },
-// ];
 
 export const planColumns: ColumnDef<Plan>[] = [
   {
@@ -39,7 +22,7 @@ export const planColumns: ColumnDef<Plan>[] = [
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
-        headerName="Tempo de Treino"
+        headerName="Tempo de Treino (min)"
         type="numeral"
       />
     ),
@@ -49,7 +32,17 @@ export const planColumns: ColumnDef<Plan>[] = [
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
-        headerName="Preço"
+        headerName="Preço (R$)"
+        type="numeral"
+      />
+    ),
+  },
+  {
+    accessorKey: "diary",
+    header: ({ column }) => (
+      <DataTableSortableHeader
+        column={column}
+        headerName="Diária (R$)"
         type="numeral"
       />
     ),
@@ -65,11 +58,7 @@ export const planColumns: ColumnDef<Plan>[] = [
     ),
     cell: ({ row }) => {
       const plan = row.original;
-      return (
-        <p>
-          {`${plan.createdAt.toLocaleDateString()} às ${plan.createdAt.toLocaleTimeString()}`}
-        </p>
-      );
+      return <p>{plan.createdAt.toLocaleDateString()}</p>;
     },
   },
   {

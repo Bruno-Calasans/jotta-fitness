@@ -26,6 +26,9 @@ const planFormSchema = z.object({
     .number()
     .min(1, "Tempo de treino deve ser maior or igual a 1"),
   price: z.coerce.number().min(1, "Preço deve ser maior ou igual a 1"),
+  diary: z.coerce
+    .number()
+    .min(1, "Preço da diária deve ser maior ou igual a 1"),
 });
 
 type PlanFormInputs = z.infer<typeof planFormSchema>;
@@ -45,6 +48,7 @@ export default function PlanForm({ plan, onSubmit }: PlanFormProps) {
       name: plan ? plan.name : "",
       price: plan ? plan.price : 0,
       trainTime: plan ? plan.trainTime : 0,
+      diary: plan ? plan.diary : 0,
     },
   });
 
@@ -122,8 +126,8 @@ export default function PlanForm({ plan, onSubmit }: PlanFormProps) {
                 <Input
                   onFocus={focusHandler}
                   placeholder="60"
-                  {...field}
                   type="number"
+                  {...field}
                 />
               </FormControl>
               <FormDescription>
@@ -144,13 +148,33 @@ export default function PlanForm({ plan, onSubmit }: PlanFormProps) {
                 <Input
                   onFocus={focusHandler}
                   placeholder="100"
-                  {...field}
                   type="number"
+                  {...field}
                 />
               </FormControl>
               <FormDescription>
                 Quanto vai custar seu plano por mês
               </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* price input */}
+        <FormField
+          control={form.control}
+          name="diary"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Preço da Diária (R$)</FormLabel>
+              <FormControl>
+                <Input
+                  onFocus={focusHandler}
+                  placeholder="100"
+                  type="number"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>Quanto vai custar a diária</FormDescription>
               <FormMessage />
             </FormItem>
           )}
