@@ -7,6 +7,9 @@ import RemoveMemberDialog from "./RemoveMemberDialog";
 import { Badge } from "@/components/ui/badge";
 import phoneMask from "@/utils/phoneMask";
 import PlanStatus from "./Enrollments/EnrollmentStatus";
+import { Button } from "@/components/ui/button";
+import { Info } from "lucide-react";
+import MoreDetails from "./MoreDetails";
 
 export const membersColumns: ColumnDef<Member>[] = [
   {
@@ -62,24 +65,6 @@ export const membersColumns: ColumnDef<Member>[] = [
       return <PlanStatus enrollment={enrollments[enrollments.length - 1]} />;
     },
   },
-  // {
-  //   accessorKey: "createdAt",
-  //   header: ({ column }) => (
-  //     <DataTableSortableHeader
-  //       column={column}
-  //       headerName="Data de Criação"
-  //       type="date"
-  //     />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const member = row.original;
-  //     return (
-  //       <p>
-  //         {`${member.createdAt.toLocaleDateString()} às ${member.createdAt.toLocaleTimeString()}`}
-  //       </p>
-  //     );
-  //   },
-  // },
   {
     id: "actions",
     cell: ({ row }) => {
@@ -88,6 +73,7 @@ export const membersColumns: ColumnDef<Member>[] = [
       return (
         <MoreOptionsDropdown>
           <div className="flex flex-col gap-1">
+            <MoreDetails member={member} />
             <EditMemberDialog member={member} />
             <RemoveMemberDialog member={member} />
           </div>

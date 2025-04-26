@@ -110,7 +110,7 @@ export default function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                   className={cn(
                     "cursor-pointer hover:bg-stone-600 transition-all",
-                    row.id === selectedRow?.id && "bg-stone-700"
+                    // row.id === selectedRow?.id && "bg-stone-700"
                   )}
                   onClick={() => selectionHandler(row)}
                 >

@@ -11,10 +11,10 @@ export default function MembersTable() {
   const { members, setSelectedMember } = useMemberStore();
   const router = useRouter();
 
-  const clickMemberRowHandler = (member: Member) => {
-    setSelectedMember(member);
-    router.push(`/dashboard/members/${member.id}`);
-  };
+  // const clickMemberRowHandler = (member: Member) => {
+  //   setSelectedMember(member);
+  //   router.push(`/dashboard/members/${member.id}`);
+  // };
 
   return (
     <div>
@@ -26,7 +26,7 @@ export default function MembersTable() {
         columns={membersColumns}
         data={members}
         noResultMsg="Nenhum membro encontrado"
-        onRowSelection={clickMemberRowHandler}
+        // onRowSelection={clickMemberRowHandler}
       />
     </div>
   );
