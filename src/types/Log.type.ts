@@ -6,11 +6,11 @@ import type { Member } from "./Member.type";
 import type { Plan } from "./Plan.type";
 import type { Product } from "./Product.type";
 
-export type ProductPurchaseLog = {
+export type ProductPurchaseLog = DB & {
   type: "product-purchase";
   product: Product;
   amount: number;
-  member: Member;
+  member: Member | string;
 };
 
 export type EnrollmentLog = DB & {
@@ -49,3 +49,4 @@ export type InvestmentLog = DB & {
 
 export type GainLog = ProductPurchaseLog | PlanLog;
 export type LossLog = ExpenseLog | InvestmentLog;
+export type Log = GainLog | LossLog;
