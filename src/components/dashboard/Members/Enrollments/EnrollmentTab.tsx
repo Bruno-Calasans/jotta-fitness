@@ -1,6 +1,6 @@
 "use client";
 
-import SubscriptionsHistoryTable from "./EnrollmentsHistoryTable";
+import EnrollmentsHistoryTable from "./EnrollmentsHistoryTable";
 import CurrentEnrollmentResume from "./CurrentEnrollmentResume";
 import { useMemberStore } from "@/store/memberStore";
 
@@ -12,7 +12,7 @@ export default function EnrollmentTab() {
   return (
     <div className="flex flex-col gap-4 mb-20">
       <CurrentEnrollmentResume />
-      <SubscriptionsHistoryTable />
+      <EnrollmentsHistoryTable />
     </div>
   );
 }

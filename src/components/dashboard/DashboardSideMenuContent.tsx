@@ -2,12 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import {
-  registerItems,
-  profitItems,
-  lossItems,
-  memberItems,
-} from "./dashboardSideMenuData";
+import { DashboardSidebarItems } from "./dashboardSideMenuData";
 
 type DashboardSideMenuContentProps = {};
 
@@ -37,7 +32,7 @@ export default function DashboardSideMenuContent({}: DashboardSideMenuContentPro
           Registros
         </p>
         <div className="flex flex-col text-orange-black gap-1 text-black">
-          {registerItems.map((item) => (
+          {DashboardSidebarItems.Principal.map((item) => (
             <Link key={item.title} href={item.url}>
               <Button className="flex gap-1 items-center transition-all w-full justify-start px-2 bg-white text-ora shadow-none hover:bg-stone-100 hover:text-orange-500">
                 <item.icon />
@@ -55,7 +50,7 @@ export default function DashboardSideMenuContent({}: DashboardSideMenuContentPro
         </p>
 
         <div className="flex flex-col text-orange-black gap-1 text-black">
-          {profitItems.map((item) => (
+          {DashboardSidebarItems.Lucro.map((item) => (
             <Link key={item.title} href={item.url}>
               <Button className="flex gap-1 items-center transition-all w-full justify-start px-2 bg-white text-ora shadow-none hover:bg-stone-100 hover:text-orange-500">
                 <item.icon />
@@ -73,7 +68,7 @@ export default function DashboardSideMenuContent({}: DashboardSideMenuContentPro
         </p>
 
         <div className="flex flex-col text-orange-black gap-1 text-black">
-          {lossItems.map((item) => (
+          {DashboardSidebarItems.Prejuízo.map((item) => (
             <Link key={item.title} href={item.url}>
               <Button className="flex gap-1 items-center transition-all w-full justify-start px-2 bg-white text-ora shadow-none hover:bg-stone-100 hover:text-orange-500">
                 <item.icon />
@@ -91,7 +86,7 @@ export default function DashboardSideMenuContent({}: DashboardSideMenuContentPro
         </p>
 
         <div className="flex flex-col text-orange-black gap-1 text-black">
-          {memberItems.map((item) => (
+          {DashboardSidebarItems.Usuários.map((item) => (
             <Link key={item.title} href={item.url}>
               <Button className="flex gap-1 items-center transition-all w-full justify-start px-2 bg-white text-ora shadow-none hover:bg-stone-100 hover:text-orange-500">
                 <item.icon />

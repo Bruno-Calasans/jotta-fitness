@@ -3,7 +3,6 @@
 import { PLANS_DATA } from "@/data/PLANS_DATA";
 import { DB } from "@/types/Db.typ";
 import { Plan } from "@/types/Plan.type";
-import { v4 } from "uuid";
 import { create } from "zustand";
 import generateDbFields from "@/utils/generateDefaultDbFields";
 
