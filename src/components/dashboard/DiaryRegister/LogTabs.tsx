@@ -3,6 +3,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EnrollmentLogTab from "./Enrollment/EnrollmentLogTab";
 import LossLogTab from "./LossLogTab";
+import PlanDiaryLogTab from "./PlanDiary/PlanDiarylogTab";
 
 const tabData = [
   {
@@ -13,7 +14,7 @@ const tabData = [
   {
     value: "plan-diary-register",
     label: "Diária",
-    content: <p>Ainda não disponível</p>,
+    content: <PlanDiaryLogTab />,
   },
   {
     value: "adhesion-payment-register",
@@ -47,8 +48,8 @@ export default function LogTabs() {
         ))}
       </TabsList>
 
-      {tabData.map((data) => (
-        <TabsContent key={data.value} value={data.value}>
+      {tabData.map((data, index) => (
+        <TabsContent key={data.value + index} value={data.value}>
           {data.content}
         </TabsContent>
       ))}

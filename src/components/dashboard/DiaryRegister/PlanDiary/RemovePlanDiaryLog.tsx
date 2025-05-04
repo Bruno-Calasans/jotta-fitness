@@ -11,35 +11,32 @@ import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { useLogStore } from "@/store/logStore";
+import { Log } from "@/types/Log.type";
 import { useMemberStore } from "@/store/memberStore";
-import type { Log } from "@/types/Log.type";
 
-type RemoveEnrollmentLogDialogProps = {
-  enrollmentLog: Log & { type: "enrollment" };
+type RemovePlanDiaryLogDialogProps = {
+  planDiaryLog: Log & { type: "plan-diary" };
 };
 
-export default function RemoveEnrollmentLogDialog({
-  enrollmentLog,
-}: RemoveEnrollmentLogDialogProps) {
+export default function RemovePlanDiaryLogDialog({
+  planDiaryLog,
+}: RemovePlanDiaryLogDialogProps) {
   const logDb = useLogStore();
   const memberDb = useMemberStore();
   const { successToast, errorToast } = useCustomToast();
 
-  const removeEnrollmentLogHandler = () => {
+  const removePlanDiaryLogHandler = () => {
     try {
-      memberDb.unsubscribe(
-        enrollmentLog.member.id,
-        enrollmentLog.enrollment.id
-      );
-      logDb.remove(enrollmentLog.id);
+      memberDb.removeDiary(planDiaryLog.member.id, planDiaryLog.planDiary.id);
+      logDb.remove(planDiaryLog.id);
       successToast(
-        "Exclusão de Registro de Inscrição",
+        "Exclusão de Registro de Diária",
         "Registro removido com sucesso!"
       );
     } catch (error) {
       errorToast(
-        "Exclusão de Registro de Inscrição",
-        "Erro ao remover registro de inscrição"
+        "Exclusão de Registro de Diária",
+        "Erro ao remover registro de diária"
       );
     }
   };
@@ -59,8 +56,8 @@ export default function RemoveEnrollmentLogDialog({
         <DialogHeader>
           <DialogTitle>Remover Inscrição</DialogTitle>
           <div>
-            Tem certeza que deseja excluir o registro de inscrição do usuário{" "}
-            <span className="font-bold">"{enrollmentLog.member.name}"</span>?
+            Tem certeza que deseja excluir o registro de diária do usuário{" "}
+            <span className="font-bold">"{planDiaryLog.member.name}"</span>?
           </div>
         </DialogHeader>
         <DialogFooter>
@@ -74,7 +71,7 @@ export default function RemoveEnrollmentLogDialog({
           </DialogClose>
           <DialogClose asChild>
             <Button
-              onClick={removeEnrollmentLogHandler}
+              onClick={removePlanDiaryLogHandler}
               className="bg-red-500 hover:bg-red-600 transition-all"
               type="submit"
             >

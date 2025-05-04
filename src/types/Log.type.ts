@@ -5,6 +5,7 @@ import type { Expense } from "./Expense.type";
 import type { Investment } from "./Investment.type";
 import type { Member } from "./Member.type";
 import type { Plan } from "./Plan.type";
+import { PlanDiary } from "./PlanDiary.type";
 import type { Product } from "./Product.type";
 
 export type ProductPurchaseLog = {
@@ -20,12 +21,10 @@ export type EnrollmentLog = {
   member: Member;
 };
 
-export type DBEnrollmentLog = EnrollmentLog & DB
-
 export type PlanDiaryLog = {
   type: "plan-diary";
-  plan: Plan;
-  member: Member | string;
+  planDiary: PlanDiary;
+  member: Member;
 };
 
 export type AdhesionPaymentLog = {

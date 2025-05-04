@@ -12,6 +12,7 @@ export const STAFF: Member = {
   enrollments: [],
   purchases: [],
   adhesionsPayments: [],
+  diaries: [],
 };
 
 export const MEMBERS_DATA: Member[] = [
@@ -23,6 +24,7 @@ export const MEMBERS_DATA: Member[] = [
     enrollments: [],
     purchases: [],
     adhesionsPayments: [],
+    diaries: [],
   },
   {
     ...generateDefaultDbFields(),
@@ -38,6 +40,7 @@ export const MEMBERS_DATA: Member[] = [
         startsIn: addDays(new Date(), -31),
         expiresIn: addDays(new Date(), -1),
         createdBy: STAFF,
+        lateFee: 0,
       },
     ],
     purchases: [
@@ -55,6 +58,7 @@ export const MEMBERS_DATA: Member[] = [
       },
     ],
     adhesionsPayments: [],
+    diaries: [],
   },
   {
     ...generateDefaultDbFields(),
@@ -64,6 +68,7 @@ export const MEMBERS_DATA: Member[] = [
     enrollments: [],
     purchases: [],
     adhesionsPayments: [],
+    diaries: [],
   },
   {
     ...generateDefaultDbFields(),
@@ -73,6 +78,7 @@ export const MEMBERS_DATA: Member[] = [
     enrollments: [],
     purchases: [],
     adhesionsPayments: [],
+    diaries: [],
   },
   {
     ...generateDefaultDbFields(),
@@ -92,5 +98,6 @@ export const MEMBERS_DATA: Member[] = [
     enrollments: [],
     purchases: [],
     adhesionsPayments: [],
+    diaries: [],
   },
 ];

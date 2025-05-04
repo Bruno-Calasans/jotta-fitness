@@ -8,16 +8,16 @@ import {
 } from "@/components/ui/dialog";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
-import EnrollmentLogForm from "./EnrollmentLogForm";
+import PlanDiaryLogForm from "./PlanDiaryLogForm";
 import type { Log } from "@/types/Log.type";
 
-type EditEnrollmentLogDialogProps = {
-  enrollmentLog: Log & { type: "enrollment" };
+type EditPlanDiaryLogDialogProps = {
+  planDiaryLog: Log & { type: "plan-diary" };
 };
 
-export default function EditEnrollmentLogDialog({
-  enrollmentLog,
-}: EditEnrollmentLogDialogProps) {
+export default function EditPlanDiaryLogDialog({
+  planDiaryLog,
+}: EditPlanDiaryLogDialogProps) {
   const [open, setOpen] = useState(false);
 
   const submitFormHandler = (success: boolean) => {
@@ -37,10 +37,10 @@ export default function EditEnrollmentLogDialog({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Editar Registro</DialogTitle>
+          <DialogTitle>Editar Registro de Diária</DialogTitle>
         </DialogHeader>
-        <EnrollmentLogForm
-          enrollmentLog={enrollmentLog}
+        <PlanDiaryLogForm
+          planDiaryLog={planDiaryLog}
           onSubmit={submitFormHandler}
         />
       </DialogContent>

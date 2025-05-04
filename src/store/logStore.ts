@@ -1,7 +1,7 @@
 "use client";
 
 // import { LOGS_DATA } from "@/data/LOGS_DATA";
-import type { EnrollmentLog, GainLog, Log, LossLog } from "@/types/Log.type";
+import type { GainLog, Log, LossLog } from "@/types/Log.type";
 import { create } from "zustand";
 import generateDbFields from "@/utils/generateDefaultDbFields";
 
@@ -13,6 +13,7 @@ type LogState = {
   remove: (id: string) => void;
   update: (id: string, input: Partial<Log>) => void;
   getAllEnrollmentLogs: () => (Log & { type: "enrollment" })[];
+  getAllPlanDiaryLogs: () => (Log & { type: "plan-diary" })[];
 };
 
 export const useLogStore = create<LogState>((set, get) => ({
@@ -44,6 +45,11 @@ export const useLogStore = create<LogState>((set, get) => ({
   getAllEnrollmentLogs() {
     return get().logs.filter((log) => log.type === "enrollment") as (Log & {
       type: "enrollment";
+    })[];
+  },
+  getAllPlanDiaryLogs() {
+    return get().logs.filter((log) => log.type === "plan-diary") as (Log & {
+      type: "plan-diary";
     })[];
   },
 }));

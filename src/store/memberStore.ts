@@ -5,12 +5,13 @@ import { DB } from "@/types/Db.typ";
 import type { Member } from "@/types/Member.type";
 import type { Enrollment } from "@/types/Enrollment.type";
 import { create } from "zustand";
-import { add as addDate, differenceInDays } from "date-fns";
+import { add as addDate, addDays, differenceInDays } from "date-fns";
 import type { Plan } from "@/types/Plan.type";
 import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
 import type { Purchase } from "@/types/Purchase.type";
 import { AdhesionPayment } from "@/types/AdhesionPayment.type";
 import { Adhesion } from "@/types/Adhesion.type";
+import { PlanDiary } from "@/types/PlanDiary.type";
 
 type MemberState = {
   members: Member[];
@@ -50,6 +51,16 @@ type MemberState = {
     memberId: string,
     year: number
   ) => AdhesionPayment | null;
+  addDiary: (
+    memberId: string,
+    input: Omit<PlanDiary, keyof DB | "expiresIn">
+  ) => PlanDiary | null;
+  updateDiary: (
+    memberId: string,
+    diaryId: string,
+    input: Omit<PlanDiary, keyof DB | "expiresIn">
+  ) => PlanDiary | null;
+  removeDiary: (memberId: string, diaryId: string) => void;
 };
 
 export const useMemberStore = create<MemberState>((set, get) => ({
@@ -169,7 +180,6 @@ export const useMemberStore = create<MemberState>((set, get) => ({
 
     // Update specific plan payment
     const updatedEnrollments = foundMember.enrollments.map((enrollment) => {
-      
       // Find specific plan payment
       if (enrollment.id === enrollmentId) {
         let leftDaysLastEnrollment = get().getLeftDays(foundMember, [
@@ -306,5 +316,68 @@ export const useMemberStore = create<MemberState>((set, get) => ({
     if (!foundAdhesion) return null;
 
     return foundAdhesion;
+  },
+  addDiary(memberId, input) {
+    const foundMember = get().getById(memberId);
+    if (!foundMember) return null;
+
+    const activePayments = get().getActiveEnrollments(memberId);
+    const lastActivePayment = activePayments[activePayments.length - 1];
+
+    const newDiary: PlanDiary = {
+      ...generateDefaultDbFields(),
+      ...input,
+      expiresIn: lastActivePayment
+        ? addDays(lastActivePayment.expiresIn, input.days)
+        : addDays(new Date(), input.days),
+    };
+
+    get().update(memberId, { diaries: [...foundMember.diaries, newDiary] });
+
+    return newDiary;
+  },
+  updateDiary(memberId, diaryId, input) {
+    const foundMember = get().getById(memberId);
+    if (!foundMember) return null;
+
+    let updatedDiary: PlanDiary | null = null;
+
+    const updatedDiaries = foundMember.diaries.map((diary) => {
+      if (diary.id === diaryId) {
+        const activePayments = get().getActiveEnrollments(memberId);
+        const lastActivePayment = activePayments[activePayments.length - 1];
+        const isUpdateDiff = input.days != diary.days;
+        const newExpiresIn =
+          isUpdateDiff && lastActivePayment
+            ? addDays(lastActivePayment.expiresIn, input.days)
+            : addDays(new Date(), input.days);
+
+        updatedDiary = {
+          ...diary,
+          ...input,
+          expiresIn: newExpiresIn,
+        };
+        return updatedDiary;
+      }
+      return diary;
+    });
+
+    get().update(memberId, {
+      diaries: updatedDiaries,
+    });
+
+    return updatedDiary;
+  },
+  removeDiary(memberId, diaryId) {
+    const foundMember = get().getById(memberId);
+    if (!foundMember) return null;
+
+    const updatedDiaries = foundMember.diaries.filter(
+      (diary) => (diary.id! += diaryId)
+    );
+
+    get().update(memberId, {
+      diaries: updatedDiaries,
+    });
   },
 }));
