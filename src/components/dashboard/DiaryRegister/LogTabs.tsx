@@ -1,7 +1,8 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import EnrollmentRegisterTab from "./EnrollmentRegisterTab";
+import EnrollmentLogTab from "./Enrollment/EnrollmentLogTab";
+import LossLogTab from "./LossLogTab";
 // import PlanRegisterTab from "./Enrollments/EnrollmentTab";
 // import PurchasesTab from "./Purchases/PurchasesTab";
 
@@ -9,26 +10,31 @@ const tabData = [
   {
     value: "enrollment-register",
     label: "Inscrições",
+    content: <EnrollmentLogTab />,
   },
   {
     value: "plan-diary-register",
     label: "Diária",
+    content: <p>Ainda não disponível</p>,
   },
   {
     value: "adhesion-payment-register",
     label: "Adesão",
+    content: <p>Ainda não disponível</p>,
   },
   {
     value: "purchase-registers",
     label: "Produtos",
+    content: <p>Ainda não disponível</p>,
   },
   {
     value: "loss-register",
     label: "Perdas",
+    content: <LossLogTab />,
   },
 ];
 
-export default function RegisterTabs() {
+export default function LogTabs() {
   return (
     <Tabs defaultValue={tabData[0].value}>
       <TabsList className="w-full mb-2 gap-2 bg-stone-800 text-white p-4">
@@ -42,20 +48,12 @@ export default function RegisterTabs() {
           </TabsTrigger>
         ))}
       </TabsList>
-      <TabsContent value={tabData[0].value}>
-        <EnrollmentRegisterTab />
-      </TabsContent>
 
-      <TabsContent value={tabData[1].value}>
-        <p>Ainda não disponível</p>
-      </TabsContent>
-
-      <TabsContent value={tabData[2].value}>
-        <p>Ainda não disponível</p>
-      </TabsContent>
-      <TabsContent value={tabData[3].value}>
-        <p>Ainda não disponível</p>
-      </TabsContent>
+      {tabData.map((data) => (
+        <TabsContent key={data.value} value={data.value}>
+          {data.content}
+        </TabsContent>
+      ))}
     </Tabs>
   );
 }

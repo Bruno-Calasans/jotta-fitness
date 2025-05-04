@@ -1,8 +1,8 @@
 "use client";
 
 // import { LOGS_DATA } from "@/data/LOGS_DATA";
-import { DB } from "@/types/Db.typ";
-import { GainLog, LossLog, Log } from "@/types/Log.type";
+import type { DB } from "@/types/Db.typ";
+import type { Log } from "@/types/Log.type";
 import { create } from "zustand";
 import generateDbFields from "@/utils/generateDefaultDbFields";
 

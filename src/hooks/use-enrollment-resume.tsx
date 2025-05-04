@@ -1,10 +1,10 @@
 import { BUSINESS_RULES } from "@/config/BusinessRules";
 import { useAdhesionStore } from "@/store/adhesionStore";
 import { useMemberStore } from "@/store/memberStore";
-import { Adhesion } from "@/types/Adhesion.type";
 import { Member } from "@/types/Member.type";
 import calcLateFee from "@/utils/calcLateFee";
 import { differenceInDays, differenceInHours } from "date-fns";
+import { useState } from "react";
 
 export function useEnrollmentResume() {
   const { selectedMember } = useMemberStore();

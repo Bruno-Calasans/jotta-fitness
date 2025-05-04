@@ -16,7 +16,7 @@ export type ProductPurchaseLog = DB & {
 export type EnrollmentLog = DB & {
   type: "enrollment";
   plan: Plan;
-  amount: number;
+  months: number;
   member: Member;
 };
 
