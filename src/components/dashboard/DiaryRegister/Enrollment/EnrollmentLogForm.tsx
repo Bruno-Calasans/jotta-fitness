@@ -1,4 +1,5 @@
 "use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
@@ -20,7 +21,7 @@ import { useState } from "react";
 import { Plan } from "@/types/Plan.type";
 import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
 import EnrollmentPaymentResume from "../../Members/Enrollments/EnrollmentPaymentResume";
-import { EnrollmentLog } from "@/types/Log.type";
+import type { Log } from "@/types/Log.type";
 import MemberSelector from "../MemberSelector";
 import { Member } from "@/types/Member.type";
 import { useLogStore } from "@/store/logStore";
@@ -35,7 +36,7 @@ const enrollmentLogFormSchema = z.object({
 type SubscribePlanFormInputs = z.infer<typeof enrollmentLogFormSchema>;
 
 type EnrollmentLogFormProps = {
-  enrollmentLog?: EnrollmentLog;
+  enrollmentLog?: Log & { type: "enrollment" };
   onSubmit: (success: boolean) => void;
 };
 
@@ -43,14 +44,14 @@ export default function EnrollmentLogForm({
   enrollmentLog,
   onSubmit,
 }: EnrollmentLogFormProps) {
+  const { lateFee } = useEnrollmentResume();
   const { successToast, errorToast } = useCustomToast();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(
-    enrollmentLog ? enrollmentLog.plan : null
+    enrollmentLog?.enrollment.plan || null
   );
   const [selectedMember, setSelectedMember] = useState<Member | null>(
-    enrollmentLog ? enrollmentLog.member : null
+    enrollmentLog?.member || null
   );
-  const { lateFee } = useEnrollmentResume();
 
   const logDb = useLogStore();
   const memberDb = useMemberStore();
@@ -58,9 +59,9 @@ export default function EnrollmentLogForm({
   const form = useForm<SubscribePlanFormInputs>({
     resolver: zodResolver(enrollmentLogFormSchema),
     defaultValues: {
-      member: enrollmentLog ? enrollmentLog.member.name : "",
-      plan: enrollmentLog ? enrollmentLog.plan.name : "",
-      months: enrollmentLog ? enrollmentLog.months : 1,
+      member: enrollmentLog?.member.name || "",
+      plan: enrollmentLog?.enrollment.plan.name || "",
+      months: enrollmentLog?.enrollment.months || 1,
     },
   });
 
@@ -69,24 +70,28 @@ export default function EnrollmentLogForm({
   const submitHandler = (input: SubscribePlanFormInputs) => {
     if (!selectedPlan || !selectedMember) return;
 
-    // Update plan payment
+    // Update enrollment register
     if (enrollmentLog) {
       try {
         form.reset();
 
         // Save enrollment to member
-        memberDb.updateEnrollment(selectedMember.id, selectedPlan.id, {
-          plan: selectedPlan,
-          months: input.months,
-        });
+        const enrollment = memberDb.updateEnrollment(
+          selectedMember.id,
+          selectedPlan.id,
+          {
+            plan: selectedPlan,
+            months,
+          }
+        );
 
         // Update enrollment log
-        logDb.update(enrollmentLog.id, {
-          type: "enrollment",
-          plan: selectedPlan,
-          member: selectedMember,
-          months,
-        });
+        if (enrollment)
+          logDb.update(enrollmentLog.id, {
+            type: "enrollment",
+            member: selectedMember,
+            enrollment,
+          });
 
         // Show success message
         successToast(
@@ -103,7 +108,7 @@ export default function EnrollmentLogForm({
         form.reset();
 
         // Save to database
-        memberDb.subscribe(selectedMember.id, {
+        const enrollment = memberDb.subscribe(selectedMember.id, {
           plan: selectedPlan,
           createdBy: STAFF,
           months,
@@ -111,12 +116,12 @@ export default function EnrollmentLogForm({
         });
 
         // create enrollment log
-        logDb.add({
-          type: "enrollment",
-          plan: selectedPlan,
-          member: selectedMember,
-          months,
-        });
+        if (enrollment)
+          logDb.add({
+            type: "enrollment",
+            member: selectedMember,
+            enrollment,
+          });
 
         successToast("Registro de Inscrição", "Registro criado com sucesso");
         onSubmit(true);

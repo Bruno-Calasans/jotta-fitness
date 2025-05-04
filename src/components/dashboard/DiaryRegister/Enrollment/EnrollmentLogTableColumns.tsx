@@ -1,7 +1,7 @@
 import DataTableSortableHeader from "@/components/custom/DataTable/DataTableSortableHeader";
 import type { ColumnDef } from "@tanstack/react-table";
-import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
 import type { EnrollmentLog } from "@/types/Log.type";
+import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
 import EditEnrollmentLogDialog from "./EditEnrollmentLogDialog";
 import RemoveEnrollmentLogDialog from "./RemoveEnrollmentLogDialog";
 
@@ -14,19 +14,23 @@ export const enrollmentLogColumns: ColumnDef<EnrollmentLog>[] = [
     ),
   },
   {
-    accessorKey: "plan.name",
+    accessorKey: "enrollment.plan.name",
     header: ({ column }) => (
       <DataTableSortableHeader column={column} headerName="Plano" />
     ),
   },
   {
-    accessorKey: "months",
+    accessorKey: "enrollment.months",
     header: ({ column }) => (
-      <DataTableSortableHeader column={column} headerName="Meses" />
+      <DataTableSortableHeader
+        column={column}
+        headerName="Meses"
+        type="numeral"
+      />
     ),
   },
   {
-    accessorKey: "startsIn",
+    accessorKey: "enrollment.startsIn",
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
@@ -35,8 +39,22 @@ export const enrollmentLogColumns: ColumnDef<EnrollmentLog>[] = [
       />
     ),
     cell: ({ row }) => {
-      const { createdAt } = row.original;
-      return <p>{createdAt.toLocaleDateString()}</p>;
+      const { enrollment } = row.original;
+      return <p>{enrollment.startsIn.toLocaleDateString()}</p>;
+    },
+  },
+  {
+    accessorKey: "enrollment.expiresIn",
+    header: ({ column }) => (
+      <DataTableSortableHeader
+        column={column}
+        headerName="Data de Término"
+        type="date"
+      />
+    ),
+    cell: ({ row }) => {
+      const { enrollment } = row.original;
+      return <p>{enrollment.expiresIn.toLocaleDateString()}</p>;
     },
   },
   {

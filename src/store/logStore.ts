@@ -1,20 +1,26 @@
 "use client";
 
 // import { LOGS_DATA } from "@/data/LOGS_DATA";
-import type { DB } from "@/types/Db.typ";
-import type { Log } from "@/types/Log.type";
+import type { EnrollmentLog, GainLog, Log, LossLog } from "@/types/Log.type";
 import { create } from "zustand";
 import generateDbFields from "@/utils/generateDefaultDbFields";
 
 type LogState = {
   logs: Log[];
-  add: (input: Omit<Log, keyof DB>) => void;
+  selectedDate?: Date;
+  setSelectedDate: (value: Date | undefined) => void;
+  add: (input: GainLog | LossLog) => void;
   remove: (id: string) => void;
-  update: (id: string, input: Partial<Omit<Log, keyof DB>>) => void;
+  update: (id: string, input: Partial<Log>) => void;
+  getAllEnrollmentLogs: () => (Log & { type: "enrollment" })[];
 };
 
 export const useLogStore = create<LogState>((set, get) => ({
   logs: [],
+  selectedDate: new Date(),
+  setSelectedDate(value) {
+    set(() => ({ selectedDate: value }));
+  },
   add(input) {
     const newLog = { ...generateDbFields(), ...input } as Log;
     set((state) => ({
@@ -34,5 +40,10 @@ export const useLogStore = create<LogState>((set, get) => ({
     }) as Log[];
 
     set((state) => ({ ...state, logs: updatedLogs }), true);
+  },
+  getAllEnrollmentLogs() {
+    return get().logs.filter((log) => log.type === "enrollment") as (Log & {
+      type: "enrollment";
+    })[];
   },
 }));

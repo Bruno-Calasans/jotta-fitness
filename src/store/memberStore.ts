@@ -28,13 +28,13 @@ type MemberState = {
   subscribe: (
     memberId: string,
     input: Omit<Enrollment, keyof DB | "startsIn" | "expiresIn">
-  ) => void;
+  ) => Enrollment | null;
   unsubscribe: (memberId: string, enrollmentId: string) => void;
   updateEnrollment: (
     memberId: string,
     enrollmentId: string,
     input: Partial<{ plan: Plan; months: number }>
-  ) => void;
+  ) => Enrollment | null;
   getLeftDays: (member: Member, excludes?: string[]) => number;
   getActiveEnrollments: (memberId: string) => Enrollment[];
   addPurchase: (memberId: string, input: Omit<Purchase, keyof DB>) => void;
@@ -118,28 +118,28 @@ export const useMemberStore = create<MemberState>((set, get) => ({
   subscribe(memberId, input) {
     // Check if members exists
     const member = get().getById(memberId);
-    if (!member) return;
+    if (!member) return null;
 
     // Check if there's left days at the last plan payment
     const leftDaysLastEnrollment = get().getLeftDays(member);
+    const enrollment: Enrollment = {
+      ...input,
+      ...generateDefaultDbFields(),
+      startsIn: new Date(),
+      expiresIn: addDate(new Date(), {
+        days: input.months * 30 + leftDaysLastEnrollment,
+      }),
+    };
 
     const updatedMember = get().update(memberId, {
       ...member,
-      enrollments: [
-        ...member.enrollments,
-        {
-          ...input,
-          ...generateDefaultDbFields(),
-          startsIn: new Date(),
-          expiresIn: addDate(new Date(), {
-            days: input.months * 30 + leftDaysLastEnrollment,
-          }),
-        },
-      ],
+      enrollments: [...member.enrollments, enrollment],
     });
 
     // Update selected member
     if (updatedMember) get().setSelectedMember(updatedMember);
+
+    return enrollment;
   },
   unsubscribe(memberId, enrollmentId) {
     // Found member
@@ -162,12 +162,14 @@ export const useMemberStore = create<MemberState>((set, get) => ({
   updateEnrollment(memberId, enrollmentId, input) {
     // Found member
     const foundMember = get().getById(memberId);
-    if (!foundMember) return;
+    if (!foundMember) return null;
 
     const currentDate = new Date();
+    let updatedEnrollment: Enrollment | null = null;
 
     // Update specific plan payment
     const updatedEnrollments = foundMember.enrollments.map((enrollment) => {
+      
       // Find specific plan payment
       if (enrollment.id === enrollmentId) {
         let leftDaysLastEnrollment = get().getLeftDays(foundMember, [
@@ -176,8 +178,7 @@ export const useMemberStore = create<MemberState>((set, get) => ({
 
         const isMonthsDiff = input.months && input.months != enrollment.months;
         const pastDays = differenceInDays(enrollment.startsIn, new Date());
-
-        return {
+        updatedEnrollment = {
           ...enrollment,
           ...input,
           startsIn: isMonthsDiff ? currentDate : enrollment.startsIn,
@@ -187,6 +188,8 @@ export const useMemberStore = create<MemberState>((set, get) => ({
               })
             : enrollment.expiresIn,
         };
+
+        return updatedEnrollment;
       }
       // Return others plan payments
       return enrollment;
@@ -198,6 +201,8 @@ export const useMemberStore = create<MemberState>((set, get) => ({
     });
 
     get().setSelectedMember(updatedMember);
+
+    return updatedEnrollment;
   },
   getActiveEnrollments(memberId) {
     let activeEnrollments: Enrollment[] = [];

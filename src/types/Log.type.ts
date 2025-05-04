@@ -1,32 +1,34 @@
 import type { Adhesion } from "./Adhesion.type";
 import type { DB } from "./Db.typ";
+import type { Enrollment } from "./Enrollment.type";
 import type { Expense } from "./Expense.type";
 import type { Investment } from "./Investment.type";
 import type { Member } from "./Member.type";
 import type { Plan } from "./Plan.type";
 import type { Product } from "./Product.type";
 
-export type ProductPurchaseLog = DB & {
+export type ProductPurchaseLog = {
   type: "product-purchase";
   product: Product;
   amount: number;
   member: Member | string;
 };
 
-export type EnrollmentLog = DB & {
+export type EnrollmentLog = {
   type: "enrollment";
-  plan: Plan;
-  months: number;
+  enrollment: Enrollment;
   member: Member;
 };
 
-export type PlanDiaryLog = DB & {
+export type DBEnrollmentLog = EnrollmentLog & DB
+
+export type PlanDiaryLog = {
   type: "plan-diary";
   plan: Plan;
   member: Member | string;
 };
 
-export type AdhesionPaymentLog = DB & {
+export type AdhesionPaymentLog = {
   type: "adhesion-payment";
   plan: Plan;
   adhesion: Adhesion;
@@ -35,13 +37,13 @@ export type AdhesionPaymentLog = DB & {
 
 export type PlanLog = EnrollmentLog | PlanDiaryLog | AdhesionPaymentLog;
 
-export type ExpenseLog = DB & {
+export type ExpenseLog = {
   type: "expense";
   item: Expense;
   value: number;
 };
 
-export type InvestmentLog = DB & {
+export type InvestmentLog = {
   type: "investment";
   item: Investment;
   value: number;
@@ -49,4 +51,4 @@ export type InvestmentLog = DB & {
 
 export type GainLog = ProductPurchaseLog | PlanLog;
 export type LossLog = ExpenseLog | InvestmentLog;
-export type Log = GainLog | LossLog;
+export type Log = DB & (GainLog | LossLog);

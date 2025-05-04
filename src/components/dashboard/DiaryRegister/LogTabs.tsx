@@ -3,8 +3,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EnrollmentLogTab from "./Enrollment/EnrollmentLogTab";
 import LossLogTab from "./LossLogTab";
-// import PlanRegisterTab from "./Enrollments/EnrollmentTab";
-// import PurchasesTab from "./Purchases/PurchasesTab";
 
 const tabData = [
   {

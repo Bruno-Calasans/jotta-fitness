@@ -9,9 +9,12 @@ import {
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import EnrollmentLogForm from "./EnrollmentLogForm";
+import { useLogStore } from "@/store/logStore";
+import { formatDate } from "date-fns";
 
 export default function CreateEnrollmentLogDialog() {
   const [open, setOpen] = useState(false);
+  const { selectedDate } = useLogStore();
 
   const submitFormHandler = (success: boolean) => {
     if (success) setOpen(false);
@@ -21,7 +24,13 @@ export default function CreateEnrollmentLogDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       {/* Button to subscribe */}
       <DialogTrigger asChild>
-        <Button className="bg-emerald-500 hover:bg-emerald-600 font-bold">
+        <Button
+          disabled={
+            selectedDate &&
+            formatDate(selectedDate, "d/M/Y") != formatDate(new Date(), "d/M/Y")
+          }
+          className="bg-emerald-500 hover:bg-emerald-600 font-bold"
+        >
           <Plus />
           Inscrever
         </Button>

@@ -16,16 +16,23 @@ import {
 type DatePickerProps = {
   selected?: Date;
   onSelect?: (selectedDate: Date | undefined) => void;
+  toDate?: Date;
+  fromDate?: Date;
 };
 
-export function DatePicker({ selected, onSelect }: DatePickerProps) {
+export function DatePicker({
+  selected,
+  toDate,
+  fromDate,
+  onSelect,
+}: DatePickerProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
           className={cn(
-            "w-full justify-start text-left font-normal",
+            "justify-start text-left font-normal text-black rounded-md",
             !selected && "text-muted-foreground"
           )}
         >
@@ -33,23 +40,18 @@ export function DatePicker({ selected, onSelect }: DatePickerProps) {
           {selected ? format(selected, "d/M/Y") : <span>Escolha uma data</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent
-        // className="w-auto p-0"
-        align="start"
-        className="flex w-auto flex-col space-y-2 p-2"
-        asChild
-      >
+      <PopoverContent className="w-auto p-0" align="start" asChild>
         <div id="calender">
           <Calendar
             mode="single"
             selected={selected}
             onSelect={onSelect}
-            fromDate={new Date()}
-            toDate={addYears(new Date(), 1)}
-            //   disabled={(date) =>
-            //     date > new Date() || date < new Date("1900-01-01")
-            //   }
+            fromDate={fromDate}
+            toDate={toDate}
             initialFocus
+            classNames={{
+              day_today: "bg-orange-500 text-white font-bold rounded-md",
+            }}
           />
         </div>
       </PopoverContent>
