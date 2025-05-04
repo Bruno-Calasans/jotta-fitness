@@ -11,7 +11,7 @@ export default function DiaryRegisterPage() {
   return (
     <ContentContainer>
       <div className="flex justify-between text-4xl border-b-2 border-b-orange-500 py-2 flex-row">
-        <p>Registro Diário</p>
+        <p>Registro do Dia</p>
         <DatePicker
           selected={selectedDate}
           onSelect={setSelectedDate}

@@ -22,7 +22,7 @@ export default function PlanDiaryLogTab() {
         <div className="flex justify-between text-4xl border-b-2 border-b-orange-500 py-2 mb-3">
           <p>Registro de Diárias</p>
           <CreatePlanDiaryLogDialog />
-        </div>''
+        </div>
         <DataTable
           columns={planDiaryColumns}
           data={filteredPlanDiaryLogs}

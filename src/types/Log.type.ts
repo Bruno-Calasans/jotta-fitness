@@ -5,14 +5,13 @@ import type { Expense } from "./Expense.type";
 import type { Investment } from "./Investment.type";
 import type { Member } from "./Member.type";
 import type { Plan } from "./Plan.type";
-import { PlanDiary } from "./PlanDiary.type";
-import type { Product } from "./Product.type";
+import type { PlanDiary } from "./PlanDiary.type";
+import type { Purchase } from "./Purchase.type";
 
 export type ProductPurchaseLog = {
   type: "product-purchase";
-  product: Product;
-  amount: number;
-  member: Member | string;
+  purchase: Purchase;
+  member: Member;
 };
 
 export type EnrollmentLog = {

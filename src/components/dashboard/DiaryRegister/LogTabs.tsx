@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EnrollmentLogTab from "./Enrollment/EnrollmentLogTab";
 import LossLogTab from "./LossLogTab";
 import PlanDiaryLogTab from "./PlanDiary/PlanDiarylogTab";
+import PurchaseLogTab from "./Purchases/PurchaseLogTab";
 
 const tabData = [
   {
@@ -24,7 +25,7 @@ const tabData = [
   {
     value: "purchase-registers",
     label: "Produtos",
-    content: <p>Ainda não disponível</p>,
+    content: <PurchaseLogTab />,
   },
   {
     value: "loss-register",

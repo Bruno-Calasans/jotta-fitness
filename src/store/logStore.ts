@@ -14,6 +14,7 @@ type LogState = {
   update: (id: string, input: Partial<Log>) => void;
   getAllEnrollmentLogs: () => (Log & { type: "enrollment" })[];
   getAllPlanDiaryLogs: () => (Log & { type: "plan-diary" })[];
+  getAllPurchaseLogs: () => (Log & { type: "product-purchase" })[];
 };
 
 export const useLogStore = create<LogState>((set, get) => ({
@@ -50,6 +51,13 @@ export const useLogStore = create<LogState>((set, get) => ({
   getAllPlanDiaryLogs() {
     return get().logs.filter((log) => log.type === "plan-diary") as (Log & {
       type: "plan-diary";
+    })[];
+  },
+  getAllPurchaseLogs() {
+    return get().logs.filter(
+      (log) => log.type === "product-purchase"
+    ) as (Log & {
+      type: "product-purchase";
     })[];
   },
 }));

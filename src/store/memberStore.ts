@@ -38,12 +38,15 @@ type MemberState = {
   ) => Enrollment | null;
   getLeftDays: (member: Member, excludes?: string[]) => number;
   getActiveEnrollments: (memberId: string) => Enrollment[];
-  addPurchase: (memberId: string, input: Omit<Purchase, keyof DB>) => void;
+  addPurchase: (
+    memberId: string,
+    input: Omit<Purchase, keyof DB>
+  ) => Purchase | null;
   updatePurchase: (
     memberId: string,
     purchaseId: string,
     input: Partial<Omit<Purchase, keyof DB>>
-  ) => void;
+  ) => Purchase | null;
   removePurchase: (memberId: string, purchaseId: string) => void;
   getPurchaseById: (id: string) => Purchase | null;
   payAdhesion: (memberId: string, year: number) => void;
@@ -228,30 +231,31 @@ export const useMemberStore = create<MemberState>((set, get) => ({
   },
   addPurchase(memberId, input) {
     const foundMember = get().getById(memberId);
-    if (!foundMember) return;
+    if (!foundMember) return null;
+
+    const newPurchase: Purchase = {
+      ...generateDefaultDbFields(),
+      ...input,
+    };
 
     const updatedMember = get().update(memberId, {
-      purchases: [
-        ...foundMember.purchases,
-        {
-          ...generateDefaultDbFields(),
-          ...input,
-        },
-      ],
+      purchases: [...foundMember.purchases, newPurchase],
     });
 
     get().setSelectedMember(updatedMember);
+
+    return newPurchase;
   },
   updatePurchase(memberId, purchaseId, input) {
     const foundMember = get().getById(memberId);
-    if (!foundMember) return;
+    if (!foundMember) return null;
+
+    let updatedPurchase: Purchase | null = null;
 
     const updatedPurchases = foundMember.purchases.map((purchase) => {
       if (purchase.id === purchaseId) {
-        return {
-          ...purchase,
-          ...input,
-        };
+        updatedPurchase = { ...purchase, ...input };
+        return updatedPurchase;
       }
       return purchase;
     });
@@ -261,6 +265,8 @@ export const useMemberStore = create<MemberState>((set, get) => ({
     });
 
     get().setSelectedMember(updatedMember);
+
+    return updatedPurchase;
   },
   getPurchaseById(id) {
     let foundPurchase: Purchase | null = null;
