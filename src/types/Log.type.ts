@@ -35,18 +35,11 @@ export type AdhesionPaymentLog = {
 
 export type PlanLog = EnrollmentLog | PlanDiaryLog | AdhesionPaymentLog;
 
-export type ExpenseLog = {
-  type: "expense";
-  item: Expense;
-  value: number;
-};
-
-export type InvestmentLog = {
-  type: "investment";
-  item: Investment;
+export type LossLog = {
+  type: "expense" | "investment";
+  item: Expense | Investment;
   value: number;
 };
 
 export type GainLog = ProductPurchaseLog | PlanLog;
-export type LossLog = ExpenseLog | InvestmentLog;
 export type Log = DB & (GainLog | LossLog);

@@ -1,5 +1,6 @@
 "use client";
 
+import { EXPENSE_DATA } from "@/data/EXPENSE_DATA";
 import { Expense } from "@/types/Expense.type";
 import { v4 } from "uuid";
 import { create } from "zustand";
@@ -12,7 +13,7 @@ type ExpenseState = {
 };
 
 export const useExpenseStore = create<ExpenseState>((set, get) => ({
-  expenses: [],
+  expenses: EXPENSE_DATA,
   add(input) {
     set((state) => ({
       expenses: [

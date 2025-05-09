@@ -17,16 +17,6 @@ export const adhesionColumns: ColumnDef<Adhesion>[] = [
       />
     ),
   },
-  // {
-  //   accessorKey: "price",
-  //   header: ({ column }) => (
-  //     <DataTableSortableHeader
-  //       column={column}
-  //       headerName="Preço (R$)"
-  //       type="numeral"
-  //     />
-  //   ),
-  // },
   {
     accessorKey: "newbieDiscount",
     header: ({ column }) => (

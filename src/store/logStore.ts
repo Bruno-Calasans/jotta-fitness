@@ -15,6 +15,7 @@ type LogState = {
   getAllEnrollmentLogs: () => (Log & { type: "enrollment" })[];
   getAllPlanDiaryLogs: () => (Log & { type: "plan-diary" })[];
   getAllPurchaseLogs: () => (Log & { type: "product-purchase" })[];
+  getAllLossLogs: () => (Log & { type: "expense" | "investment" })[];
 };
 
 export const useLogStore = create<LogState>((set, get) => ({
@@ -58,6 +59,13 @@ export const useLogStore = create<LogState>((set, get) => ({
       (log) => log.type === "product-purchase"
     ) as (Log & {
       type: "product-purchase";
+    })[];
+  },
+  getAllLossLogs() {
+    return get().logs.filter(
+      (log) => log.type === "expense" || "investment"
+    ) as (Log & {
+      type: "expense" | "investment";
     })[];
   },
 }));

@@ -1,5 +1,6 @@
 "use client";
 
+import { INVESTIMENT_DATA } from "@/data/INVESTIMENT_DATA";
 import { Investment } from "@/types/Investment.type";
 import { v4 } from "uuid";
 import { create } from "zustand";
@@ -12,7 +13,7 @@ type InvestmentState = {
 };
 
 export const useInvestmentStore = create<InvestmentState>((set, get) => ({
-  investments: [],
+  investments: INVESTIMENT_DATA,
   add(input) {
     set((state) => ({
       investments: [
