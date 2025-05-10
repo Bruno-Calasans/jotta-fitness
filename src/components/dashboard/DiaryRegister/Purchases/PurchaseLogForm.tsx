@@ -10,6 +10,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -192,6 +193,9 @@ export default function PurchaseLogForm({
                 />
               </FormControl>
               <FormMessage />
+              <FormDescription>
+                Deixe em branco caso não seja um membro não registrado.
+              </FormDescription>
             </FormItem>
           )}
         />
