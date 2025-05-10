@@ -1,5 +1,5 @@
 import type { Adhesion } from "./Adhesion.type";
-import type { DB } from "./Db.typ";
+import type { DB } from "./Db.type";
 import type { Enrollment } from "./Enrollment.type";
 import type { Expense } from "./Expense.type";
 import type { Investment } from "./Investment.type";
@@ -8,38 +8,60 @@ import type { Plan } from "./Plan.type";
 import type { PlanDiary } from "./PlanDiary.type";
 import type { Purchase } from "./Purchase.type";
 
-export type ProductPurchaseLog = {
-  type: "product-purchase";
+export type PurchaseLogData = {
   purchase: Purchase;
-  member: Member;
+  member?: Member;
 };
 
-export type EnrollmentLog = {
-  type: "enrollment";
+export type EnrollmentLogData = {
   enrollment: Enrollment;
   member: Member;
 };
 
-export type PlanDiaryLog = {
-  type: "plan-diary";
+export type PlanDiaryLogData = {
   planDiary: PlanDiary;
-  member: Member;
+  member?: Member;
 };
 
-export type AdhesionPaymentLog = {
-  type: "adhesion-payment";
+export type AdhesionPaymentLogData = {
   plan: Plan;
   adhesion: Adhesion;
   member: Member;
 };
 
-export type PlanLog = EnrollmentLog | PlanDiaryLog | AdhesionPaymentLog;
-
-export type LossLog = {
+export type LossLogData = {
   type: "expense" | "investment";
   item: Expense | Investment;
   value: number;
 };
 
-export type GainLog = ProductPurchaseLog | PlanLog;
-export type Log = DB & (GainLog | LossLog);
+export type LogType =
+  | "purchase"
+  | "enrollment"
+  | "adhesion"
+  | "plan-diary"
+  | "expense"
+  | "investment";
+
+export type PurchaseLog = DB & PurchaseLogData & { type: "purchase" };
+export type EnrollmentLog = DB & EnrollmentLogData & { type: "enrollment" };
+export type AdhesionPaymentLog = DB &
+  AdhesionPaymentLogData & {
+    type: "adhesion";
+  };
+export type PlanDiaryLog = DB & PlanDiaryLogData & { type: "plan-diary" };
+export type LossLog = DB & LossLogData & { type: "expense" | "investment" };
+
+export type LogData =
+  | Omit<PurchaseLog, keyof DB>
+  | Omit<EnrollmentLog, keyof DB>
+  | Omit<AdhesionPaymentLog, keyof DB>
+  | Omit<PlanDiaryLog, keyof DB>
+  | Omit<LossLog, keyof DB>;
+
+export type Log =
+  | PurchaseLog
+  | EnrollmentLog
+  | AdhesionPaymentLog
+  | PlanDiaryLog
+  | LossLog;

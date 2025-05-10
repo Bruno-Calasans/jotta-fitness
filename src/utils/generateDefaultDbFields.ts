@@ -1,7 +1,7 @@
-import { DB } from "@/types/Db.typ";
+import { DB } from "@/types/Db.type";
 import { v4 } from "uuid";
 
-export default function generateDbFields() {
+export default function generateDbFields(): DB {
   return {
     id: v4(),
     createdAt: new Date(),

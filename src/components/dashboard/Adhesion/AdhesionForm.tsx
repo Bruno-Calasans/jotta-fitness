@@ -20,7 +20,7 @@ import useCustomToast from "@/hooks/use-custom-toast";
 import { FocusEventHandler, useEffect } from "react";
 import type { toZod } from "tozod";
 import type { Adhesion } from "@/types/Adhesion.type";
-import type { DB } from "@/types/Db.typ";
+import type { DB } from "@/types/Db.type";
 import { format, startOfYear, endOfYear } from "date-fns";
 
 type AdhesionFormSchema = toZod<Omit<Adhesion, keyof DB>>;

@@ -18,7 +18,7 @@ import useCustomToast from "@/hooks/use-custom-toast";
 import { useMemberStore } from "@/store/memberStore";
 import { useState } from "react";
 import PurchasePaymentResume from "../../Members/Purchases/PurchasePaymentResume";
-import type { Log } from "@/types/Log.type";
+import type { PurchaseLog } from "@/types/Log.type";
 import MemberSelector from "../MemberSelector";
 import { Member } from "@/types/Member.type";
 import { useLogStore } from "@/store/logStore";
@@ -26,9 +26,10 @@ import { STAFF } from "@/data/MEMBERS_DATA";
 import { ProductSelector } from "../../Members/Purchases/ProductSelector";
 import { Product } from "@/types/Product.type";
 import { useProductStore } from "@/store/productStore";
+import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
 
 const purchaseLogFormSchema = z.object({
-  member: z.string().min(1, "Membro é obrigatório"),
+  member: z.string().optional(),
   product: z.string().min(1, "Produto é obrigatório"),
   amount: z.coerce.number().min(1, "Quantidade deve ser maior ou igual a 1"),
 });
@@ -36,7 +37,7 @@ const purchaseLogFormSchema = z.object({
 type SubscribePlanFormInputs = z.infer<typeof purchaseLogFormSchema>;
 
 type PurchaseLogFormProps = {
-  purchaseLog?: Log & { type: "product-purchase" };
+  purchaseLog?: PurchaseLog;
   onSubmit: (success: boolean) => void;
 };
 
@@ -58,7 +59,7 @@ export default function PurchaseLogForm({
   const form = useForm<SubscribePlanFormInputs>({
     resolver: zodResolver(purchaseLogFormSchema),
     defaultValues: {
-      member: purchaseLog?.member.name || "",
+      member: purchaseLog?.member?.name || "",
       product: purchaseLog?.purchase.product.name || "",
       amount: purchaseLog?.purchase.amount || 1,
     },
@@ -67,23 +68,42 @@ export default function PurchaseLogForm({
   const amount = useWatch({ name: "amount", control: form.control });
 
   const submitHandler = (input: SubscribePlanFormInputs) => {
-    if (!selectedProduct || !selectedMember) return;
+    if (!selectedProduct) return;
 
-    // Update purchase register
+    // Update purchase log
     if (purchaseLog) {
       try {
         form.reset();
 
-        // Save purchase to member
-        const purchase = memberDb.updatePurchase(
-          selectedMember.id,
-          purchaseLog.purchase.id,
-          {
-            product: selectedProduct,
-            createdBy: STAFF,
-            amount,
-          }
-        );
+        // Registered Member
+        if (selectedMember) {
+          const purchase = memberDb.updatePurchase(
+            selectedMember.id,
+            purchaseLog.purchase.id,
+            {
+              product: selectedProduct,
+              amount,
+            }
+          );
+
+          // Update purchase log
+          if (purchase)
+            logDb.update(purchaseLog.id, {
+              type: "purchase",
+              member: selectedMember,
+              purchase,
+            });
+          // Update not registered member
+        } else {
+          logDb.update(purchaseLog.id, {
+            type: "purchase",
+            purchase: logDb.createPurchase({
+              ...purchaseLog,
+              amount,
+              product: selectedProduct,
+            }),
+          });
+        }
 
         // Update product amount
         const amountDiff = amount - purchaseLog.purchase.amount;
@@ -96,42 +116,54 @@ export default function PurchaseLogForm({
           productDb.increaseAmount(selectedProduct.id, amountDiff);
         }
 
-        // Update purchase log
-        if (purchase)
-          logDb.update(purchaseLog.id, {
-            type: "product-purchase",
-            member: selectedMember,
-            purchase,
-          });
-
         // Show success message
-        successToast("Atualização de Compra", "Compra atualizada com sucesso");
+        successToast(
+          "Atualização de Registro de Compra",
+          "Registro atualizada com sucesso"
+        );
         onSubmit(true);
       } catch (error) {
-        errorToast("Atualização de Compra", "Erro ao atualizar Compra");
+        errorToast(
+          "Atualização de Registro de Compra",
+          "Erro ao atualizar registro"
+        );
         onSubmit(false);
       }
+      // Create purchase log
     } else {
       try {
         form.reset();
 
-        // Save to database
-        const purchase = memberDb.addPurchase(selectedMember.id, {
-          product: selectedProduct,
-          createdBy: STAFF,
-          amount,
-        });
+        // Registered member
+        if (selectedMember) {
+          const purchase = memberDb.addPurchase(selectedMember.id, {
+            amount,
+            product: selectedProduct,
+            // createdBy: STAFF,
+          });
+
+          // create purchase log
+          if (purchase)
+            logDb.add({
+              type: "purchase",
+              purchase,
+              member: selectedMember,
+              createdBy: STAFF,
+            });
+          // Not registered member
+        } else {
+          logDb.add({
+            type: "purchase",
+            purchase: logDb.createPurchase({
+              amount,
+              product: selectedProduct,
+            }),
+            createdBy: STAFF,
+          });
+        }
 
         // Update product amount
         productDb.decreaseAmount(selectedProduct.id, amount);
-
-        // create purchase log
-        if (purchase)
-          logDb.add({
-            type: "product-purchase",
-            member: selectedMember,
-            purchase,
-          });
 
         successToast("Registro de Compra", "Registro criado com sucesso");
         onSubmit(true);
@@ -145,7 +177,7 @@ export default function PurchaseLogForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(submitHandler)} className="space-y-8">
-        {/* Plan input */}
+        {/* Member input */}
         <FormField
           control={form.control}
           name="member"
@@ -155,9 +187,8 @@ export default function PurchaseLogForm({
               <FormControl>
                 <MemberSelector
                   value={field.value}
-                  defaultValue={field.value}
                   onValueChange={field.onChange}
-                  onSelected={setSelectedMember}
+                  onItemSelected={setSelectedMember}
                 />
               </FormControl>
               <FormMessage />
@@ -165,17 +196,18 @@ export default function PurchaseLogForm({
           )}
         />
 
-        {/* Plan input */}
+        {/* Product input */}
         <FormField
           control={form.control}
           name="product"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Produto</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Produto</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
                 <ProductSelector
                   value={field.value}
-                  defaultValue={field.value}
                   onValueChange={field.onChange}
                   onSelected={setSelectedProduct}
                 />
@@ -191,7 +223,9 @@ export default function PurchaseLogForm({
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Quantidade</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Quantidade</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
                 <Input
                   type="number"
@@ -206,7 +240,7 @@ export default function PurchaseLogForm({
           )}
         />
 
-        {/* Payment resume */}
+        {/* PPurchase Payment resume */}
         {selectedProduct && amount > 0 && (
           <PurchasePaymentResume product={selectedProduct} amount={amount} />
         )}
@@ -225,7 +259,7 @@ export default function PurchaseLogForm({
             className="bg-indigo-500 hover:bg-indigo-600 transition-all"
             type="submit"
           >
-            Salvar
+            {purchaseLog ? "Salvar" : "Criar"}
           </Button>
         </div>
       </form>

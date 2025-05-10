@@ -3,17 +3,24 @@ import { enrollmentLogColumns } from "./EnrollmentLogTableColumns";
 import { useLogStore } from "@/store/logStore";
 import CreateEnrollmentLogDialog from "./CreateEnrollmentLogDialog";
 import { formatDate } from "date-fns";
+import isDateEqual from "@/utils/isDateEquals";
 
 export default function EnrollmentLogTab() {
   const { selectedDate, getAllEnrollmentLogs } = useLogStore();
+
   const enrollmentLogs = getAllEnrollmentLogs();
   const filteredEnrollmentLogs = selectedDate
-    ? enrollmentLogs.filter(
-        (log) =>
-          formatDate(log.createdAt, "d/M/Y") ===
-          formatDate(selectedDate, "d/M/Y")
-      )
+    ? enrollmentLogs.filter((log) => isDateEqual(log.createdAt, selectedDate))
     : enrollmentLogs;
+
+  const createNoResultMsg = () => {
+    if (!selectedDate) return <p>Selecione uma data</p>;
+
+    const isToday = isDateEqual(selectedDate, new Date());
+    if (isToday) return <p>Nenhum registro para hoje</p>;
+
+    return <p>Nenhum registro para data {formatDate(selectedDate, "d/M/Y")}</p>;
+  };
 
   return (
     <div>
@@ -28,7 +35,7 @@ export default function EnrollmentLogTab() {
         <DataTable
           columns={enrollmentLogColumns}
           data={filteredEnrollmentLogs}
-          noResultMsg="Nenhuma registro de inscrição hoje"
+          noResultMsg={createNoResultMsg()}
         />
       </div>
     </div>

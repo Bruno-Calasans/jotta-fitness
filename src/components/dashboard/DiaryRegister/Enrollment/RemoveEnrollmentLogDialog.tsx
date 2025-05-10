@@ -39,7 +39,7 @@ export default function RemoveEnrollmentLogDialog({
     } catch (error) {
       errorToast(
         "Exclusão de Registro de Inscrição",
-        "Erro ao remover registro de inscrição"
+        "Erro ao remover registro"
       );
     }
   };
@@ -52,15 +52,22 @@ export default function RemoveEnrollmentLogDialog({
           className="w-full flex items-center justify-start gap-1"
         >
           <Trash className="h-4 w-4" />
-          Remover
+          Excluir
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Remover Inscrição</DialogTitle>
+          <DialogTitle>Excluir Registro de Inscrição</DialogTitle>
           <div>
             Tem certeza que deseja excluir o registro de inscrição do usuário{" "}
-            <span className="font-bold">"{enrollmentLog.member.name}"</span>?
+            <span className="font-bold text-orange-500">
+              {enrollmentLog.member.name}{" "}
+            </span>
+            do dia{" "}
+            <span className="font-bold">
+              {enrollmentLog.createdAt.toLocaleDateString()}
+            </span>
+            ?
           </div>
         </DialogHeader>
         <DialogFooter>

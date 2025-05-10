@@ -1,5 +1,5 @@
 import type { AdhesionPayment } from "./AdhesionPayment.type";
-import type { DB } from "./Db.typ";
+import type { DB } from "./Db.type";
 import type { Enrollment } from "./Enrollment.type";
 import type { PlanDiary } from "./PlanDiary.type";
 import type { Purchase } from "./Purchase.type";

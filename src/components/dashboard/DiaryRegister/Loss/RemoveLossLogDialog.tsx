@@ -11,10 +11,10 @@ import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { useLogStore } from "@/store/logStore";
-import type { Log } from "@/types/Log.type";
+import type { LossLog } from "@/types/Log.type";
 
 type RemoveLossLogDialogProps = {
-  lossLog: Log & { type: "expense" | "investment" };
+  lossLog: LossLog;
 };
 
 export default function RemoveLossLogDialog({

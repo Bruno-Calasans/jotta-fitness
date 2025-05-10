@@ -1,7 +1,7 @@
 "use client";
 
 import { PLANS_DATA } from "@/data/PLANS_DATA";
-import { DB } from "@/types/Db.typ";
+import { DB } from "@/types/Db.type";
 import { Plan } from "@/types/Plan.type";
 import { create } from "zustand";
 import generateDbFields from "@/utils/generateDefaultDbFields";

@@ -2,7 +2,7 @@
 
 import { ADHESION_DATA } from "@/data/ADHESION_DATA";
 import type { Adhesion } from "@/types/Adhesion.type";
-import { DB } from "@/types/Db.typ";
+import { DB } from "@/types/Db.type";
 import { create } from "zustand";
 import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
 

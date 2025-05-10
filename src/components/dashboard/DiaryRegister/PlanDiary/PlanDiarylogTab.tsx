@@ -1,19 +1,16 @@
 import DataTable from "@/components/custom/DataTable/DataTable";
-// import { planDiaryLogColumns } from "./PlanDiaryLogTableColumns";
 import { useLogStore } from "@/store/logStore";
-import { formatDate } from "date-fns";
 import { planDiaryColumns } from "./PlanDiaryTableColumns";
 import CreatePlanDiaryLogDialog from "./CreatePlanDiaryLogDialog";
+import isDateEqual from "@/utils/isDateEquals";
+import SelectedDateNotResultMsg from "../SelectedDateNotResultMsg";
 
 export default function PlanDiaryLogTab() {
   const { selectedDate, getAllPlanDiaryLogs } = useLogStore();
+
   const planDiaryLogs = getAllPlanDiaryLogs();
   const filteredPlanDiaryLogs = selectedDate
-    ? planDiaryLogs.filter(
-        (log) =>
-          formatDate(log.createdAt, "d/M/Y") ===
-          formatDate(selectedDate, "d/M/Y")
-      )
+    ? planDiaryLogs.filter((log) => isDateEqual(log.createdAt, selectedDate))
     : planDiaryLogs;
 
   return (
@@ -26,7 +23,7 @@ export default function PlanDiaryLogTab() {
         <DataTable
           columns={planDiaryColumns}
           data={filteredPlanDiaryLogs}
-          noResultMsg="Nenhuma diária registrada hoje"
+          noResultMsg={<SelectedDateNotResultMsg />}
         />
       </div>
     </div>

@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { useState } from "react";
-import type { Log } from "@/types/Log.type";
+import type { LossLog } from "@/types/Log.type";
 import { useLogStore } from "@/store/logStore";
 import { STAFF } from "@/data/MEMBERS_DATA";
 import { Expense } from "@/types/Expense.type";
@@ -24,6 +24,7 @@ import { Investment } from "@/types/Investment.type";
 import LossTypeSelector from "./LossTypeSelector";
 import InvestmentSelector from "./InvestmentSelector";
 import ExpenseSelector from "./ExpenseSelector";
+import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
 
 const lossLogFormSchema = z.object({
   name: z.string().min(1, "Campo obrigatório"),
@@ -34,7 +35,7 @@ const lossLogFormSchema = z.object({
 type LossLogFormInputs = z.infer<typeof lossLogFormSchema>;
 
 type LossLogFormProps = {
-  lossLog?: Log & { type: "investment" | "expense" };
+  lossLog?: LossLog;
   onSubmit: (success: boolean) => void;
 };
 
@@ -50,7 +51,7 @@ export default function LossLogForm({ lossLog, onSubmit }: LossLogFormProps) {
     defaultValues: {
       name: lossLog?.item.name || "",
       type: lossLog?.type || "expense",
-      value: lossLog?.value || 0,
+      value: lossLog?.value || 1,
     },
   });
 
@@ -88,6 +89,7 @@ export default function LossLogForm({ lossLog, onSubmit }: LossLogFormProps) {
           type: input.type,
           item: selectedLoss,
           value: input.value,
+          createdBy: STAFF,
         });
 
         successToast(
@@ -103,7 +105,6 @@ export default function LossLogForm({ lossLog, onSubmit }: LossLogFormProps) {
   };
 
   const type = useWatch({ control: form.control, name: "type" });
-  console.log(selectedLoss);
 
   return (
     <Form {...form}>
@@ -114,7 +115,9 @@ export default function LossLogForm({ lossLog, onSubmit }: LossLogFormProps) {
           name="type"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Tipo de Perda</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Tipo de Perda</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
                 <LossTypeSelector
                   value={field.value}
@@ -132,7 +135,9 @@ export default function LossLogForm({ lossLog, onSubmit }: LossLogFormProps) {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Investimento</FormLabel>
+                <FormLabel>
+                  <RequiredFieldTooltip>Investimento</RequiredFieldTooltip>
+                </FormLabel>
                 <FormControl>
                   <InvestmentSelector
                     value={field.value}
@@ -152,7 +157,9 @@ export default function LossLogForm({ lossLog, onSubmit }: LossLogFormProps) {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Despesa</FormLabel>
+                <FormLabel>
+                  <RequiredFieldTooltip>Despesa</RequiredFieldTooltip>
+                </FormLabel>
                 <FormControl>
                   <ExpenseSelector
                     value={field.value}
@@ -172,7 +179,9 @@ export default function LossLogForm({ lossLog, onSubmit }: LossLogFormProps) {
           name="value"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Valor (R$)</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Valor (R$)</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
                 <Input type="number" placeholder="Valor" {...field} />
               </FormControl>
@@ -195,7 +204,7 @@ export default function LossLogForm({ lossLog, onSubmit }: LossLogFormProps) {
             className="bg-indigo-500 hover:bg-indigo-600 transition-all"
             type="submit"
           >
-            Salvar
+            {lossLog ? "Salvar" : "Criar"}
           </Button>
         </div>
       </form>

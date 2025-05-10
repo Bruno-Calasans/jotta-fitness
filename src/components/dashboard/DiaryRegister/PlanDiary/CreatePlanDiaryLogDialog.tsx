@@ -32,7 +32,7 @@ export default function CreatePlanDiaryLogDialog() {
           className="bg-emerald-500 hover:bg-emerald-600 font-bold"
         >
           <Plus />
-          Criar
+          Novo
         </Button>
       </DialogTrigger>
       {/* Subscribe form */}

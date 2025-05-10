@@ -24,7 +24,7 @@ export const enrollmentLogColumns: ColumnDef<EnrollmentLog>[] = [
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
-        headerName="Meses"
+        headerName="Mese(s)"
         type="numeral"
       />
     ),

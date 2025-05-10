@@ -1,21 +1,16 @@
 import DataTable from "@/components/custom/DataTable/DataTable";
 import { useLogStore } from "@/store/logStore";
 import CreatePurchaseLogDialog from "./CreatePurchaseLogDialog";
-import { formatDate } from "date-fns";
 import { purchaseLogColumns } from "./PurchaseLogTableColumns";
+import isDateEqual from "@/utils/isDateEquals";
+import SelectedDateNotResultMsg from "../SelectedDateNotResultMsg";
 
 export default function PurchaseLogTab() {
   const { selectedDate, getAllPurchaseLogs } = useLogStore();
   const purchaseLogs = getAllPurchaseLogs();
   const filteredPurchaseLogs = selectedDate
-    ? purchaseLogs.filter(
-        (log) =>
-          formatDate(log.createdAt, "d/M/Y") ===
-          formatDate(selectedDate, "d/M/Y")
-      )
+    ? purchaseLogs.filter((log) => isDateEqual(log.createdAt, selectedDate))
     : purchaseLogs;
-
-  console.log(filteredPurchaseLogs);
 
   return (
     <div>
@@ -27,7 +22,7 @@ export default function PurchaseLogTab() {
         <DataTable
           columns={purchaseLogColumns}
           data={filteredPurchaseLogs}
-          noResultMsg="Nenhuma registro de compra hoje"
+          noResultMsg={<SelectedDateNotResultMsg />}
         />
       </div>
     </div>

@@ -12,6 +12,10 @@ export const planDiaryColumns: ColumnDef<PlanDiaryLog>[] = [
     header: ({ column }) => (
       <DataTableSortableHeader column={column} headerName="Membro" />
     ),
+    cell: ({ row }) => {
+      const { member } = row.original;
+      return <p>{member ? member.name : "Não cadastrado"}</p>;
+    },
   },
   {
     accessorKey: "planDiary.plan.name",

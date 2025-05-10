@@ -1,4 +1,4 @@
-import { DB } from "./Db.typ";
+import { DB } from "./Db.type";
 
 export type Resources =
   | "all"

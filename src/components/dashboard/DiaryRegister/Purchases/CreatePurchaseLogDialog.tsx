@@ -10,7 +10,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import PurchaseLogForm from "./PurchaseLogForm";
 import { useLogStore } from "@/store/logStore";
-import { formatDate } from "date-fns";
+import isDateEqual from "@/utils/isDateEquals";
 
 export default function CreatePurchaseLogDialog() {
   const [open, setOpen] = useState(false);
@@ -20,22 +20,19 @@ export default function CreatePurchaseLogDialog() {
     if (success) setOpen(false);
   };
 
+  const isToday = selectedDate && isDateEqual(selectedDate, new Date());
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {/* Button to subscribe */}
       <DialogTrigger asChild>
         <Button
-          disabled={
-            selectedDate &&
-            formatDate(selectedDate, "d/M/Y") != formatDate(new Date(), "d/M/Y")
-          }
+          disabled={!isToday}
           className="bg-emerald-500 hover:bg-emerald-600 font-bold"
         >
           <Plus />
-          Adicionar
+          Novo
         </Button>
       </DialogTrigger>
-      {/* Subscribe form */}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Registrar Compra</DialogTitle>

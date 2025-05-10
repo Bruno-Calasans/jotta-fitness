@@ -15,14 +15,12 @@ import { cn } from "@/lib/utils";
 
 type ProductSelectorProps = {
   value: string;
-  defaultValue: string;
   onValueChange: (value: string) => void;
   onSelected: (product: Product) => void;
 };
 
 export function ProductSelector({
   value,
-  defaultValue,
   onValueChange,
   onSelected,
 }: ProductSelectorProps) {
@@ -35,11 +33,7 @@ export function ProductSelector({
   };
 
   return (
-    <Select
-      value={value}
-      defaultValue={defaultValue}
-      onValueChange={changeHandler}
-    >
+    <Select value={value} onValueChange={changeHandler}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Selecione um produto" />
       </SelectTrigger>

@@ -32,13 +32,13 @@ export default function CreateEnrollmentLogDialog() {
           className="bg-emerald-500 hover:bg-emerald-600 font-bold"
         >
           <Plus />
-          Inscrever
+          Novo
         </Button>
       </DialogTrigger>
       {/* Subscribe form */}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Inscrever</DialogTitle>
+          <DialogTitle>Registrar Inscrição</DialogTitle>
         </DialogHeader>
         <EnrollmentLogForm onSubmit={submitFormHandler} />
       </DialogContent>

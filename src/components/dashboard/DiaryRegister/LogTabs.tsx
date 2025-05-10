@@ -8,28 +8,28 @@ import LossLogTab from "./Loss/LossLogTab";
 
 const tabData = [
   {
-    value: "enrollment-register",
     label: "Inscrições",
+    value: "enrollment",
     content: <EnrollmentLogTab />,
   },
   {
-    value: "plan-diary-register",
     label: "Diária",
+    value: "plan-diary",
     content: <PlanDiaryLogTab />,
   },
   {
-    value: "adhesion-payment-register",
     label: "Adesão",
+    value: "adhesion-payment",
     content: <p>Ainda não disponível</p>,
   },
   {
-    value: "purchase-registers",
-    label: "Produtos",
+    label: "Compras",
+    value: "purchase",
     content: <PurchaseLogTab />,
   },
   {
-    value: "loss-register",
     label: "Perdas",
+    value: "loss",
     content: <LossLogTab />,
   },
 ];

@@ -4,7 +4,7 @@ import { PRODUCTS_DATA } from "@/data/PRODUCTS_DATA";
 import { Product } from "@/types/Product.type";
 import { create } from "zustand";
 import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
-import type { DB } from "@/types/Db.typ";
+import type { DB } from "@/types/Db.type";
 
 type ProductState = {
   products: Product[];

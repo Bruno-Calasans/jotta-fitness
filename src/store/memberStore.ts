@@ -1,7 +1,7 @@
 "use client";
 
 import { MEMBERS_DATA } from "@/data/MEMBERS_DATA";
-import { DB } from "@/types/Db.typ";
+import type { DB } from "@/types/Db.type";
 import type { Member } from "@/types/Member.type";
 import type { Enrollment } from "@/types/Enrollment.type";
 import { create } from "zustand";
@@ -9,9 +9,8 @@ import { add as addDate, addDays, differenceInDays } from "date-fns";
 import type { Plan } from "@/types/Plan.type";
 import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
 import type { Purchase } from "@/types/Purchase.type";
-import { AdhesionPayment } from "@/types/AdhesionPayment.type";
-import { Adhesion } from "@/types/Adhesion.type";
-import { PlanDiary } from "@/types/PlanDiary.type";
+import type { AdhesionPayment } from "@/types/AdhesionPayment.type";
+import type { PlanDiary } from "@/types/PlanDiary.type";
 
 type MemberState = {
   members: Member[];
@@ -28,7 +27,9 @@ type MemberState = {
   ) => Member | null;
   subscribe: (
     memberId: string,
-    input: Omit<Enrollment, keyof DB | "startsIn" | "expiresIn">
+    input: Omit<Enrollment, keyof DB | "startsIn" | "expiresIn"> & {
+      createdBy: Member;
+    }
   ) => Enrollment | null;
   unsubscribe: (memberId: string, enrollmentId: string) => void;
   updateEnrollment: (

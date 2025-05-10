@@ -27,7 +27,9 @@ export default function RemovePlanDiaryLogDialog({
 
   const removePlanDiaryLogHandler = () => {
     try {
-      memberDb.removeDiary(planDiaryLog.member.id, planDiaryLog.planDiary.id);
+      // Registered member
+      if (planDiaryLog.member)
+        memberDb.removeDiary(planDiaryLog.member.id, planDiaryLog.planDiary.id);
       logDb.remove(planDiaryLog.id);
       successToast(
         "Exclusão de Registro de Diária",
@@ -55,10 +57,7 @@ export default function RemovePlanDiaryLogDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Remover Inscrição</DialogTitle>
-          <div>
-            Tem certeza que deseja excluir o registro de diária do usuário{" "}
-            <span className="font-bold">"{planDiaryLog.member.name}"</span>?
-          </div>
+          <div>Tem certeza que deseja excluir o registro desta diária?</div>
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>

@@ -10,6 +10,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -18,25 +19,26 @@ import useCustomToast from "@/hooks/use-custom-toast";
 import { PlanSelector } from "../../Members/PlanSelector";
 import { useState } from "react";
 import { Plan } from "@/types/Plan.type";
-import type { Log } from "@/types/Log.type";
+import type { PlanDiaryLog } from "@/types/Log.type";
 import MemberSelector from "../MemberSelector";
 import { Member } from "@/types/Member.type";
 import { useLogStore } from "@/store/logStore";
 import { STAFF } from "@/data/MEMBERS_DATA";
 import PlanDiaryPaymentResume from "./PlanDiaryPaymentResume";
 import { useMemberStore } from "@/store/memberStore";
+import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
+import PlanDiarySelector from "./PlanDiarySelector";
 
 const planDiaryLogFormSchema = z.object({
-  member: z.string().min(1, "Membro é obrigatório"),
+  member: z.string().optional(),
   plan: z.string().min(1, "Plano é obrigatório"),
   days: z.coerce.number().min(1, "Número de dias deve ser maior que 1"),
-  // isNotMember: z.boolean().default(false).optional(),
 });
 
 type PlanDiaryLogFormInputs = z.infer<typeof planDiaryLogFormSchema>;
 
 type PlanDiaryLogFormProps = {
-  planDiaryLog?: Log & { type: "plan-diary" };
+  planDiaryLog?: PlanDiaryLog;
   onSubmit: (success: boolean) => void;
 };
 
@@ -58,66 +60,89 @@ export default function PlanDiaryLogForm({
     resolver: zodResolver(planDiaryLogFormSchema),
     defaultValues: {
       plan: planDiaryLog?.planDiary.plan.name || "",
-      member: planDiaryLog?.member.name || "",
+      member: planDiaryLog?.member?.name || "",
       days: planDiaryLog?.planDiary.days || 1,
-      // isNotMember: false,
     },
   });
 
   const days = useWatch({ control: form.control, name: "days" });
 
   const submitHandler = (input: PlanDiaryLogFormInputs) => {
-    if (!selectedPlan || !selectedMember) return;
+    if (!selectedPlan) return;
 
     if (planDiaryLog) {
       try {
         form.reset();
 
-        const updatedPlanDiary = memberDb.updateDiary(
-          selectedMember.id,
-          planDiaryLog.planDiary.id,
-          {
-            plan: selectedPlan,
-            days,
-          }
-        );
+        // Registered Member
+        if (selectedMember) {
+          const updatedPlanDiary = memberDb.updateDiary(
+            selectedMember.id,
+            planDiaryLog.planDiary.id,
+            {
+              plan: selectedPlan,
+              days,
+            }
+          );
 
-        if (updatedPlanDiary)
+          if (updatedPlanDiary)
+            logDb.update(planDiaryLog.id, {
+              type: "plan-diary",
+              member: selectedMember,
+              planDiary: updatedPlanDiary,
+            });
+
+          // Not registered member
+        } else {
           logDb.update(planDiaryLog.id, {
             type: "plan-diary",
-            member: selectedMember,
-            planDiary: updatedPlanDiary,
+            planDiary: { ...planDiaryLog.planDiary, days, plan: selectedPlan },
           });
+        }
 
         successToast(
-          "Atualização de Inscrição",
-          "Inscrição atualizada com sucesso"
+          "Atualização de Registro de Diária",
+          "Registro atualizado com sucesso"
         );
         onSubmit(true);
       } catch (error) {
-        errorToast("Atualização de Inscrição", "Erro ao atualizar inscrição");
+        errorToast(
+          "Atualização de Registro de Diária",
+          "Erro ao atualizar registro"
+        );
         onSubmit(false);
       }
     } else {
       try {
         form.reset();
 
-        const planDiary = memberDb.addDiary(selectedMember.id, {
-          plan: selectedPlan,
-          days,
-        });
-
-        if (planDiary)
-          logDb.add({
-            type: "plan-diary",
-            member: selectedMember,
-            planDiary,
+        // Registered Member
+        if (selectedMember) {
+          const planDiary = memberDb.addDiary(selectedMember.id, {
+            plan: selectedPlan,
+            days,
           });
 
-        successToast("Registro de Inscrição", "Registro criado com sucesso");
+          if (planDiary)
+            logDb.add({
+              type: "plan-diary",
+              planDiary,
+              member: selectedMember,
+              createdBy: STAFF,
+            });
+          //Not registerd Member
+        } else {
+          logDb.add({
+            type: "plan-diary",
+            planDiary: logDb.createPlanDiary({ days, plan: selectedPlan }),
+            createdBy: STAFF,
+          });
+        }
+
+        successToast("Registro de Diária", "Registro criado com sucesso");
         onSubmit(true);
       } catch (error) {
-        errorToast("Registro de Inscrição", "Erro ao registrar inscrição");
+        errorToast("Registro de Diária", "Erro ao criar registro");
         onSubmit(false);
       }
     }
@@ -136,12 +161,14 @@ export default function PlanDiaryLogForm({
               <FormControl>
                 <MemberSelector
                   value={field.value}
-                  defaultValue={field.value}
                   onValueChange={field.onChange}
-                  onSelected={setSelectedMember}
+                  onItemSelected={setSelectedMember}
                 />
               </FormControl>
               <FormMessage />
+              <FormDescription>
+                Deixe em branco caso não seja um membro registrado.
+              </FormDescription>
             </FormItem>
           )}
         />
@@ -152,16 +179,20 @@ export default function PlanDiaryLogForm({
           name="plan"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Plano</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Diária</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
-                <PlanSelector
+                <PlanDiarySelector
                   value={field.value}
-                  defaultValue={field.value}
                   onValueChange={field.onChange}
-                  onSelected={setSelectedPlan}
+                  onItemSelected={setSelectedPlan}
                 />
               </FormControl>
               <FormMessage />
+              <FormDescription>
+                O valor da diária vai depender do plano selecionado.
+              </FormDescription>
             </FormItem>
           )}
         />
@@ -171,7 +202,9 @@ export default function PlanDiaryLogForm({
           name="days"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Dias Pagos</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Dias Pagos</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
                 <Input type="number" {...field} min={1} />
               </FormControl>
@@ -199,7 +232,7 @@ export default function PlanDiaryLogForm({
             className="bg-indigo-500 hover:bg-indigo-600 transition-all"
             type="submit"
           >
-            Salvar
+            {planDiaryLog ? "Salvar" : "Criar"}
           </Button>
         </div>
       </form>

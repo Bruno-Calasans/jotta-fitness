@@ -14,18 +14,16 @@ type SelectorData<ItemType> = {
 };
 
 type SelectorProps<ItemType> = {
-  value: string;
+  value?: string;
   data: SelectorData<ItemType>[];
   onValueChange: (value: string) => void;
   onItemSelect?: (item: ItemType) => void;
   itemAcessorKey?: keyof ItemType;
   placeholder?: string;
-  defaultValue?: string;
 };
 
 export default function Selector<ItemType>({
   value,
-  defaultValue,
   data,
   itemAcessorKey,
   placeholder,

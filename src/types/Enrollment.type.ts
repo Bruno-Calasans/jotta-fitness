@@ -1,4 +1,4 @@
-import type { DB } from "./Db.typ";
+import type { DB } from "./Db.type";
 import { Member } from "./Member.type";
 import type { Plan } from "./Plan.type";
 

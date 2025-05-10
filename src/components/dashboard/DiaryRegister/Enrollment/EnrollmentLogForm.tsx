@@ -18,14 +18,15 @@ import useCustomToast from "@/hooks/use-custom-toast";
 import { useMemberStore } from "@/store/memberStore";
 import { PlanSelector } from "../../Members/PlanSelector";
 import { useState } from "react";
-import { Plan } from "@/types/Plan.type";
+import type { Plan } from "@/types/Plan.type";
 import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
 import EnrollmentPaymentResume from "../../Members/Enrollments/EnrollmentPaymentResume";
-import type { Log } from "@/types/Log.type";
+import type { EnrollmentLog } from "@/types/Log.type";
 import MemberSelector from "../MemberSelector";
-import { Member } from "@/types/Member.type";
+import type { Member } from "@/types/Member.type";
 import { useLogStore } from "@/store/logStore";
 import { STAFF } from "@/data/MEMBERS_DATA";
+import RequiredFieldPopover from "@/components/custom/RequiredFieldTooltip";
 
 const enrollmentLogFormSchema = z.object({
   member: z.string().min(1, "Membro é obrigatório"),
@@ -36,7 +37,7 @@ const enrollmentLogFormSchema = z.object({
 type SubscribePlanFormInputs = z.infer<typeof enrollmentLogFormSchema>;
 
 type EnrollmentLogFormProps = {
-  enrollmentLog?: Log & { type: "enrollment" };
+  enrollmentLog?: EnrollmentLog;
   onSubmit: (success: boolean) => void;
 };
 
@@ -44,6 +45,8 @@ export default function EnrollmentLogForm({
   enrollmentLog,
   onSubmit,
 }: EnrollmentLogFormProps) {
+  const logDb = useLogStore();
+  const memberDb = useMemberStore();
   const { lateFee } = useEnrollmentResume();
   const { successToast, errorToast } = useCustomToast();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(
@@ -52,9 +55,6 @@ export default function EnrollmentLogForm({
   const [selectedMember, setSelectedMember] = useState<Member | null>(
     enrollmentLog?.member || null
   );
-
-  const logDb = useLogStore();
-  const memberDb = useMemberStore();
 
   const form = useForm<SubscribePlanFormInputs>({
     resolver: zodResolver(enrollmentLogFormSchema),
@@ -70,15 +70,15 @@ export default function EnrollmentLogForm({
   const submitHandler = (input: SubscribePlanFormInputs) => {
     if (!selectedPlan || !selectedMember) return;
 
-    // Update enrollment register
+    // Update enrollment log
     if (enrollmentLog) {
       try {
         form.reset();
 
-        // Save enrollment to member
+        // Update
         const enrollment = memberDb.updateEnrollment(
           selectedMember.id,
-          selectedPlan.id,
+          enrollmentLog.id,
           {
             plan: selectedPlan,
             months,
@@ -103,16 +103,16 @@ export default function EnrollmentLogForm({
         errorToast("Atualização de Inscrição", "Erro ao atualizar inscrição");
         onSubmit(false);
       }
+      // Create new enrollment log
     } else {
       try {
         form.reset();
 
-        // Save to database
         const enrollment = memberDb.subscribe(selectedMember.id, {
           plan: selectedPlan,
-          createdBy: STAFF,
           months,
           lateFee,
+          createdBy: STAFF,
         });
 
         // create enrollment log
@@ -121,6 +121,7 @@ export default function EnrollmentLogForm({
             type: "enrollment",
             member: selectedMember,
             enrollment,
+            createdBy: STAFF,
           });
 
         successToast("Registro de Inscrição", "Registro criado com sucesso");
@@ -141,13 +142,14 @@ export default function EnrollmentLogForm({
           name="member"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Membro</FormLabel>
+              <FormLabel>
+                <RequiredFieldPopover>Membro</RequiredFieldPopover>
+              </FormLabel>
               <FormControl>
                 <MemberSelector
                   value={field.value}
-                  defaultValue={field.value}
                   onValueChange={field.onChange}
-                  onSelected={setSelectedMember}
+                  onItemSelected={setSelectedMember}
                 />
               </FormControl>
               <FormMessage />
@@ -161,7 +163,9 @@ export default function EnrollmentLogForm({
           name="plan"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Plano</FormLabel>
+              <FormLabel className="flex items-center">
+                <RequiredFieldPopover>Plano</RequiredFieldPopover>
+              </FormLabel>
               <FormControl>
                 <PlanSelector
                   value={field.value}
@@ -181,7 +185,9 @@ export default function EnrollmentLogForm({
           name="months"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Meses</FormLabel>
+              <FormLabel>
+                <RequiredFieldPopover>Mese(s)</RequiredFieldPopover>
+              </FormLabel>
               <FormControl>
                 <Input type="number" placeholder="Meses" {...field} />
               </FormControl>
@@ -209,7 +215,7 @@ export default function EnrollmentLogForm({
             className="bg-indigo-500 hover:bg-indigo-600 transition-all"
             type="submit"
           >
-            Salvar
+            {enrollmentLog ? "Salvar" : "Criar"}
           </Button>
         </div>
       </form>

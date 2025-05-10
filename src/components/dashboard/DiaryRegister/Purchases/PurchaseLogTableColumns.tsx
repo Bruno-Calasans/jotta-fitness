@@ -1,19 +1,21 @@
 import DataTableSortableHeader from "@/components/custom/DataTable/DataTableSortableHeader";
 import type { ColumnDef } from "@tanstack/react-table";
-import type { Log, ProductPurchaseLog } from "@/types/Log.type";
+import type { Log, PurchaseLog } from "@/types/Log.type";
 import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
 import EditPurchaseLogDialog from "./EditPurchaseLogDialog";
 import RemovePurchaseLogDialog from "./RemovePurchaseLog";
-// import EditEnrollmentLogDialog from "./EditEnrollmentLogDialog";
-// import RemoveEnrollmentLogDialog from "./RemoveEnrollmentLogDialog";
 
-export const purchaseLogColumns: ColumnDef<ProductPurchaseLog>[] = [
+export const purchaseLogColumns: ColumnDef<PurchaseLog>[] = [
   {
     id: "name",
     accessorKey: "member.name",
     header: ({ column }) => (
       <DataTableSortableHeader column={column} headerName="Membro" />
     ),
+    cell: ({ row }) => {
+      const { member } = row.original;
+      return <p>{member ? member.name : "Não cadastrado"}</p>;
+    },
   },
   {
     accessorKey: "purchase.product.name",

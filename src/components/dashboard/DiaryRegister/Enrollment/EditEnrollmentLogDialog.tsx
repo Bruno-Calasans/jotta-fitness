@@ -37,7 +37,7 @@ export default function EditEnrollmentLogDialog({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Editar Registro</DialogTitle>
+          <DialogTitle>Editar Registro de Inscrição</DialogTitle>
         </DialogHeader>
         <EnrollmentLogForm
           enrollmentLog={enrollmentLog}

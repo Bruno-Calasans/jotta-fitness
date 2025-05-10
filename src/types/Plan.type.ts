@@ -1,4 +1,4 @@
-import type { DB } from "./Db.typ";
+import type { DB } from "./Db.type";
 
 export type Plan = DB & {
   name: string;

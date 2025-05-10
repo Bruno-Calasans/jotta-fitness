@@ -1,7 +1,7 @@
 "use client";
 
 import { DatePicker } from "@/components/custom/DatePicker";
-import RegisterTabs from "@/components/dashboard/DiaryRegister/LogTabs";
+import LogTabs from "@/components/dashboard/DiaryRegister/LogTabs";
 import ContentContainer from "@/components/general/ContentContainer";
 import { useLogStore } from "@/store/logStore";
 
@@ -18,7 +18,7 @@ export default function DiaryRegisterPage() {
           toDate={new Date()}
         />
       </div>
-      <RegisterTabs />
+      <LogTabs />
     </ContentContainer>
   );
 }
