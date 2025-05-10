@@ -1,11 +1,11 @@
 "use client";
 
 import { DatePicker } from "@/components/custom/DatePicker";
-import LogTabs from "@/components/dashboard/DiaryRegister/LogTabs";
+import LogTabs from "@/components/dashboard/DiaryLog/LogTabs";
 import ContentContainer from "@/components/general/ContentContainer";
 import { useLogStore } from "@/store/logStore";
 
-export default function DiaryRegisterPage() {
+export default function DiaryLogPage() {
   const { selectedDate, setSelectedDate } = useLogStore();
 
   return (

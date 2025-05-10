@@ -15,7 +15,7 @@ export const DashboardSidebarItems = {
   Principal: [
     {
       title: "Registro Diário",
-      url: "diary-register",
+      url: "diary-log",
       icon: CalendarCheck,
     },
     {
