@@ -2,6 +2,7 @@
 
 // import { LOGS_DATA } from "@/data/LOGS_DATA";
 import type {
+  AdhesionLog,
   EnrollmentLog,
   Log,
   LogData,
@@ -32,6 +33,7 @@ type LogState = {
   getAllPlanDiaryLogs: () => PlanDiaryLog[];
   getAllPurchaseLogs: () => PurchaseLog[];
   getAllLossLogs: () => LossLog[];
+  getAllAdhesionLogs: () => AdhesionLog[];
   createPlanDiary: (
     input: Optional<PlanDiary, keyof DB | "expiresIn">
   ) => PlanDiary;
@@ -84,6 +86,9 @@ export const useLogStore = create<LogState>((set, get) => ({
     return get().logs.filter(
       (log) => log.type === "investment" || "expense"
     ) as LossLog[];
+  },
+  getAllAdhesionLogs() {
+    return get().logs.filter((log) => log.type === "adhesion") as AdhesionLog[];
   },
   createPlanDiary(input) {
     const newDiary: PlanDiary = {

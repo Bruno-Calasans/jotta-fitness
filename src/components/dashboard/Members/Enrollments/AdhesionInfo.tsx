@@ -23,7 +23,7 @@ export default function AdhesionInfo() {
       payAdhesion(selectedMember.id, currentAdhesion.year);
       successToast("Pagamento de Adesão", "Pagamento realizado com sucesso!");
     } catch (error) {
-      errorToast("Pagamento de Adesão", "Erro ao pagar adesão.");
+      errorToast("Pagamento de Adesão", "Erro ao realizar pagamento.");
     }
   };
 

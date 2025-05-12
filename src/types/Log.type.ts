@@ -1,4 +1,5 @@
 import type { Adhesion } from "./Adhesion.type";
+import { AdhesionPayment } from "./AdhesionPayment.type";
 import type { DB } from "./Db.type";
 import type { Enrollment } from "./Enrollment.type";
 import type { Expense } from "./Expense.type";
@@ -23,10 +24,12 @@ export type PlanDiaryLogData = {
   member?: Member;
 };
 
-export type AdhesionPaymentLogData = {
+export type AdhesionLogData = {
   plan: Plan;
   adhesion: Adhesion;
+  adhesionPayment: AdhesionPayment;
   member: Member;
+  price: number;
 };
 
 export type LossLogData = {
@@ -45,8 +48,8 @@ export type LogType =
 
 export type PurchaseLog = DB & PurchaseLogData & { type: "purchase" };
 export type EnrollmentLog = DB & EnrollmentLogData & { type: "enrollment" };
-export type AdhesionPaymentLog = DB &
-  AdhesionPaymentLogData & {
+export type AdhesionLog = DB &
+  AdhesionLogData & {
     type: "adhesion";
   };
 export type PlanDiaryLog = DB & PlanDiaryLogData & { type: "plan-diary" };
@@ -55,13 +58,13 @@ export type LossLog = DB & LossLogData & { type: "expense" | "investment" };
 export type LogData =
   | Omit<PurchaseLog, keyof DB>
   | Omit<EnrollmentLog, keyof DB>
-  | Omit<AdhesionPaymentLog, keyof DB>
+  | Omit<AdhesionLog, keyof DB>
   | Omit<PlanDiaryLog, keyof DB>
   | Omit<LossLog, keyof DB>;
 
 export type Log =
   | PurchaseLog
   | EnrollmentLog
-  | AdhesionPaymentLog
+  | AdhesionLog
   | PlanDiaryLog
   | LossLog;

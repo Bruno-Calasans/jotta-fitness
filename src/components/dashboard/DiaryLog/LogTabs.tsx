@@ -5,6 +5,7 @@ import EnrollmentLogTab from "./Enrollment/EnrollmentLogTab";
 import PlanDiaryLogTab from "./PlanDiary/PlanDiarylogTab";
 import PurchaseLogTab from "./Purchases/PurchaseLogTab";
 import LossLogTab from "./Loss/LossLogTab";
+import AdhesionLogTab from "./Adhesion/AdhesionLogTab";
 
 const tabData = [
   {
@@ -19,8 +20,8 @@ const tabData = [
   },
   {
     label: "Adesão",
-    value: "adhesion-payment",
-    content: <p>Ainda não disponível</p>,
+    value: "adhesion",
+    content: <AdhesionLogTab />,
   },
   {
     label: "Compras",

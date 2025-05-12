@@ -1,16 +1,16 @@
 "use client";
 
 import { MEMBERS_DATA } from "@/data/MEMBERS_DATA";
-import type { DB } from "@/types/Db.type";
-import type { Member } from "@/types/Member.type";
-import type { Enrollment } from "@/types/Enrollment.type";
 import { create } from "zustand";
 import { add as addDate, addDays, differenceInDays } from "date-fns";
-import type { Plan } from "@/types/Plan.type";
 import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
+import type { Plan } from "@/types/Plan.type";
 import type { Purchase } from "@/types/Purchase.type";
 import type { AdhesionPayment } from "@/types/AdhesionPayment.type";
 import type { PlanDiary } from "@/types/PlanDiary.type";
+import type { Member } from "@/types/Member.type";
+import type { Enrollment } from "@/types/Enrollment.type";
+import type { DB } from "@/types/Db.type";
 
 type MemberState = {
   members: Member[];
@@ -50,7 +50,8 @@ type MemberState = {
   ) => Purchase | null;
   removePurchase: (memberId: string, purchaseId: string) => void;
   getPurchaseById: (id: string) => Purchase | null;
-  payAdhesion: (memberId: string, year: number) => void;
+  payAdhesion: (memberId: string, year: number) => AdhesionPayment | null;
+  removeAdhesionPayment: (memberId: string, adhesionId: string) => void;
   getAdhesionPaymentByYear: (
     memberId: string,
     year: number
@@ -297,7 +298,7 @@ export const useMemberStore = create<MemberState>((set, get) => ({
   },
   payAdhesion(memberId, year) {
     const foundMember = get().getById(memberId);
-    if (!foundMember) return;
+    if (!foundMember) return null;
 
     const newAdhesion: AdhesionPayment = {
       ...generateDefaultDbFields(),
@@ -311,6 +312,8 @@ export const useMemberStore = create<MemberState>((set, get) => ({
     });
 
     get().setSelectedMember(updatedMember);
+
+    return newAdhesion;
   },
   getAdhesionPaymentByYear(memberId, year) {
     const foundMember = get().getById(memberId);
@@ -385,6 +388,21 @@ export const useMemberStore = create<MemberState>((set, get) => ({
 
     get().update(memberId, {
       diaries: updatedDiaries,
+    });
+  },
+  removeAdhesionPayment(memberId, adhesionId) {
+    const foundMember = get().getById(memberId);
+    if (!foundMember) return;
+
+    console.log("member adhesions", foundMember.adhesionsPayments, adhesionId);
+    const updatedAdhesions = foundMember.adhesionsPayments.filter(
+      (adhesion) => adhesion.id !== adhesionId
+    );
+
+    console.log("remove adhesion", updatedAdhesions);
+
+    get().update(foundMember.id, {
+      adhesionsPayments: updatedAdhesions,
     });
   },
 }));

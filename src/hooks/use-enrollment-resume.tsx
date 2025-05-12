@@ -1,17 +1,15 @@
 import { BUSINESS_RULES } from "@/config/BusinessRules";
 import { useAdhesionStore } from "@/store/adhesionStore";
 import { useMemberStore } from "@/store/memberStore";
-import { Member } from "@/types/Member.type";
 import calcLateFee from "@/utils/calcLateFee";
 import { differenceInDays, differenceInHours } from "date-fns";
-import { useState } from "react";
 
 export function useEnrollmentResume() {
   const { selectedMember } = useMemberStore();
-  const { getCurretYearAdhesion } = useAdhesionStore();
-
+  const { getCurrentYearAdhesion } = useAdhesionStore();
   const currentDate = new Date();
-  const currentAdhesion = getCurretYearAdhesion();
+  const currentAdhesion = getCurrentYearAdhesion();
+  
   const hasEnrollment = selectedMember
     ? selectedMember.enrollments.length > 0
     : false;
