@@ -15,7 +15,7 @@ type DataTableSortableHeaderProps<Dtype> = {
   type?: "text" | "numeral" | "date";
 };
 
-export default function DataTableSortableHeader<Dtype, T>({
+export default function DataTableSortableHeader<Dtype>({
   headerName,
   column,
   type = "text",

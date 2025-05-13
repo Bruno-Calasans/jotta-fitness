@@ -48,7 +48,7 @@ export default function RemoveMemberDialog({
           <DialogTitle>Remover Membro</DialogTitle>
           <div>
             Tem certeza que deseja excluir o membro{" "}
-            <span className="font-bold">"{member.name}"</span>?
+            <span className="font-bold text-orange-500">{member.name}</span>?
           </div>
         </DialogHeader>
         <DialogFooter>

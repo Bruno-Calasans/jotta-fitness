@@ -27,7 +27,7 @@ export default function RemoveEnrollmentLogDialog({
 
   const removeEnrollmentLogHandler = () => {
     try {
-      memberDb.unsubscribe(
+      memberDb.removeEnrollment(
         enrollmentLog.member.id,
         enrollmentLog.enrollment.id
       );

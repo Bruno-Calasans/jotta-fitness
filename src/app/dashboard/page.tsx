@@ -1,8 +1,6 @@
 import ContentContainer from "@/components/general/ContentContainer";
 
-type DashboardPageProps = {};
-
-export default function DashboardPage({}: DashboardPageProps) {
+export default function DashboardPage() {
   return (
     <ContentContainer>
       {/* Content */}

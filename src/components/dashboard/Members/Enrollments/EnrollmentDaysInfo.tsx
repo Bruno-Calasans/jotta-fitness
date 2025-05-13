@@ -2,7 +2,7 @@ import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
 import { cn } from "@/lib/utils";
 
 export default function EnrollmentDaysInfo() {
-  const { totalDays, leftDays, usedDays } = useEnrollmentResume();
+  const { totalDays, usedDays } = useEnrollmentResume();
 
   return (
     <div className="flex gap-1">

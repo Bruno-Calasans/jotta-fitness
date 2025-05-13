@@ -10,9 +10,7 @@ import { Plus } from "lucide-react";
 import ExpenseForm from "./ExpenseForm";
 import { useState } from "react";
 
-type CreateExpenseModalProps = {};
-
-export default function CreateExpenseDialog({}: CreateExpenseModalProps) {
+export default function CreateExpenseDialog() {
   const [open, setOpen] = useState(false);
 
   const submitFormHandler = (success: boolean) => {

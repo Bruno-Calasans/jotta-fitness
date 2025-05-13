@@ -1,9 +1,7 @@
 import AdhesionTable from "@/components/dashboard/Adhesion/AdhesionTable";
 import ContentContainer from "@/components/general/ContentContainer";
 
-type AdhesionPageProps = {};
-
-export default function AdhesionPage({}: AdhesionPageProps) {
+export default function AdhesionPage() {
   return (
     <ContentContainer>
       <AdhesionTable />

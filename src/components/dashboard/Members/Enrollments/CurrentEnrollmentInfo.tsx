@@ -1,9 +1,7 @@
 import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
 import EnrollmentStatus from "./EnrollmentStatus";
 
-type CurrentEnrollmentInfoProps = {};
-
-export default function CurrentEnrollmentInfo({}: CurrentEnrollmentInfoProps) {
+export default function CurrentEnrollmentInfo() {
   const { lastEnrollment } = useEnrollmentResume();
   return (
     <div className="flex p-1">

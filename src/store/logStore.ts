@@ -1,6 +1,7 @@
 "use client";
 
-// import { LOGS_DATA } from "@/data/LOGS_DATA";
+"use client";
+
 import type {
   AdhesionLog,
   EnrollmentLog,
@@ -11,15 +12,9 @@ import type {
   PlanDiaryLog,
   PurchaseLog,
 } from "@/types/Log.type";
+import type { Member } from "@/types/Member.type";
 import { create } from "zustand";
 import generateDbFields from "@/utils/generateDefaultDbFields";
-import { DB } from "@/types/Db.type";
-import { Member } from "@/types/Member.type";
-import { PlanDiary } from "@/types/PlanDiary.type";
-import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
-import { addDays } from "date-fns";
-import { Optional } from "@/types/Optional.type";
-import { Purchase } from "@/types/Purchase.type";
 import isDateEqual from "@/utils/isDateEquals";
 
 type LogState = {
@@ -34,10 +29,6 @@ type LogState = {
   getAllPurchaseLogs: () => PurchaseLog[];
   getAllLossLogs: () => LossLog[];
   getAllAdhesionLogs: () => AdhesionLog[];
-  createPlanDiary: (
-    input: Optional<PlanDiary, keyof DB | "expiresIn">
-  ) => PlanDiary;
-  createPurchase: (input: Optional<Purchase, keyof DB>) => Purchase;
   getLogsByDate: (type: LogType, selectedDate: Date) => Log[];
 };
 
@@ -89,21 +80,6 @@ export const useLogStore = create<LogState>((set, get) => ({
   },
   getAllAdhesionLogs() {
     return get().logs.filter((log) => log.type === "adhesion") as AdhesionLog[];
-  },
-  createPlanDiary(input) {
-    const newDiary: PlanDiary = {
-      ...generateDefaultDbFields(),
-      ...input,
-      expiresIn: addDays(new Date(), input.days),
-    };
-    return newDiary;
-  },
-  createPurchase(input) {
-    const newPurchase: Purchase = {
-      ...generateDefaultDbFields(),
-      ...input,
-    };
-    return newPurchase;
   },
   getLogsByDate(type, selectedDate) {
     return get().logs.filter(

@@ -78,7 +78,7 @@ export default function EnrollmentLogForm({
         // Update
         const enrollment = memberDb.updateEnrollment(
           selectedMember.id,
-          enrollmentLog.id,
+          enrollmentLog.enrollment.id,
           {
             plan: selectedPlan,
             months,
@@ -108,11 +108,10 @@ export default function EnrollmentLogForm({
       try {
         form.reset();
 
-        const enrollment = memberDb.subscribe(selectedMember.id, {
+        const enrollment = memberDb.addEnrollment(selectedMember.id, {
           plan: selectedPlan,
           months,
           lateFee,
-          createdBy: STAFF,
         });
 
         // create enrollment log

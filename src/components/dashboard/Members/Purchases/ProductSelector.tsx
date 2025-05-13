@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/select";
 import { useProductStore } from "@/store/productStore";
 import { Product } from "@/types/Product.type";
-import { useMemberStore } from "@/store/memberStore";
 import { cn } from "@/lib/utils";
 
 type ProductSelectorProps = {

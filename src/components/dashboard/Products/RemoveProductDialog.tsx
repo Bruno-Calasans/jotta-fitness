@@ -48,7 +48,7 @@ export default function RemoveProductDialog({
           <DialogTitle>Remover Produto</DialogTitle>
           <div>
             Tem certeza que deseja excluir o produto{" "}
-            <span className="font-bold">"{product.name}"</span>?
+            <span className="font-bold text-orange-500">{product.name}</span>?
           </div>
         </DialogHeader>
         <DialogFooter>

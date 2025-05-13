@@ -75,7 +75,10 @@ export default function AdhesionLogForm({
             selectedMember.id,
             adhesionLog.adhesion.id
           );
-          memberDb.payAdhesion(selectedMember.id, adhesionLog.adhesion.year);
+          memberDb.addAdhesionPayment(
+            selectedMember.id,
+            adhesionLog.adhesion.year
+          );
         }
 
         // Update adhesion log
@@ -110,7 +113,7 @@ export default function AdhesionLogForm({
         form.reset();
 
         // Pay member adhesion
-        const adhesionPayment = memberDb.payAdhesion(
+        const adhesionPayment = memberDb.addAdhesionPayment(
           selectedMember.id,
           new Date().getFullYear()
         );

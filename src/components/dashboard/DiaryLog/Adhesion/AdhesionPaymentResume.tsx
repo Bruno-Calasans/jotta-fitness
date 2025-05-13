@@ -24,7 +24,7 @@ export default function AdhesionPaymentResume({
 
       {/* Plan price */}
       <p className="text-stone-800 text-lg">
-        Preço do Plano:{" "}
+        Preço do Plano ({plan.name}):{" "}
         <span className="font-bold">R${plan.price.toFixed(2)}</span>
       </p>
 

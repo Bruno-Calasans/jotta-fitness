@@ -8,9 +8,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-type DashboardSideBardButtonProps = {};
-
-export default function DashboardSideBarButton({}: DashboardSideBardButtonProps) {
+export default function DashboardSideBarButton() {
   const { open, toggleSidebar } = useSidebar();
 
   return (

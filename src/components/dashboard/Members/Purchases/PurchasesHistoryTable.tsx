@@ -5,9 +5,7 @@ import { purchasesColumns } from "./PurchasesHistoryTableColumns";
 import { useMemberStore } from "@/store/memberStore";
 import CreatePurchaseDialog from "./CreatePurchaseDialog";
 
-type PurchasesHistoryTableProps = {};
-
-export default function PurchasesHistoryTable({}: PurchasesHistoryTableProps) {
+export default function PurchasesHistoryTable() {
   const { selectedMember } = useMemberStore();
 
   if (!selectedMember) return null;

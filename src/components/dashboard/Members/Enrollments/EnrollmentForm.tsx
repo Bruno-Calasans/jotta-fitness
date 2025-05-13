@@ -86,10 +86,9 @@ export default function SubscriptionForm({
         // start loading
 
         // Save to database
-        memberDb.subscribe(selectedMember.id, {
+        memberDb.addEnrollment(selectedMember.id, {
           months: input.months,
           plan: selectedPlan,
-          createdBy: selectedMember,
           lateFee,
         });
 

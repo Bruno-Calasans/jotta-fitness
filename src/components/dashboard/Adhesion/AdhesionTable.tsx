@@ -6,9 +6,7 @@ import { useAdhesionStore } from "@/store/adhesionStore";
 import CreateAdhesionDialog from "./CreateAdhesionDialog";
 import InfoMsg from "@/components/custom/InfoMsg";
 
-type AdhesionTableProps = {};
-
-export default function AdhesionTable({}: AdhesionTableProps) {
+export default function AdhesionTable() {
   const { adhesions } = useAdhesionStore();
 
   const currentYearAdhesion = adhesions.find(

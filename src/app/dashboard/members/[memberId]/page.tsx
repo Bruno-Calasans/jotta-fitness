@@ -12,13 +12,13 @@ type MemberInfoPageProps = {
 };
 
 export default function MemberInfoPage({ params }: MemberInfoPageProps) {
-  const { getById, setSelectedMember } = useMemberStore();
+  const { getMemberById, setSelectedMember } = useMemberStore();
   const router = useRouter();
 
   const loadMember = async () => {
     const { memberId } = await params;
     if (!memberId) return;
-    const foundMember = getById(memberId);
+    const foundMember = getMemberById(memberId);
     if (!foundMember) return router.push("/dashboard/members");
     setSelectedMember(foundMember);
   };

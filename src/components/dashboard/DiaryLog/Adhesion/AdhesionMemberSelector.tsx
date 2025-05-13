@@ -3,7 +3,6 @@ import { useMemberStore } from "@/store/memberStore";
 import getLastMemberPlan from "@/utils/getLastMemberPlan";
 import isCurrentYearAdhesionPaid from "@/utils/isCurrentYearAdhesionPaid";
 import type { Member } from "@/types/Member.type";
-import memberHasEnrollment from "@/utils/memberHasEnrollment";
 
 type AdhesionMemberSelectorProps = {
   value?: string;

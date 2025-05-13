@@ -21,13 +21,13 @@ export default function RemoveEnrollmentDialog({
   enrollment,
 }: RemoveEnrollmentDialogProps) {
   const { successToast, errorToast } = useCustomToast();
-  const { selectedMember, unsubscribe } = useMemberStore();
+  const { selectedMember, removeEnrollment } = useMemberStore();
 
   if (!selectedMember) return null;
 
   const removeSubscriptionHandler = () => {
     try {
-      unsubscribe(selectedMember.id, enrollment.id);
+      removeEnrollment(selectedMember.id, enrollment.id);
       successToast("Desiscrição de Plano", "Plano desiscrito com sucesso!");
     } catch (error) {
       errorToast("Desiscrição de Plano", "Erro ao desiscrever do Plano!");
@@ -50,7 +50,10 @@ export default function RemoveEnrollmentDialog({
           <DialogTitle>Desiscrever</DialogTitle>
           <div>
             Tem certeza que deseja excluir a inscrição no plano{" "}
-            <span className="font-bold">"{enrollment.plan.name}"</span>?
+            <span className="font-bold text-orange-500">
+              {enrollment.plan.name}
+            </span>
+            ?
           </div>
         </DialogHeader>
         <DialogFooter>

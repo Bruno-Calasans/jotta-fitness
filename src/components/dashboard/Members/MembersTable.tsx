@@ -5,16 +5,9 @@ import { membersColumns } from "@/components/dashboard/Members/MembersTableColum
 import { useMemberStore } from "@/store/memberStore";
 import CreateMemberDialog from "./CreateMemberDialog";
 import { useRouter } from "next/navigation";
-import { Member } from "@/types/Member.type";
 
 export default function MembersTable() {
-  const { members, setSelectedMember } = useMemberStore();
-  const router = useRouter();
-
-  // const clickMemberRowHandler = (member: Member) => {
-  //   setSelectedMember(member);
-  //   router.push(`/dashboard/members/${member.id}`);
-  // };
+  const { members } = useMemberStore();
 
   return (
     <div>

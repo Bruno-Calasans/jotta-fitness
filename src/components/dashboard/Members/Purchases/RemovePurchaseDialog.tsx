@@ -50,7 +50,10 @@ export default function RemovePurchaseDialog({
           <DialogTitle>RemoverCompra</DialogTitle>
           <div>
             Tem certeza que deseja excluir a compra{" "}
-            <span className="font-bold">"{purchase.product.name}"</span>?
+            <span className="font-bold text-orange-500">
+              {purchase.product.name}
+            </span>
+            ?
           </div>
         </DialogHeader>
         <DialogFooter>

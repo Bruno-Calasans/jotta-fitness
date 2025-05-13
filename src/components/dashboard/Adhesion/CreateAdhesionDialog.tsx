@@ -10,9 +10,7 @@ import { Plus } from "lucide-react";
 import AdhesionForm from "./AdhesionForm";
 import { useState } from "react";
 
-type CreateAdhesionModalProps = {};
-
-export default function CreateAdhesionDialog({}: CreateAdhesionModalProps) {
+export default function CreateAdhesionDialog() {
   const [open, setOpen] = useState(false);
 
   const submitFormHandler = (success: boolean) => {

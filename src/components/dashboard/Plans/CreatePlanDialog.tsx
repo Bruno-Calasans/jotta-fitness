@@ -10,9 +10,7 @@ import { Plus } from "lucide-react";
 import PlanForm from "./PlanForm";
 import { useState } from "react";
 
-type CreatePlanModalProps = {};
-
-export default function CreatePlanDialog({}: CreatePlanModalProps) {
+export default function CreatePlanDialog() {
   const [open, setOpen] = useState(false);
 
   const submitFormHandler = (success: boolean) => {

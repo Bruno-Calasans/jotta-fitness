@@ -7,7 +7,7 @@ import calcDiscount from "@/utils/calcDiscount";
 import { Check } from "lucide-react";
 
 export default function AdhesionInfo() {
-  const { selectedMember, payAdhesion } = useMemberStore();
+  const { selectedMember, addAdhesionPayment } = useMemberStore();
   const { successToast, errorToast } = useCustomToast();
   const {
     lastEnrollment,
@@ -20,7 +20,7 @@ export default function AdhesionInfo() {
   const payAdhesionHandler = () => {
     if (!selectedMember || !currentAdhesion) return;
     try {
-      payAdhesion(selectedMember.id, currentAdhesion.year);
+      addAdhesionPayment(selectedMember.id, currentAdhesion.year);
       successToast("Pagamento de Adesão", "Pagamento realizado com sucesso!");
     } catch (error) {
       errorToast("Pagamento de Adesão", "Erro ao realizar pagamento.");

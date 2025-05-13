@@ -4,6 +4,7 @@ import type { Log, PlanDiaryLog } from "@/types/Log.type";
 import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
 import EditPlanDiaryLogDialog from "./EditPlanDiaryLogDialog";
 import RemovePlanDiaryLogDialog from "./RemovePlanDiaryLog";
+import { format } from "date-fns";
 
 export const planDiaryColumns: ColumnDef<PlanDiaryLog>[] = [
   {
@@ -55,6 +56,20 @@ export const planDiaryColumns: ColumnDef<PlanDiaryLog>[] = [
     cell: ({ row }) => {
       const { planDiary } = row.original as Log & { type: "plan-diary" };
       return <p>{(planDiary.plan.diary * planDiary.days).toFixed(2)}</p>;
+    },
+  },
+  {
+    accessorKey: "planDiary.expiresIn",
+    header: ({ column }) => (
+      <DataTableSortableHeader
+        column={column}
+        headerName="Expira em"
+        type="date"
+      />
+    ),
+    cell: ({ row }) => {
+      const { planDiary } = row.original;
+      return format(planDiary.expiresIn, "d/M/y");
     },
   },
   {

@@ -1,5 +1,3 @@
-type EnrollmentLogTableProps = {};
-
-export default function EnrollmentLogTable({}: EnrollmentLogTableProps) {
+export default function EnrollmentLogTable() {
   return <div>EnrollmentLogTable</div>;
 }

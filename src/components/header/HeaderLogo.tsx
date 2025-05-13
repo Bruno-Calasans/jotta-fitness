@@ -1,8 +1,6 @@
 import Image from "next/image";
 
-type HeaderLogoProps = {};
-
-export default function HeaderLogo({}: HeaderLogoProps) {
+export default function HeaderLogo() {
   return (
     <div className="h-20 w-36 rounded-md relative">
       <Image

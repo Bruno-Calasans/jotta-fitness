@@ -4,9 +4,7 @@ import { Button } from "../ui/button";
 import { SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { DashboardSidebarItems } from "./dashboardSideMenuData";
 
-type DashboardSideMenuContentProps = {};
-
-export default function DashboardSideMenuContent({}: DashboardSideMenuContentProps) {
+export default function DashboardSideMenuContent() {
   return (
     <SheetContent side="left" className="flex flex-col gap-2 w-[300px]">
       <SheetHeader className="mb-2">

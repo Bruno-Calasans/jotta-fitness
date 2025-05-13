@@ -48,7 +48,7 @@ import {
             <DialogTitle>Remover Despesa</DialogTitle>
             <div>
               Tem certeza que deseja excluir a despesa{" "}
-              <span className="font-bold">"{expense.name}"</span>?
+              <span className="font-bold text-orange-500">{expense.name}</span>?
             </div>
           </DialogHeader>
           <DialogFooter>

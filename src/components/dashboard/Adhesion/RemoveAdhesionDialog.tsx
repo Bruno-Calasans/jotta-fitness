@@ -48,7 +48,7 @@ export default function RemoveAdhesionDialog({
           <DialogTitle>Remover Adesão</DialogTitle>
           <div>
             Tem certeza que deseja excluir a adesão do ano{" "}
-            <span className="font-bold">"{adhesion.year}"</span>?
+            <span className="font-bold">{adhesion.year}</span>?
           </div>
         </DialogHeader>
         <DialogFooter>

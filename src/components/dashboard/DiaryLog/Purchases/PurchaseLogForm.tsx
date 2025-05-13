@@ -28,6 +28,8 @@ import { ProductSelector } from "../../Members/Purchases/ProductSelector";
 import { Product } from "@/types/Product.type";
 import { useProductStore } from "@/store/productStore";
 import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
+import createPurchase from "@/utils/createPurchase";
+import updatePurchase from "@/utils/updatePurchase";
 
 const purchaseLogFormSchema = z.object({
   member: z.string().optional(),
@@ -98,8 +100,7 @@ export default function PurchaseLogForm({
         } else {
           logDb.update(purchaseLog.id, {
             type: "purchase",
-            purchase: logDb.createPurchase({
-              ...purchaseLog,
+            purchase: updatePurchase(purchaseLog.purchase, {
               amount,
               product: selectedProduct,
             }),
@@ -140,7 +141,6 @@ export default function PurchaseLogForm({
           const purchase = memberDb.addPurchase(selectedMember.id, {
             amount,
             product: selectedProduct,
-            // createdBy: STAFF,
           });
 
           // create purchase log
@@ -155,7 +155,7 @@ export default function PurchaseLogForm({
         } else {
           logDb.add({
             type: "purchase",
-            purchase: logDb.createPurchase({
+            purchase: createPurchase({
               amount,
               product: selectedProduct,
             }),
@@ -194,7 +194,7 @@ export default function PurchaseLogForm({
               </FormControl>
               <FormMessage />
               <FormDescription>
-                Deixe em branco caso não seja um membro não registrado.
+                Deixe em branco caso seja um membro não registrado.
               </FormDescription>
             </FormItem>
           )}

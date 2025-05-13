@@ -25,7 +25,6 @@ export default function RemovePlanDialog({ plan }: RemovePlanDialogProps) {
     try {
       remove(plan.id);
       successToast("Exclusão de Plano", "Plano removido com sucesso!");
-      
     } catch (error) {
       errorToast("Exclusão de Plano", "Erro ao remover plano");
     }
@@ -47,7 +46,7 @@ export default function RemovePlanDialog({ plan }: RemovePlanDialogProps) {
           <DialogTitle>Remover Plano</DialogTitle>
           <div>
             Tem certeza que deseja excluir o plano{" "}
-            <span className="font-bold">"{plan.name}"</span>?
+            <span className="font-bold text-orange-500">{plan.name}</span>?
           </div>
         </DialogHeader>
         <DialogFooter>

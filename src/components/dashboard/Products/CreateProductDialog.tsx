@@ -10,9 +10,7 @@ import { Plus } from "lucide-react";
 import ProductForm from "./ProductForm";
 import { useState } from "react";
 
-type CreateProductModalProps = {};
-
-export default function CreateProductDialog({}: CreateProductModalProps) {
+export default function CreateProductDialog() {
   const [open, setOpen] = useState(false);
 
   const submitFormHandler = (success: boolean) => {

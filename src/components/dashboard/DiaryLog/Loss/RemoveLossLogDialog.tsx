@@ -50,8 +50,15 @@ export default function RemoveLossLogDialog({
         <DialogHeader>
           <DialogTitle>Remover Registro de Perda</DialogTitle>
           <div>
-            Tem certeza que deseja excluir o registro de perda{" "}
-            <span className="font-bold">"{lossLog.item.name}"</span>?
+            Tem certeza que deseja excluir o registro de perda de{" "}
+            <span className="font-bold text-orange-500">
+              {lossLog.item.name}
+            </span>{" "}
+            do dia{" "}
+            <span className="font-bold">
+              {lossLog.createdAt.toLocaleDateString()}
+            </span>
+            ?
           </div>
         </DialogHeader>
         <DialogFooter>

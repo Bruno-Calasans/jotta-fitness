@@ -16,7 +16,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
 import useCustomToast from "@/hooks/use-custom-toast";
-import { PlanSelector } from "../../Members/PlanSelector";
 import { useState } from "react";
 import { Plan } from "@/types/Plan.type";
 import type { PlanDiaryLog } from "@/types/Log.type";
@@ -28,6 +27,8 @@ import PlanDiaryPaymentResume from "./PlanDiaryPaymentResume";
 import { useMemberStore } from "@/store/memberStore";
 import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
 import PlanDiarySelector from "./PlanDiarySelector";
+import createPlanDiary from "@/utils/createPlanDiary";
+import updatePlanDiary from "@/utils/updatePlanDiary";
 
 const planDiaryLogFormSchema = z.object({
   member: z.string().optional(),
@@ -96,7 +97,10 @@ export default function PlanDiaryLogForm({
         } else {
           logDb.update(planDiaryLog.id, {
             type: "plan-diary",
-            planDiary: { ...planDiaryLog.planDiary, days, plan: selectedPlan },
+            planDiary: updatePlanDiary(planDiaryLog.planDiary, {
+              days: input.days,
+              plan: selectedPlan,
+            }),
           });
         }
 
@@ -134,7 +138,7 @@ export default function PlanDiaryLogForm({
         } else {
           logDb.add({
             type: "plan-diary",
-            planDiary: logDb.createPlanDiary({ days, plan: selectedPlan }),
+            planDiary: createPlanDiary({ days, plan: selectedPlan }),
             createdBy: STAFF,
           });
         }

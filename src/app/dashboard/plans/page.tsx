@@ -6,9 +6,7 @@ import { planColumns } from "@/components/dashboard/Plans/PlansTableColumns";
 import { usePlanStore } from "@/store/planStore";
 import CreatePlanDialog from "@/components/dashboard/Plans/CreatePlanDialog";
 
-type DashboardPlansProps = {};
-
-export default function DashboardPlans({}: DashboardPlansProps) {
+export default function DashboardPlans() {
   const { plans } = usePlanStore();
 
   return (

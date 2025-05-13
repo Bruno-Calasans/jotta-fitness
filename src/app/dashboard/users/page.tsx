@@ -1,7 +1,5 @@
 import ContentContainer from "@/components/general/ContentContainer";
 
-type DashboardUsersProps = {};
-
-export default function DashboardUsers({}: DashboardUsersProps) {
+export default function DashboardUsers() {
   return <ContentContainer>DashboardUsers</ContentContainer>;
 }

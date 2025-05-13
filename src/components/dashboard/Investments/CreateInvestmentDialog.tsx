@@ -10,9 +10,7 @@ import { Plus } from "lucide-react";
 import InvestmentForm from "./InvestmentForm";
 import { useState } from "react";
 
-type CreateInvestmentModalProps = {};
-
-export default function CreateInvestmentDialog({}: CreateInvestmentModalProps) {
+export default function CreateInvestmentDialog() {
   const [open, setOpen] = useState(false);
 
   const submitFormHandler = (success: boolean) => {

@@ -7,8 +7,6 @@ import RemoveMemberDialog from "./RemoveMemberDialog";
 import { Badge } from "@/components/ui/badge";
 import phoneMask from "@/utils/phoneMask";
 import PlanStatus from "./Enrollments/EnrollmentStatus";
-import { Button } from "@/components/ui/button";
-import { Info } from "lucide-react";
 import MoreDetails from "./MoreDetails";
 
 export const membersColumns: ColumnDef<Member>[] = [

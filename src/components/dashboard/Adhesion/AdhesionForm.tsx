@@ -17,11 +17,11 @@ import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
 import { useAdhesionStore } from "@/store/adhesionStore";
 import useCustomToast from "@/hooks/use-custom-toast";
-import { FocusEventHandler, useEffect } from "react";
+import { FocusEventHandler } from "react";
 import type { toZod } from "tozod";
 import type { Adhesion } from "@/types/Adhesion.type";
 import type { DB } from "@/types/Db.type";
-import { format, startOfYear, endOfYear } from "date-fns";
+import { format, startOfYear } from "date-fns";
 
 type AdhesionFormSchema = toZod<Omit<Adhesion, keyof DB>>;
 

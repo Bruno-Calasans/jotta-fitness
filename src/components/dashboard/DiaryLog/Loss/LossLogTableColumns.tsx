@@ -34,16 +34,6 @@ export const lossLogColumns: ColumnDef<LossLog>[] = [
     ),
   },
   {
-    accessorKey: "createdAt",
-    header: ({ column }) => (
-      <DataTableSortableHeader
-        column={column}
-        headerName="Data de Criação"
-        type="date"
-      />
-    ),
-  },
-  {
     id: "actions",
     cell: ({ row }) => {
       const lossLog = row.original as Log & { type: "expense" | "investment" };

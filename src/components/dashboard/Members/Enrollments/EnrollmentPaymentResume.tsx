@@ -1,10 +1,7 @@
-import { BUSINESS_RULES } from "@/config/BusinessRules";
 import { useMemberStore } from "@/store/memberStore";
-import { Member } from "@/types/Member.type";
 import { Plan } from "@/types/Plan.type";
 import calcLateFee from "@/utils/calcLateFee";
 import { differenceInDays } from "date-fns";
-import { useState } from "react";
 
 type EnrollmentResumeProps = {
   plan: Plan;

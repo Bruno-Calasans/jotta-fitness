@@ -12,10 +12,10 @@ import { Trash } from "lucide-react";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { useLogStore } from "@/store/logStore";
 import { useMemberStore } from "@/store/memberStore";
-import type { Log } from "@/types/Log.type";
+import type { PurchaseLog } from "@/types/Log.type";
 
 type RemovePurchaseLogDialogProps = {
-  purchaseLog: Log & { type: "product-purchase" };
+  purchaseLog: PurchaseLog;
 };
 
 export default function RemovePurchaseLogDialog({
@@ -27,7 +27,8 @@ export default function RemovePurchaseLogDialog({
 
   const removePurchaseLogHandler = () => {
     try {
-      memberDb.removePurchase(purchaseLog.member.id, purchaseLog.purchase.id);
+      if (purchaseLog.member)
+        memberDb.removePurchase(purchaseLog.member.id, purchaseLog.purchase.id);
       logDb.remove(purchaseLog.id);
       successToast(
         "Exclusão de Registro de Inscrição",
@@ -56,8 +57,11 @@ export default function RemovePurchaseLogDialog({
         <DialogHeader>
           <DialogTitle>Remover Inscrição</DialogTitle>
           <div>
-            Tem certeza que deseja excluir a compra do usuário{" "}
-            <span className="font-bold">"{purchaseLog.member.name}"</span>?
+            Tem certeza que deseja excluir a compra do produto{" "}
+            <span className="font-bold text-orange-500">
+              {purchaseLog.purchase.product.name}
+            </span>
+            ?
           </div>
         </DialogHeader>
         <DialogFooter>

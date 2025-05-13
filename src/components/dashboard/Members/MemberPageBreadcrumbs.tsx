@@ -2,9 +2,7 @@ import CustomBreadcrumb from "@/components/custom/CustomBreadcrumb";
 import { useMemberStore } from "@/store/memberStore";
 import { House } from "lucide-react";
 
-type MemberPageBreadcrumbsProps = {};
-
-export default function MemberPageBreadcrumbs({}: MemberPageBreadcrumbsProps) {
+export default function MemberPageBreadcrumbs() {
   const { selectedMember } = useMemberStore();
   return (
     <CustomBreadcrumb

@@ -2,7 +2,6 @@
 
 import { MEMBERS_DATA } from "@/data/MEMBERS_DATA";
 import { create } from "zustand";
-import { add as addDate, addDays, differenceInDays } from "date-fns";
 import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
 import type { Plan } from "@/types/Plan.type";
 import type { Purchase } from "@/types/Purchase.type";
@@ -11,6 +10,14 @@ import type { PlanDiary } from "@/types/PlanDiary.type";
 import type { Member } from "@/types/Member.type";
 import type { Enrollment } from "@/types/Enrollment.type";
 import type { DB } from "@/types/Db.type";
+import createAdhesionPayment from "@/utils/createAdhesionPayment";
+import createPurchase from "@/utils/createPurchase";
+import createEnrollment from "@/utils/createEnrollment";
+import updateEnrollment from "@/utils/updateEnrollment";
+import createPlanDiary from "@/utils/createPlanDiary";
+import updatePlanDiary from "@/utils/updatePlanDiary";
+import updatePurchase from "@/utils/updatePurchase";
+import type { Optional } from "@/types/Optional.type";
 
 type MemberState = {
   members: Member[];
@@ -18,27 +25,28 @@ type MemberState = {
   selectedEnrollment: Enrollment | null;
   setSelectedEnrollment: (enrollment: Enrollment | null) => void;
   setSelectedMember: (member: Member | null) => void;
-  getById: (id: string) => Member | null;
-  add: (input: Omit<Member, keyof DB>) => void;
+  getMemberById: (id: string) => Member | null;
+  add: (
+    input: Optional<
+      Omit<Member, keyof DB>,
+      "adhesionsPayments" | "diaries" | "enrollments" | "purchases" | "role"
+    >
+  ) => void;
   remove: (id: string) => void;
   update: (
     memberId: string,
     input: Partial<Omit<Member, keyof DB>>
   ) => Member | null;
-  subscribe: (
+  addEnrollment: (
     memberId: string,
-    input: Omit<Enrollment, keyof DB | "startsIn" | "expiresIn"> & {
-      createdBy: Member;
-    }
+    input: Omit<Enrollment, keyof DB | "startsIn" | "expiresIn">
   ) => Enrollment | null;
-  unsubscribe: (memberId: string, enrollmentId: string) => void;
+  removeEnrollment: (memberId: string, enrollmentId: string) => void;
   updateEnrollment: (
     memberId: string,
     enrollmentId: string,
     input: Partial<{ plan: Plan; months: number }>
   ) => Enrollment | null;
-  getLeftDays: (member: Member, excludes?: string[]) => number;
-  getActiveEnrollments: (memberId: string) => Enrollment[];
   addPurchase: (
     memberId: string,
     input: Omit<Purchase, keyof DB>
@@ -49,13 +57,11 @@ type MemberState = {
     input: Partial<Omit<Purchase, keyof DB>>
   ) => Purchase | null;
   removePurchase: (memberId: string, purchaseId: string) => void;
-  getPurchaseById: (id: string) => Purchase | null;
-  payAdhesion: (memberId: string, year: number) => AdhesionPayment | null;
-  removeAdhesionPayment: (memberId: string, adhesionId: string) => void;
-  getAdhesionPaymentByYear: (
+  addAdhesionPayment: (
     memberId: string,
-    year: number
+    adhesionYear: number
   ) => AdhesionPayment | null;
+  removeAdhesionPayment: (memberId: string, adhesionId: string) => void;
   addDiary: (
     memberId: string,
     input: Omit<PlanDiary, keyof DB | "expiresIn">
@@ -78,20 +84,32 @@ export const useMemberStore = create<MemberState>((set, get) => ({
   setSelectedMember(member) {
     set(() => ({ selectedMember: member }));
   },
+  getMemberById(memberId) {
+    const foundMember = get().members.find((member) => member.id === memberId);
+    if (!foundMember) return null;
+    return foundMember;
+  },
   add(input) {
     set((state) => ({
-      members: [...state.members, { ...generateDefaultDbFields(), ...input }],
+      members: [
+        ...state.members,
+        {
+          ...generateDefaultDbFields(),
+          role: null,
+          adhesionsPayments: [],
+          enrollments: [],
+          diaries: [],
+          purchases: [],
+          ...input,
+        },
+      ],
     }));
   },
-  remove(id) {
-    const updatedMembers = get().members.filter((member) => member.id !== id);
-    set((state) => ({ ...state, members: updatedMembers }), true);
-  },
-  update(id, input) {
+  update(memberId, input) {
     let updatedMember: Member | null = null;
 
     const updatedMembers = get().members.map((member) => {
-      if (member.id === id) {
+      if (member.id === memberId) {
         updatedMember = { ...member, updatedAt: new Date(), ...input };
         return updatedMember;
       }
@@ -102,50 +120,19 @@ export const useMemberStore = create<MemberState>((set, get) => ({
 
     return updatedMember;
   },
-  getById(id) {
-    const foundMember = get().members.find((member) => member.id === id);
-    if (!foundMember) return null;
-    return foundMember;
-  },
-  getLeftDays(member: Member, excludes = []) {
-    // Check if there's left days at the last plan payment
-    let totalLeftDays = 0;
-    const activeEnrollments = get().getActiveEnrollments(member.id);
-    if (activeEnrollments.length === 0) return totalLeftDays;
-
-    const filteredActiveEnrollments = activeEnrollments.filter(
-      (enrollment) => !excludes.includes(enrollment.id)
+  remove(memberId) {
+    const updatedMembers = get().members.filter(
+      (member) => member.id !== memberId
     );
-    if (filteredActiveEnrollments.length === 0) return totalLeftDays;
-
-    const lasActivePayment =
-      filteredActiveEnrollments[filteredActiveEnrollments.length - 1];
-
-    // Calc left days
-    let leftDays = differenceInDays(lasActivePayment.expiresIn, new Date());
-
-    // plus 1 for day correction
-    if (leftDays > 0) {
-      totalLeftDays += leftDays + 1;
-    }
-
-    return totalLeftDays;
+    set((state) => ({ ...state, members: updatedMembers }), true);
   },
-  subscribe(memberId, input) {
+  addEnrollment(memberId, input) {
     // Check if members exists
-    const member = get().getById(memberId);
+    const member = get().getMemberById(memberId);
     if (!member) return null;
 
-    // Check if there's left days at the last plan payment
-    const leftDaysLastEnrollment = get().getLeftDays(member);
-    const enrollment: Enrollment = {
-      ...input,
-      ...generateDefaultDbFields(),
-      startsIn: new Date(),
-      expiresIn: addDate(new Date(), {
-        days: input.months * 30 + leftDaysLastEnrollment,
-      }),
-    };
+    // Create enrollment
+    const enrollment = createEnrollment(member, input);
 
     const updatedMember = get().update(memberId, {
       ...member,
@@ -157,9 +144,37 @@ export const useMemberStore = create<MemberState>((set, get) => ({
 
     return enrollment;
   },
-  unsubscribe(memberId, enrollmentId) {
+  updateEnrollment(memberId, enrollmentId, input) {
     // Found member
-    const foundMember = get().getById(memberId);
+    const foundMember = get().getMemberById(memberId);
+    if (!foundMember) return null;
+
+    let updatedEnrollment: Enrollment | null = null;
+
+    // Update specific plan payment
+    const updatedEnrollments = foundMember.enrollments.map((enrollment) => {
+      // Find and update the specific enrollment
+      if (enrollment.id === enrollmentId) {
+        updatedEnrollment = updateEnrollment(enrollment, foundMember, input);
+        return updatedEnrollment;
+      }
+
+      // Return others plan payments
+      return enrollment;
+    });
+
+    const updatedMember = get().update(foundMember.id, {
+      ...foundMember,
+      enrollments: updatedEnrollments,
+    });
+
+    get().setSelectedMember(updatedMember);
+
+    return updatedEnrollment;
+  },
+  removeEnrollment(memberId, enrollmentId) {
+    // Found member
+    const foundMember = get().getMemberById(memberId);
     if (!foundMember) return;
 
     // Change specific plan payment
@@ -175,70 +190,11 @@ export const useMemberStore = create<MemberState>((set, get) => ({
     // Update selected member
     get().setSelectedMember(updatedMember);
   },
-  updateEnrollment(memberId, enrollmentId, input) {
-    // Found member
-    const foundMember = get().getById(memberId);
-    if (!foundMember) return null;
-
-    const currentDate = new Date();
-    let updatedEnrollment: Enrollment | null = null;
-
-    // Update specific plan payment
-    const updatedEnrollments = foundMember.enrollments.map((enrollment) => {
-      // Find specific plan payment
-      if (enrollment.id === enrollmentId) {
-        let leftDaysLastEnrollment = get().getLeftDays(foundMember, [
-          enrollment.id,
-        ]);
-
-        const isMonthsDiff = input.months && input.months != enrollment.months;
-        const pastDays = differenceInDays(enrollment.startsIn, new Date());
-        updatedEnrollment = {
-          ...enrollment,
-          ...input,
-          startsIn: isMonthsDiff ? currentDate : enrollment.startsIn,
-          expiresIn: isMonthsDiff
-            ? addDate(currentDate, {
-                days: input.months! * 30 + leftDaysLastEnrollment - pastDays,
-              })
-            : enrollment.expiresIn,
-        };
-
-        return updatedEnrollment;
-      }
-      // Return others plan payments
-      return enrollment;
-    });
-
-    const updatedMember = get().update(foundMember.id, {
-      ...foundMember,
-      enrollments: updatedEnrollments,
-    });
-
-    get().setSelectedMember(updatedMember);
-
-    return updatedEnrollment;
-  },
-  getActiveEnrollments(memberId) {
-    let activeEnrollments: Enrollment[] = [];
-    const foundMember = get().getById(memberId);
-
-    if (!foundMember) return activeEnrollments;
-
-    activeEnrollments = foundMember.enrollments.filter((payment) => {
-      return differenceInDays(payment.expiresIn, new Date()) > 0;
-    });
-
-    return activeEnrollments;
-  },
   addPurchase(memberId, input) {
-    const foundMember = get().getById(memberId);
+    const foundMember = get().getMemberById(memberId);
     if (!foundMember) return null;
 
-    const newPurchase: Purchase = {
-      ...generateDefaultDbFields(),
-      ...input,
-    };
+    const newPurchase = createPurchase(input);
 
     const updatedMember = get().update(memberId, {
       purchases: [...foundMember.purchases, newPurchase],
@@ -249,14 +205,14 @@ export const useMemberStore = create<MemberState>((set, get) => ({
     return newPurchase;
   },
   updatePurchase(memberId, purchaseId, input) {
-    const foundMember = get().getById(memberId);
+    const foundMember = get().getMemberById(memberId);
     if (!foundMember) return null;
 
     let updatedPurchase: Purchase | null = null;
 
     const updatedPurchases = foundMember.purchases.map((purchase) => {
       if (purchase.id === purchaseId) {
-        updatedPurchase = { ...purchase, ...input };
+        updatedPurchase = updatePurchase(purchase, input);
         return updatedPurchase;
       }
       return purchase;
@@ -270,20 +226,8 @@ export const useMemberStore = create<MemberState>((set, get) => ({
 
     return updatedPurchase;
   },
-  getPurchaseById(id) {
-    let foundPurchase: Purchase | null = null;
-
-    for (let member of get().members) {
-      const purchase = member.purchases.find((purchase) => purchase.id === id);
-      if (purchase) {
-        foundPurchase = purchase;
-        break;
-      }
-    }
-    return foundPurchase;
-  },
   removePurchase(memberId, purchaseId) {
-    const foundMember = get().getById(memberId);
+    const foundMember = get().getMemberById(memberId);
     if (!foundMember) return;
 
     const updatedPurchases = foundMember.purchases.filter(
@@ -296,78 +240,52 @@ export const useMemberStore = create<MemberState>((set, get) => ({
 
     get().setSelectedMember(updatedMember);
   },
-  payAdhesion(memberId, year) {
-    const foundMember = get().getById(memberId);
+  addAdhesionPayment(memberId, adhesionYear) {
+    const foundMember = get().getMemberById(memberId);
     if (!foundMember) return null;
 
-    const newAdhesion: AdhesionPayment = {
-      ...generateDefaultDbFields(),
-      year,
-      paidAt: new Date(),
-    };
+    const newAdhesionPayment = createAdhesionPayment({ year: adhesionYear });
 
     const updatedMember = get().update(foundMember.id, {
       ...foundMember,
-      adhesionsPayments: [...foundMember.adhesionsPayments, newAdhesion],
+      adhesionsPayments: [...foundMember.adhesionsPayments, newAdhesionPayment],
     });
 
     get().setSelectedMember(updatedMember);
 
-    return newAdhesion;
+    return newAdhesionPayment;
   },
-  getAdhesionPaymentByYear(memberId, year) {
-    const foundMember = get().getById(memberId);
-    if (!foundMember) return null;
+  removeAdhesionPayment(memberId, adhesionPaymentId) {
+    const foundMember = get().getMemberById(memberId);
+    if (!foundMember) return;
 
-    const foundAdhesion = foundMember.adhesionsPayments.find(
-      (adhesionPayment) => adhesionPayment.year === year
+    const updatedAdhesionPayments = foundMember.adhesionsPayments.filter(
+      (adhesionPayment) => adhesionPayment.id !== adhesionPaymentId
     );
 
-    if (!foundAdhesion) return null;
-
-    return foundAdhesion;
+    get().update(foundMember.id, {
+      adhesionsPayments: updatedAdhesionPayments,
+    });
   },
   addDiary(memberId, input) {
-    const foundMember = get().getById(memberId);
+    const foundMember = get().getMemberById(memberId);
     if (!foundMember) return null;
 
-    const activePayments = get().getActiveEnrollments(memberId);
-    const lastActivePayment = activePayments[activePayments.length - 1];
-
-    const newDiary: PlanDiary = {
-      ...generateDefaultDbFields(),
-      ...input,
-      expiresIn: lastActivePayment
-        ? addDays(lastActivePayment.expiresIn, input.days)
-        : addDays(new Date(), input.days),
-    };
+    const newDiary = createPlanDiary(input, foundMember);
 
     get().update(memberId, { diaries: [...foundMember.diaries, newDiary] });
 
     return newDiary;
   },
   updateDiary(memberId, diaryId, input) {
-    const foundMember = get().getById(memberId);
+    const foundMember = get().getMemberById(memberId);
     if (!foundMember) return null;
 
-    let updatedDiary: PlanDiary | null = null;
+    const updatedDiary: PlanDiary | null = null;
 
     const updatedDiaries = foundMember.diaries.map((diary) => {
       if (diary.id === diaryId) {
-        const activePayments = get().getActiveEnrollments(memberId);
-        const lastActivePayment = activePayments[activePayments.length - 1];
-        const isUpdateDiff = input.days != diary.days;
-        const newExpiresIn =
-          isUpdateDiff && lastActivePayment
-            ? addDays(lastActivePayment.expiresIn, input.days)
-            : addDays(new Date(), input.days);
-
-        updatedDiary = {
-          ...diary,
-          ...input,
-          expiresIn: newExpiresIn,
-        };
-        return updatedDiary;
+        return updatePlanDiary(diary, input, foundMember);
       }
       return diary;
     });
@@ -379,7 +297,7 @@ export const useMemberStore = create<MemberState>((set, get) => ({
     return updatedDiary;
   },
   removeDiary(memberId, diaryId) {
-    const foundMember = get().getById(memberId);
+    const foundMember = get().getMemberById(memberId);
     if (!foundMember) return null;
 
     const updatedDiaries = foundMember.diaries.filter(
@@ -388,21 +306,6 @@ export const useMemberStore = create<MemberState>((set, get) => ({
 
     get().update(memberId, {
       diaries: updatedDiaries,
-    });
-  },
-  removeAdhesionPayment(memberId, adhesionId) {
-    const foundMember = get().getById(memberId);
-    if (!foundMember) return;
-
-    console.log("member adhesions", foundMember.adhesionsPayments, adhesionId);
-    const updatedAdhesions = foundMember.adhesionsPayments.filter(
-      (adhesion) => adhesion.id !== adhesionId
-    );
-
-    console.log("remove adhesion", updatedAdhesions);
-
-    get().update(foundMember.id, {
-      adhesionsPayments: updatedAdhesions,
     });
   },
 }));

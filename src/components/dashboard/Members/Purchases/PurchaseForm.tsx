@@ -20,7 +20,6 @@ import { Purchase } from "@/types/Purchase.type";
 import { Product } from "@/types/Product.type";
 import { ProductSelector } from "./ProductSelector";
 import PurchasePaymentResume from "./PurchasePaymentResume";
-import { STAFF } from "@/data/MEMBERS_DATA";
 import { useProductStore } from "@/store/productStore";
 
 const subscriptionFormSchema = z.object({
@@ -105,7 +104,6 @@ export default function SubscriptionForm({
 
         // Save to database
         memberDb.addPurchase(selectedMember.id, {
-          createdBy: STAFF,
           product: selectedProduct,
           amount,
         });
@@ -136,7 +134,6 @@ export default function SubscriptionForm({
               <FormLabel>Produto</FormLabel>
               <FormControl>
                 <ProductSelector
-                  defaultValue={field.value}
                   value={field.value}
                   onValueChange={field.onChange}
                   onSelected={setSelectedProduct}
