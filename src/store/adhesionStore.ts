@@ -27,7 +27,7 @@ export const useAdhesionStore = create<AdhesionState>((set, get) => ({
   },
   remove(id) {
     const updatedAdhesions = get().adhesions.filter(
-      (adhesion) => adhesion.id !== id
+      (adhesion) => adhesion.id !== id,
     );
     set((state) => ({ ...state, adhesions: updatedAdhesions }), true);
   },

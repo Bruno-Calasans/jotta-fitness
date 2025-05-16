@@ -29,12 +29,12 @@ export default function RemoveAdhesionLogDialog({
     try {
       memberDb.removeAdhesionPayment(
         adhesionLog.member.id,
-        adhesionLog.adhesionPayment.id
+        adhesionLog.adhesionPayment.id,
       );
       logDb.remove(adhesionLog.id);
       successToast(
         "Exclusão de Registro de Adesão",
-        "Registro removido com sucesso!"
+        "Registro removido com sucesso!",
       );
     } catch (error) {
       errorToast("Exclusão de Registro de Adesão", "Erro ao remover registro");

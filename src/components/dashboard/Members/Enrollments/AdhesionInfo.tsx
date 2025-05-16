@@ -1,56 +1,72 @@
 import ErrorMsg from "@/components/custom/ErrorMsg";
 import { Button } from "@/components/ui/button";
+import { STAFF } from "@/data/MEMBERS_DATA";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
+import { useLogStore } from "@/store/logStore";
 import { useMemberStore } from "@/store/memberStore";
-import calcDiscount from "@/utils/calcDiscount";
+import calcAdhesionPrice from "@/utils/calcAdhesionPrice";
 import { Check } from "lucide-react";
 
 export default function AdhesionInfo() {
+  const logDb = useLogStore();
   const { selectedMember, addAdhesionPayment } = useMemberStore();
   const { successToast, errorToast } = useCustomToast();
-  const {
-    lastEnrollment,
-    isDiscountValid,
-    isNewbie,
-    currentAdhesion,
-    isCurrentAdhesionPaid,
-  } = useEnrollmentResume();
+  const { lastEnrollment, currentAdhesion, isCurrentAdhesionPaid, isNewbie } =
+    useEnrollmentResume();
+
+  const adhesionPrice =
+    currentAdhesion && lastEnrollment && selectedMember
+      ? calcAdhesionPrice(currentAdhesion, lastEnrollment.plan, selectedMember)
+      : 0;
 
   const payAdhesionHandler = () => {
-    if (!selectedMember || !currentAdhesion) return;
+    if (!selectedMember || !currentAdhesion || !lastEnrollment) return;
     try {
-      addAdhesionPayment(selectedMember.id, currentAdhesion.year);
+      const adhesionPayment = addAdhesionPayment(
+        selectedMember.id,
+        currentAdhesion.year
+      );
+      if (adhesionPayment) {
+        logDb.add({
+          type: "adhesion",
+          adhesion: currentAdhesion,
+          adhesionPayment,
+          member: selectedMember,
+          plan: lastEnrollment.plan,
+          price: adhesionPrice,
+          createdBy: STAFF,
+        });
+      }
       successToast("Pagamento de Adesão", "Pagamento realizado com sucesso!");
     } catch (error) {
       errorToast("Pagamento de Adesão", "Erro ao realizar pagamento.");
     }
   };
 
-  if (!currentAdhesion || !lastEnrollment || isCurrentAdhesionPaid) return null;
+  if (
+    !selectedMember ||
+    !currentAdhesion ||
+    !lastEnrollment ||
+    isCurrentAdhesionPaid
+  )
+    return null;
 
   return (
     <ErrorMsg>
       <div className="flex items-center justify-between flex-1">
         <p>
           Este usuário ainda não pagou a <span>adesão</span> deste ano, no valor
-          de{" "}
-          <span className="font-bold underline">
-            R$
-            {isDiscountValid
-              ? calcDiscount(
-                  lastEnrollment.plan.price,
-                  isNewbie
-                    ? currentAdhesion.newbieDiscount
-                    : currentAdhesion.veteranDiscount
-                )
-              : lastEnrollment.plan.price}
-          </span>
+          de <span className="font-bold underline">R${adhesionPrice}</span> (
+          {isNewbie
+            ? currentAdhesion.newbieDiscount
+            : currentAdhesion.veteranDiscount}
+          %) de desconto
         </p>
         <Button
-          onClick={payAdhesionHandler}
           size="sm"
           className="bg-emerald-500 hover:bg-emerald-600"
+          onClick={payAdhesionHandler}
         >
           <Check />
           Marcar como pago

@@ -1,18 +1,22 @@
 import InfoMsg from "@/components/custom/InfoMsg";
+import { BUSINESS_RULES } from "@/config/BusinessRules";
 import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
 
 export default function ChangePlanInfo() {
-  const { hasEnrollment, canChangePlanWithoutFullPayment } =
+  const { hasEnrollment, canChangePlanWithoutFullPrice } =
     useEnrollmentResume();
 
   if (!hasEnrollment) return null;
 
-  if (canChangePlanWithoutFullPayment)
+  if (canChangePlanWithoutFullPrice)
     return (
       <InfoMsg>
         <p>
-          Usuário utilizou seu plano por menos que 15 dias, por isso, ainda pode
-          trocar de plano{" "}
+          Usuário utilizou seu plano por menos que{" "}
+          <span className="font-bold">
+            {BUSINESS_RULES.daysBeforeChangePlanWithoutTax}
+          </span>{" "}
+          dias, por isso, ainda pode trocar de plano{" "}
           <span className="font-bold underline">
             sem pagar o valor integral
           </span>
@@ -24,8 +28,11 @@ export default function ChangePlanInfo() {
   return (
     <InfoMsg>
       <p>
-        Usuário utilizou seu plano por menos que 15 dias, por isso, ainda pode
-        trocar de plano{" "}
+        Usuário utilizou seu plano por menos que{" "}
+        <span className="font-bold">
+          {BUSINESS_RULES.daysBeforeChangePlanWithoutTax}
+        </span>{" "}
+        dias, por isso, ainda pode trocar de plano{" "}
         <span className="font-bold underline">sem pagar o valor integral</span>.
       </p>
     </InfoMsg>

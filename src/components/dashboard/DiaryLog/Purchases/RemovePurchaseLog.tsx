@@ -32,12 +32,12 @@ export default function RemovePurchaseLogDialog({
       logDb.remove(purchaseLog.id);
       successToast(
         "Exclusão de Registro de Inscrição",
-        "Registro removido com sucesso!"
+        "Registro removido com sucesso!",
       );
     } catch (error) {
       errorToast(
         "Exclusão de Registro de Inscrição",
-        "Erro ao remover registro de inscrição"
+        "Erro ao remover registro de inscrição",
       );
     }
   };

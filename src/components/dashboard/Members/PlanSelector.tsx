@@ -1,55 +1,36 @@
-import * as React from "react";
+"use client";
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { usePlanStore } from "@/store/planStore";
-import { Plan } from "@/types/Plan.type";
+import Selector from "@/components/custom/Selector";
+import type { Plan } from "@/types/Plan.type";
 
 type PlanSelectorProps = {
   value: string;
-  defaultValue: string;
   onValueChange: (value: string) => void;
-  onSelected: (plan: Plan) => void;
+  onItemSelected: (item: Plan) => void;
 };
 
 export function PlanSelector({
   value,
-  defaultValue,
   onValueChange,
-  onSelected,
+  onItemSelected,
 }: PlanSelectorProps) {
-  const { plans, getByName } = usePlanStore();
+  const { plans } = usePlanStore();
 
-  const changeHandler = (value: string) => {
-    const plan = getByName(value)!;
-    onValueChange(value);
-    onSelected(plan);
-  };
+  const planData = plans.map((plan) => ({
+    label: plan.name,
+    value: plan.name,
+    item: plan,
+  }));
 
   return (
-    <Select
+    <Selector
+      itemAcessorKey="name"
+      data={planData}
       value={value}
-      defaultValue={defaultValue}
-      onValueChange={changeHandler}
-    >
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder="Selecione um plano" />
-      </SelectTrigger>
-      <SelectContent className="w-full">
-        <SelectGroup>
-          {plans.map((plan) => (
-            <SelectItem key={plan.id} value={plan.name}>
-              {plan.name}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+      onItemSelect={onItemSelected}
+      onValueChange={onValueChange}
+      placeholder="Selecione um plano"
+    />
   );
 }

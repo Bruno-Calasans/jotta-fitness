@@ -1,13 +1,12 @@
 import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
+import defaultDateFormat from "@/utils/defaultDateFormat";
 
 export default function LastEnrollmentPaymentInfo() {
-  const { hasEnrollment, lastEnrollment } = useEnrollmentResume();
+  const { lastEnrollment } = useEnrollmentResume();
   return (
     <p className="text-md text-stone-300">
       <span className="font-bold">Data de Último Pagamento:</span>{" "}
-      {hasEnrollment && lastEnrollment
-        ? lastEnrollment.startsIn.toLocaleDateString()
-        : "Nenhum"}
+      {lastEnrollment ? defaultDateFormat(lastEnrollment.startsIn) : "Nenhum"}
     </p>
   );
 }

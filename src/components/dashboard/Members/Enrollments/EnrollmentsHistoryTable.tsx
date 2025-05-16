@@ -1,10 +1,12 @@
-import DataTable from "@/components/custom/DataTable/DataTable";
 import { enrollmentColumns } from "./EnrollmentHistoryTableColumns";
 import { useMemberStore } from "@/store/memberStore";
+import { useLogStore } from "@/store/logStore";
+import DataTable from "@/components/custom/DataTable/DataTable";
 import CreateSubscriptionDialog from "./CreateEnrollmentDialog";
 
 export default function EnrollmentsHistoryTable() {
   const { selectedMember } = useMemberStore();
+  const logDb = useLogStore();
 
   if (!selectedMember) return null;
 

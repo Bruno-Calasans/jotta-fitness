@@ -1,9 +1,10 @@
 import DataTableSortableHeader from "@/components/custom/DataTable/DataTableSortableHeader";
-import type { ColumnDef } from "@tanstack/react-table";
 import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
-import { Purchase } from "@/types/Purchase.type";
 import EditPurchaseDialog from "./EditPurchaseDialog";
 import RemovePurchaseDialog from "./RemovePurchaseDialog";
+import defaultDateFormat from "@/utils/defaultDateFormat";
+import type { ColumnDef } from "@tanstack/react-table";
+import type { Purchase } from "@/types/Purchase.type";
 
 export const purchasesColumns: ColumnDef<Purchase>[] = [
   {
@@ -58,8 +59,8 @@ export const purchasesColumns: ColumnDef<Purchase>[] = [
       />
     ),
     cell: ({ row }) => {
-      const createdAt = row.original.createdAt;
-      return <p>{createdAt.toLocaleDateString()}</p>;
+      const { createdAt } = row.original;
+      return <p>{defaultDateFormat(createdAt)}</p>;
     },
   },
   {

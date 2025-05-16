@@ -5,6 +5,7 @@ import { Enrollment } from "@/types/Enrollment.type";
 import RemoveSubscriptionDialog from "./RemoveEnrollmentDialog";
 import EditSubscriptionDialog from "./EditEnrollmentDialog";
 import PlanStatus from "./EnrollmentStatus";
+import defaultDateFormat from "@/utils/defaultDateFormat";
 
 export const enrollmentColumns: ColumnDef<Enrollment>[] = [
   {
@@ -17,11 +18,15 @@ export const enrollmentColumns: ColumnDef<Enrollment>[] = [
   {
     accessorKey: "months",
     header: ({ column }) => (
-      <DataTableSortableHeader column={column} headerName="Meses" />
+      <DataTableSortableHeader
+        column={column}
+        headerName="Meses"
+        type="numeral"
+      />
     ),
   },
   {
-    id: "Status",
+    id: "status",
     accessorKey: "plan",
     header: ({ column }) => (
       <DataTableSortableHeader column={column} headerName="Status" />
@@ -41,8 +46,8 @@ export const enrollmentColumns: ColumnDef<Enrollment>[] = [
       />
     ),
     cell: ({ row }) => {
-      const startsIn = row.original.startsIn;
-      return <p>{startsIn.toLocaleDateString()}</p>;
+      const { startsIn } = row.original;
+      return <p>{defaultDateFormat(startsIn)}</p>;
     },
   },
   {
@@ -55,8 +60,8 @@ export const enrollmentColumns: ColumnDef<Enrollment>[] = [
       />
     ),
     cell: ({ row }) => {
-      const expiresIn = row.original.expiresIn;
-      return <p>{expiresIn.toLocaleDateString()}</p>;
+      const { expiresIn } = row.original;
+      return <p>{defaultDateFormat(expiresIn)}</p>;
     },
   },
   {

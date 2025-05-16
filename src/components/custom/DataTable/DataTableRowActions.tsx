@@ -12,7 +12,7 @@ export type Icon = typeof MoreHorizontal;
 
 export type RowActionFn<Item, Action = string> = (
   action: Action,
-  item: Item
+  item: Item,
 ) => void;
 
 export type TableRowActionData<Action = string> = {

@@ -10,7 +10,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import EnrollmentLogForm from "./EnrollmentLogForm";
 import { useLogStore } from "@/store/logStore";
-import { formatDate } from "date-fns";
+import defaultDateFormat from "@/utils/defaultDateFormat";
 
 export default function CreateEnrollmentLogDialog() {
   const [open, setOpen] = useState(false);
@@ -27,7 +27,7 @@ export default function CreateEnrollmentLogDialog() {
         <Button
           disabled={
             selectedDate &&
-            formatDate(selectedDate, "d/M/Y") != formatDate(new Date(), "d/M/Y")
+            defaultDateFormat(selectedDate) != defaultDateFormat(new Date())
           }
           className="bg-emerald-500 hover:bg-emerald-600 font-bold"
         >

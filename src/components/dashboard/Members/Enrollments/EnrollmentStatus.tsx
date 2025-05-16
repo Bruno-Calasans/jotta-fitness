@@ -1,6 +1,6 @@
-import { differenceInHours } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Enrollment } from "@/types/Enrollment.type";
+import calcEnrollmentLeftDays from "@/utils/calcEnrollmentLeftDays";
 
 type SubscriptionStatusProps = {
   enrollment?: Enrollment | null;
@@ -9,11 +9,11 @@ type SubscriptionStatusProps = {
 export default function SubscriptionStatus({
   enrollment,
 }: SubscriptionStatusProps) {
-  if (!enrollment) return <Badge>Sem Plano</Badge>;
+  const leftDays = enrollment && calcEnrollmentLeftDays(enrollment);
 
-  const diff = differenceInHours(enrollment.expiresIn, new Date());
+  if (!leftDays) return <Badge>Sem Plano</Badge>;
 
-  if (diff > 0) {
+  if (leftDays > 0) {
     return (
       <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white transition-all cursor-pointer">
         Ativo
@@ -21,7 +21,7 @@ export default function SubscriptionStatus({
     );
   }
 
-  if (diff < 0) {
+  if (leftDays < 0) {
     return (
       <Badge className="bg-red-500 hover:bg-red-600 text-white transition-all cursor-pointer">
         Vencido

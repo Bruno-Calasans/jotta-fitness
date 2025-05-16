@@ -15,7 +15,7 @@ export default function DashboardSideMenu() {
           <LayoutDashboard />
         </Button>
       </SheetTrigger>
-      <DashboardSideMenuContent/>
+      <DashboardSideMenuContent />
     </Sheet>
   );
 }

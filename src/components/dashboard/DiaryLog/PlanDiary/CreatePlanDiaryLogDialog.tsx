@@ -9,8 +9,8 @@ import {
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { useLogStore } from "@/store/logStore";
-import { formatDate } from "date-fns";
 import PlanDiaryLogForm from "./PlanDiaryLogForm";
+import isDateEqual from "@/utils/isDateEquals";
 
 export default function CreatePlanDiaryLogDialog() {
   const [open, setOpen] = useState(false);
@@ -20,15 +20,14 @@ export default function CreatePlanDiaryLogDialog() {
     if (success) setOpen(false);
   };
 
+  const isToday = selectedDate && isDateEqual(selectedDate, new Date());
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {/* Button to subscribe */}
       <DialogTrigger asChild>
         <Button
-          disabled={
-            selectedDate &&
-            formatDate(selectedDate, "d/M/Y") != formatDate(new Date(), "d/M/Y")
-          }
+          disabled={!isToday}
           className="bg-emerald-500 hover:bg-emerald-600 font-bold"
         >
           <Plus />

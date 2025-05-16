@@ -20,7 +20,7 @@ export default function AdhesionMemberSelector({
   const memberData = members
     .filter(
       (member) =>
-        getLastMemberPlan(member) && !isCurrentYearAdhesionPaid(member)
+        getLastMemberPlan(member) && !isCurrentYearAdhesionPaid(member),
     )
     .map((member) => ({
       label: member.name,

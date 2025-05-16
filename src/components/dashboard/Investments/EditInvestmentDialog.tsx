@@ -15,7 +15,9 @@ type EditInvestmentModalProps = {
   investment: Investment;
 };
 
-export default function EditInvestmentDialog({ investment }: EditInvestmentModalProps) {
+export default function EditInvestmentDialog({
+  investment,
+}: EditInvestmentModalProps) {
   const [open, setOpen] = useState(false);
 
   const submitFormHandler = (success: boolean) => {

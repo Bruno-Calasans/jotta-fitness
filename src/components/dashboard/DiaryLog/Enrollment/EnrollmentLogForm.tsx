@@ -168,9 +168,8 @@ export default function EnrollmentLogForm({
               <FormControl>
                 <PlanSelector
                   value={field.value}
-                  defaultValue={field.value}
                   onValueChange={field.onChange}
-                  onSelected={setSelectedPlan}
+                  onItemSelected={setSelectedPlan}
                 />
               </FormControl>
               <FormMessage />
@@ -196,8 +195,14 @@ export default function EnrollmentLogForm({
         />
 
         {/* Payment resume */}
-        {selectedPlan && months > 0 && (
-          <EnrollmentPaymentResume plan={selectedPlan} months={months} />
+        {selectedPlan && months > 0 && selectedMember && (
+          <EnrollmentPaymentResume
+            data={{
+              member: selectedMember,
+              plan: selectedPlan,
+              months,
+            }}
+          />
         )}
 
         {/* Form Actions */}

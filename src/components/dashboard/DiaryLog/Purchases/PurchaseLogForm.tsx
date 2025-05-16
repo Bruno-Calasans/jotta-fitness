@@ -234,9 +234,9 @@ export default function PurchaseLogForm({
                 <Input
                   type="number"
                   placeholder="Quantidade"
-                  {...field}
                   max={selectedProduct?.amount}
                   onPaste={(e) => e.preventDefault()}
+                  {...field}
                 />
               </FormControl>
               <FormMessage />
@@ -246,7 +246,12 @@ export default function PurchaseLogForm({
 
         {/* PPurchase Payment resume */}
         {selectedProduct && amount > 0 && (
-          <PurchasePaymentResume product={selectedProduct} amount={amount} />
+          <PurchasePaymentResume
+            data={{
+              product: selectedProduct,
+              amount,
+            }}
+          />
         )}
 
         {/* Form Actions */}

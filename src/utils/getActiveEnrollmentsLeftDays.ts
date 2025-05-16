@@ -4,7 +4,7 @@ import type { Enrollment } from "@/types/Enrollment.type";
 
 export default function getActiveEnrollmentsLeftDays(
   enrollments: Enrollment[],
-  excludeEnrollmentIds: string[] = []
+  excludeEnrollmentIds: string[] = [],
 ) {
   let totalLeftDays = 0;
 
@@ -12,7 +12,7 @@ export default function getActiveEnrollmentsLeftDays(
   if (activeEnrollments.length === 0) return totalLeftDays;
 
   const filteredActiveEnrollments = activeEnrollments.filter(
-    (enrollment) => !excludeEnrollmentIds.includes(enrollment.id)
+    (enrollment) => !excludeEnrollmentIds.includes(enrollment.id),
   );
 
   if (filteredActiveEnrollments.length === 0) return totalLeftDays;

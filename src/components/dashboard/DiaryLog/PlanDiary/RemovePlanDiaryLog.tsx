@@ -33,12 +33,12 @@ export default function RemovePlanDiaryLogDialog({
       logDb.remove(planDiaryLog.id);
       successToast(
         "Exclusão de Registro de Diária",
-        "Registro removido com sucesso!"
+        "Registro removido com sucesso!",
       );
     } catch (error) {
       errorToast(
         "Exclusão de Registro de Diária",
-        "Erro ao remover registro de diária"
+        "Erro ao remover registro de diária",
       );
     }
   };

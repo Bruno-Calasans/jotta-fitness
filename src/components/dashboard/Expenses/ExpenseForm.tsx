@@ -13,15 +13,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { DialogClose } from "@/components/ui/dialog";
 import { useExpenseStore } from "@/store/expenseStore";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { Expense } from "@/types/Expense.type";
-import { FocusEventHandler } from "react";
+import CancelButton from "@/components/custom/Buttons/CancelButton";
+import ConfirmButton from "@/components/custom/Buttons/ConfirmButton";
+import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
 
 const expenseFormSchema = z.object({
-  name: z.string().min(1, "Nome da despesa é obrigatório"),
+  name: z.string().min(1, "Nome é obrigatório"),
 });
 
 type ExpenseFormInputs = z.infer<typeof expenseFormSchema>;
@@ -80,16 +80,6 @@ export default function ExpenseForm({ expense, onSubmit }: ExpenseFormProps) {
     }
   };
 
-  // Clear number input value on the first focus
-  const focusHandler: FocusEventHandler<HTMLInputElement> = (e) => {
-    const value = e.target.value;
-    const isNumberField = e.target.type === "number";
-
-    if (value === "0" && isNumberField) {
-      e.target.value = "";
-    }
-  };
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(submitHandler)} className="space-y-8">
@@ -99,11 +89,13 @@ export default function ExpenseForm({ expense, onSubmit }: ExpenseFormProps) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nome</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Nome</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
-                <Input placeholder="Nome da despesa" {...field} />
+                <Input placeholder="Combustível" {...field} />
               </FormControl>
-              <FormDescription>Qual o nome do despesa.</FormDescription>
+              <FormDescription>Nome da despesa</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -111,20 +103,8 @@ export default function ExpenseForm({ expense, onSubmit }: ExpenseFormProps) {
 
         {/* Form Actions */}
         <div className="flex justify-end gap-1">
-          <DialogClose asChild>
-            <Button
-              className="bg-red-500 hover:bg-red-600 transition-all"
-              type="button"
-            >
-              Cancelar
-            </Button>
-          </DialogClose>
-          <Button
-            className="bg-indigo-500 hover:bg-indigo-600 transition-all"
-            type="submit"
-          >
-            {expense ? "Salvar" : "Criar"}
-          </Button>
+          <CancelButton />
+          <ConfirmButton isEditing={!!expense} />
         </div>
       </form>
     </Form>

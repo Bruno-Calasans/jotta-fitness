@@ -5,6 +5,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import EditPlanDialog from "./EditPlanDialog";
 import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
 import RemovePlanDialog from "./RemovePlanDialog";
+import defaultDateFormat from "@/utils/defaultDateFormat";
 
 export type PlanRowActions = "Edit" | "Delete";
 
@@ -58,7 +59,7 @@ export const planColumns: ColumnDef<Plan>[] = [
     ),
     cell: ({ row }) => {
       const plan = row.original;
-      return <p>{plan.createdAt.toLocaleDateString()}</p>;
+      return <p>{defaultDateFormat(plan.createdAt)}</p>;
     },
   },
   {

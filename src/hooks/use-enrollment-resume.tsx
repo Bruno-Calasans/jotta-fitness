@@ -1,57 +1,53 @@
-import { BUSINESS_RULES } from "@/config/BusinessRules";
 import { useAdhesionStore } from "@/store/adhesionStore";
 import { useMemberStore } from "@/store/memberStore";
+import calcEnrollmentLeftDays from "@/utils/calcEnrollmentLeftDays";
+import calcEnrollmentTotalDays from "@/utils/calcEnrollmentTotalDays";
 import calcLateFee from "@/utils/calcLateFee";
-import { differenceInDays, differenceInHours } from "date-fns";
+import calcMemberDays from "@/utils/calcMemberDays";
+import canChangePlanWithoutFullPayment from "@/utils/canChangePlanWithoutFullPayment";
+import getLastMemberEnrollment from "@/utils/getLastMemberEnrollment";
+import isAdhesionDiscountValid from "@/utils/isAdhesionDiscountValid";
+import isCurrentMemberAdhesionPaid from "@/utils/isCurrentMemberAdhesionPaid";
+import isMemberNewbie from "@/utils/isMemberNewbie";
+import memberHasEnrollment from "@/utils/memberHasEnrollment";
 
 export function useEnrollmentResume() {
   const { selectedMember } = useMemberStore();
   const { getCurrentYearAdhesion } = useAdhesionStore();
-  const currentDate = new Date();
+
   const currentAdhesion = getCurrentYearAdhesion();
-  
-  const hasEnrollment = selectedMember
-    ? selectedMember.enrollments.length > 0
-    : false;
+
+  const hasEnrollment = !!selectedMember && memberHasEnrollment(selectedMember);
 
   const lastEnrollment =
-    selectedMember &&
-    selectedMember.enrollments[selectedMember.enrollments.length - 1];
+    selectedMember && getLastMemberEnrollment(selectedMember);
 
   const isCurrentAdhesionPaid =
-    currentAdhesion && selectedMember
-      ? !!selectedMember.adhesionsPayments.find(
-          (adhesion) => adhesion.year === currentAdhesion.year
-        )
-      : false;
+    !!selectedMember &&
+    !!currentAdhesion &&
+    isCurrentMemberAdhesionPaid(selectedMember, currentAdhesion);
 
-  const isDiscountValid = currentAdhesion
-    ? differenceInHours(currentAdhesion.discountMaxDate, currentDate) > 0
-    : false;
+  const isDiscountValid =
+    !!currentAdhesion && isAdhesionDiscountValid(currentAdhesion);
 
-  const memberDays = selectedMember
-    ? differenceInDays(selectedMember.createdAt, currentDate)
+  const memberDays = selectedMember ? calcMemberDays(selectedMember) : 0;
+
+  const isNewbie = !!selectedMember && isMemberNewbie(selectedMember);
+
+  const leftDays = lastEnrollment ? calcEnrollmentLeftDays(lastEnrollment) : 0;
+
+  const totalDays = lastEnrollment
+    ? calcEnrollmentTotalDays(lastEnrollment)
     : 0;
 
-  const isNewbie = memberDays <= BUSINESS_RULES.daysBeforeVeteran;
-
-  const totalDays =
-    hasEnrollment && lastEnrollment
-      ? differenceInDays(lastEnrollment.expiresIn, lastEnrollment.startsIn)
-      : 0;
-
-  const leftDays =
-    hasEnrollment && lastEnrollment
-      ? differenceInDays(lastEnrollment.expiresIn, currentDate)
-      : 0;
-
   const usedDays = totalDays - leftDays;
-  const isCurrentPlanExpired = leftDays < 0;
-
-  const canChangePlanWithoutFullPayment =
-    hasEnrollment && usedDays <= BUSINESS_RULES.daysBeforeChangePlanWithoutTax;
 
   const lateFee = calcLateFee(leftDays);
+
+  const isCurrentPlanExpired = leftDays < 0;
+
+  const canChangePlanWithoutFullPrice =
+    !!lastEnrollment && canChangePlanWithoutFullPayment(lastEnrollment);
 
   return {
     currentAdhesion,
@@ -64,8 +60,8 @@ export function useEnrollmentResume() {
     totalDays,
     leftDays,
     usedDays,
-    isCurrentPlanExpired,
-    canChangePlanWithoutFullPayment,
     lateFee,
+    isCurrentPlanExpired,
+    canChangePlanWithoutFullPrice,
   };
 }

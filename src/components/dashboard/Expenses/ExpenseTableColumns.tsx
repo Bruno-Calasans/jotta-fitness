@@ -4,6 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import EditExpenseDialog from "./EditExpenseDialog";
 import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
 import RemoveExpenseDialog from "./RemoveExpenseDialog";
+import defaultDateFormat from "@/utils/defaultDateFormat";
 
 export const expenseColumns: ColumnDef<Expense>[] = [
   {
@@ -23,11 +24,7 @@ export const expenseColumns: ColumnDef<Expense>[] = [
     ),
     cell: ({ row }) => {
       const expense = row.original;
-      return (
-        <p>
-          {`${expense.createdAt.toLocaleDateString()} às ${expense.createdAt.toLocaleTimeString()}`}
-        </p>
-      );
+      return <p>{defaultDateFormat(expense.createdAt)}</p>;
     },
   },
   {
@@ -41,11 +38,7 @@ export const expenseColumns: ColumnDef<Expense>[] = [
     ),
     cell: ({ row }) => {
       const expense = row.original;
-      return (
-        <p>
-          {`${expense.updatedAt.toLocaleDateString()} às ${expense.updatedAt.toLocaleTimeString()}`}
-        </p>
-      );
+      return <p>{defaultDateFormat(expense.updatedAt)}</p>;
     },
   },
   {

@@ -4,6 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import EditProductDialog from "./EditProductDialog";
 import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
 import RemoveProductDialog from "./RemoveProductDialog";
+import defaultDateFormat from "@/utils/defaultDateFormat";
 
 export const productColumns: ColumnDef<Product>[] = [
   {
@@ -43,11 +44,7 @@ export const productColumns: ColumnDef<Product>[] = [
     ),
     cell: ({ row }) => {
       const product = row.original;
-      return (
-        <p>
-          {`${product.createdAt.toLocaleDateString()} às ${product.createdAt.toLocaleTimeString()}`}
-        </p>
-      );
+      return <p>{defaultDateFormat(product.createdAt)}</p>;
     },
   },
   {
@@ -61,11 +58,7 @@ export const productColumns: ColumnDef<Product>[] = [
     ),
     cell: ({ row }) => {
       const product = row.original;
-      return (
-        <p>
-          {`${product.updatedAt.toLocaleDateString()} às ${product.updatedAt.toLocaleTimeString()}`}
-        </p>
-      );
+      return <p>{defaultDateFormat(product.updatedAt)}</p>;
     },
   },
   {

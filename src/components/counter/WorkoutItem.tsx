@@ -81,7 +81,7 @@ export default function WorkoutItem({
     <div
       className={cn(
         "flex gap-1 bg-black text-orange-500 justify-between rounded-md p-2 hover:bg-black/60 group transition-all cursor-pointer mr-2 items-center delay-75",
-        !workout.running && "border-2 border-red-500"
+        !workout.running && "border-2 border-red-500",
       )}
     >
       {/* Name */}
@@ -99,7 +99,7 @@ export default function WorkoutItem({
         <p
           className={cn(
             "text-emerald-500 group-hover:text-white flex-1 text-end text-lg uppercase",
-            workout.time <= minTimeToWarning && "text-red-500"
+            workout.time <= minTimeToWarning && "text-red-500",
           )}
         >
           {workout.time} min restantes

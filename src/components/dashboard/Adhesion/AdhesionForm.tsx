@@ -13,28 +13,25 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { DialogClose } from "@/components/ui/dialog";
 import { useAdhesionStore } from "@/store/adhesionStore";
 import useCustomToast from "@/hooks/use-custom-toast";
-import { FocusEventHandler } from "react";
-import type { toZod } from "tozod";
 import type { Adhesion } from "@/types/Adhesion.type";
-import type { DB } from "@/types/Db.type";
-import { format, startOfYear } from "date-fns";
+import clearFieldOnFirstFocus from "@/utils/clearFieldOnFirstFocus";
+import CancelButton from "@/components/custom/Buttons/CancelButton";
+import ConfirmButton from "@/components/custom/Buttons/ConfirmButton";
+import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
+import dateToInputFormat from "@/utils/dateToInputFormat";
+import inputFormatToDate from "@/utils/inputFormatToDate";
+import calcMinDateFromYear from "@/utils/calcMinDateFromYear";
 
-type AdhesionFormSchema = toZod<Omit<Adhesion, keyof DB>>;
-
-const adhesionFormSchema: AdhesionFormSchema = z.object({
+const adhesionFormSchema = z.object({
   year: z.coerce
     .number()
     .min(
       new Date().getFullYear(),
       "Ano da adesão não pode ser inferior ao ano atual"
     ),
-  discountMaxDate: z.coerce
-    .date()
-    .min(new Date(), "Data deve ser maior ou igual a data de hoje"),
+  discountMaxDate: z.string(),
   newbieDiscount: z.coerce.number().min(0, "Disconto não pode ser negativo"),
   veteranDiscount: z.coerce.number().min(0, "Disconto não pode ser negativo"),
 });
@@ -56,21 +53,29 @@ export default function AdhesionForm({
   const form = useForm<AdhesionFormInputs>({
     resolver: zodResolver(adhesionFormSchema),
     defaultValues: {
-      year: adhesion ? adhesion.year : new Date().getFullYear(),
-      newbieDiscount: adhesion ? adhesion.newbieDiscount : 0,
-      veteranDiscount: adhesion ? adhesion.veteranDiscount : 0,
-      discountMaxDate: adhesion ? adhesion.discountMaxDate : new Date(),
+      year: adhesion?.year || new Date().getFullYear(),
+      newbieDiscount: adhesion?.newbieDiscount || 0,
+      veteranDiscount: adhesion?.veteranDiscount || 0,
+      // discountMaxDate: adhesion?.discountMaxDate || new Date(),
+      discountMaxDate: dateToInputFormat(
+        adhesion?.discountMaxDate || new Date()
+      ),
     },
   });
 
-  const submitHandler = (inputs: AdhesionFormInputs) => {
+  const submitHandler = (input: AdhesionFormInputs) => {
+    const discountMaxDate = inputFormatToDate(input.discountMaxDate);
+
     // Update adhesion
     if (adhesion) {
       try {
         form.reset();
 
         // Save to database
-        adhesionDb.update(adhesion.id, inputs);
+        adhesionDb.update(adhesion.id, {
+          ...input,
+          discountMaxDate,
+        });
 
         // Result
         successToast("Atualização de Adesão", "Adesão atualizada com sucesso!");
@@ -84,10 +89,11 @@ export default function AdhesionForm({
     } else {
       try {
         form.reset();
-        // start loading
 
-        // Save to database
-        adhesionDb.add(inputs);
+        adhesionDb.add({
+          ...input,
+          discountMaxDate,
+        });
 
         successToast("Criação de Adesão", "Adesão criado com sucesso!");
         onSubmit(true);
@@ -98,30 +104,9 @@ export default function AdhesionForm({
     }
   };
 
-  // Clear number input value on the first focus
-  const focusHandler: FocusEventHandler<HTMLInputElement> = (e) => {
-    const value = e.target.value;
-    const isNumberField = e.target.type === "number";
-
-    if (value === "0" && isNumberField) {
-      e.target.value = "";
-    }
-  };
-
-  const calcMinDate = (fromYear: number) => {
-    const currentYear = new Date().getFullYear();
-    let minDate = new Date();
-    minDate.setFullYear(fromYear);
-
-    if (fromYear != currentYear) {
-      minDate = startOfYear(minDate);
-    }
-
-    return minDate;
-  };
-
   const year = useWatch({ name: "year", control: form.control });
-  const minDate = calcMinDate(year);
+  const minYear = new Date().getFullYear();
+  const minDate = dateToInputFormat(calcMinDateFromYear(year));
 
   return (
     <Form {...form}>
@@ -132,13 +117,14 @@ export default function AdhesionForm({
           name="year"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Ano*</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Ano</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
                 <Input
                   type="number"
                   placeholder="Ano da adesão"
-                  onFocus={focusHandler}
-                  min={new Date().getFullYear()}
+                  min={minYear}
                   {...field}
                 />
               </FormControl>
@@ -146,28 +132,22 @@ export default function AdhesionForm({
             </FormItem>
           )}
         />
-
+        {/* Max date for discount input */}
         <FormField
           control={form.control}
           name="discountMaxDate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Desconto válido até*</FormLabel>
+              <FormLabel>Desconto válido até</FormLabel>
               <FormControl>
-                <Input
-                  type="date"
-                  {...field}
-                  value={field.value.toString()}
-                  min={format(minDate, "yyyy-MM-d")}
-                  // max={format(endOfYear(minDate), "yyyy-MM-d")}
-                />
+                <Input type="date" min={minDate} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        {/* newbie offer */}
+        {/* newbie discount input */}
         <FormField
           control={form.control}
           name="newbieDiscount"
@@ -178,7 +158,7 @@ export default function AdhesionForm({
                 <Input
                   type="number"
                   placeholder="100%"
-                  onFocus={focusHandler}
+                  onFocus={(e) => clearFieldOnFirstFocus(e, form)}
                   {...field}
                 />
               </FormControl>
@@ -201,7 +181,7 @@ export default function AdhesionForm({
                 <Input
                   type="number"
                   placeholder="100%"
-                  onFocus={focusHandler}
+                  onFocus={(e) => clearFieldOnFirstFocus(e, form)}
                   {...field}
                 />
               </FormControl>
@@ -215,20 +195,8 @@ export default function AdhesionForm({
 
         {/* Form Actions */}
         <div className="flex justify-end gap-1">
-          <DialogClose asChild>
-            <Button
-              className="bg-red-500 hover:bg-red-600 transition-all"
-              type="button"
-            >
-              Cancelar
-            </Button>
-          </DialogClose>
-          <Button
-            className="bg-indigo-500 hover:bg-indigo-600 transition-all"
-            type="submit"
-          >
-            {adhesion ? "Salvar" : "Criar"}
-          </Button>
+          <CancelButton />
+          <ConfirmButton isEditing={!!adhesion} />
         </div>
       </form>
     </Form>

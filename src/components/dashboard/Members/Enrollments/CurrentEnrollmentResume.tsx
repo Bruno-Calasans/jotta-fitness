@@ -23,8 +23,8 @@ export default function CurrentEnrollmentResume() {
         <CurrentPlanInfo />
         <EnrollmentExpireDateInfo />
         <LastEnrollmentPaymentInfo />
-        <CurrentAdhesionInfo />
         <EnrollmentDaysInfo />
+        <CurrentAdhesionInfo />
 
         {/* Messages */}
         <div className="flex flex-col gap-2 mt-2">

@@ -1,10 +1,10 @@
 "use client";
 
 import { PRODUCTS_DATA } from "@/data/PRODUCTS_DATA";
-import { Product } from "@/types/Product.type";
 import { create } from "zustand";
 import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
 import type { DB } from "@/types/Db.type";
+import type { Product } from "@/types/Product.type";
 
 type ProductState = {
   products: Product[];
@@ -12,7 +12,7 @@ type ProductState = {
   remove: (productId: string) => void;
   update: (productId: string, input: Partial<Omit<Product, keyof DB>>) => void;
   getById: (productId: string) => Product | null;
-  getByName: (name: string) => Product | null;
+  getByName: (productName: string) => Product | null;
   increaseAmount: (productId: string, amount: number) => void;
   decreaseAmount: (productId: string, amount: number) => void;
 };
@@ -40,9 +40,10 @@ export const useProductStore = create<ProductState>((set, get) => ({
 
     set((state) => ({ ...state, products: updatedProducts }), true);
   },
-  getByName(name) {
+  getByName(productName) {
     const foundProduct = get().products.find(
-      (product) => product.name.toLowerCase() === name.toLowerCase()
+      (product) =>
+        product.name.trim().toLowerCase() === productName.trim().toLowerCase()
     );
     if (!foundProduct) return null;
     return foundProduct;

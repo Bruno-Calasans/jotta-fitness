@@ -3,9 +3,9 @@ import { Member } from "@/types/Member.type";
 
 export default function isCurrentMemberAdhesionPaid(
   member: Member,
-  currentAdhesion: Adhesion
+  currentAdhesion: Adhesion,
 ) {
   return !!member.adhesionsPayments.find(
-    (adhesion) => adhesion.year === currentAdhesion.year
+    (adhesion) => adhesion.year === currentAdhesion.year,
   );
 }

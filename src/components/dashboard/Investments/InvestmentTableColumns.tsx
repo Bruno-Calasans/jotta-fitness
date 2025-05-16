@@ -4,6 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import EditInvestmentDialog from "./EditInvestmentDialog";
 import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
 import RemoveInvestmentDialog from "./RemoveInvestmentDialog";
+import defaultDateFormat from "@/utils/defaultDateFormat";
 
 export const investmentColumns: ColumnDef<Investment>[] = [
   {
@@ -23,11 +24,7 @@ export const investmentColumns: ColumnDef<Investment>[] = [
     ),
     cell: ({ row }) => {
       const investment = row.original;
-      return (
-        <p>
-          {`${investment.createdAt.toLocaleDateString()} às ${investment.createdAt.toLocaleTimeString()}`}
-        </p>
-      );
+      return <p>{defaultDateFormat(investment.createdAt)}</p>;
     },
   },
   {
@@ -41,11 +38,7 @@ export const investmentColumns: ColumnDef<Investment>[] = [
     ),
     cell: ({ row }) => {
       const investment = row.original;
-      return (
-        <p>
-          {`${investment.updatedAt.toLocaleDateString()} às ${investment.updatedAt.toLocaleTimeString()}`}
-        </p>
-      );
+      return <p>{defaultDateFormat(investment.updatedAt)}</p>;
     },
   },
   {

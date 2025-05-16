@@ -2,9 +2,9 @@ import DataTableSortableHeader from "@/components/custom/DataTable/DataTableSort
 import type { ColumnDef } from "@tanstack/react-table";
 import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
 import { Adhesion } from "@/types/Adhesion.type";
-import { format } from "date-fns";
 import RemoveAdhesionDialog from "./RemoveAdhesionDialog";
 import EditAdhesionDialog from "./EditAdhesionDialog";
+import defaultDateFormat from "@/utils/defaultDateFormat";
 
 export const adhesionColumns: ColumnDef<Adhesion>[] = [
   {
@@ -22,7 +22,7 @@ export const adhesionColumns: ColumnDef<Adhesion>[] = [
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
-        headerName="Desconto (novatos) %"
+        headerName="Desconto em % (novatos)"
         type="numeral"
       />
     ),
@@ -32,7 +32,7 @@ export const adhesionColumns: ColumnDef<Adhesion>[] = [
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
-        headerName="Desconto (veteranos) %"
+        headerName="Desconto em % (veteranos)"
         type="numeral"
       />
     ),
@@ -42,13 +42,13 @@ export const adhesionColumns: ColumnDef<Adhesion>[] = [
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
-        headerName="Desconto até"
+        headerName="Válida até"
         type="date"
       />
     ),
     cell: ({ row }) => {
       const adhesion = row.original;
-      return <p>{format(adhesion.discountMaxDate, "d/M//Y")}</p>;
+      return <p>{defaultDateFormat(adhesion.discountMaxDate)}</p>;
     },
   },
   {

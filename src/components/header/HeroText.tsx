@@ -6,7 +6,7 @@ export default function HeroText() {
   return (
     <div
       className={cn(
-        "text-white flex flex-1 gap-3 justify-center rounded-md w-full flex-col lg:max-w-[1000px] md:max-w-[800px] mx-auto p-6"
+        "text-white flex flex-1 gap-3 justify-center rounded-md w-full flex-col lg:max-w-[1000px] md:max-w-[800px] mx-auto p-6",
       )}
     >
       <div>

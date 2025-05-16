@@ -7,9 +7,8 @@ import type { Member } from "@/types/Member.type";
 
 export default function createPlanDiary(
   input: Omit<PlanDiary, keyof DB | "expiresIn">,
-  member?: Member
+  member?: Member,
 ): PlanDiary {
-  
   const activeEnrollments = member && getActiveEnrollments(member.enrollments);
   const lastActiveEnrollment =
     activeEnrollments && activeEnrollments[activeEnrollments.length - 1];

@@ -19,7 +19,7 @@ export default function Header() {
         "flex  text-black h-24 border-b-2 border-b-orange-500 backdrop-blur-md  bg-white/10 flex-col px-4",
         canShowHeroImage &&
           "bg-[url('/imgs/hero-1.jpg')] lg:bg-center sm:bg-left h-[900px]  lg:h-[800px] md:h-[600px] sm:h-[600px] pt-0 transition-all backdrop-blur-lg",
-        !canShowHeroImage && "justify-center"
+        !canShowHeroImage && "justify-center",
       )}
     >
       {/* Header Items */}

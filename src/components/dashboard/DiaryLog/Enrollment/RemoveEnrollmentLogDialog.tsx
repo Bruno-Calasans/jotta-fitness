@@ -29,17 +29,17 @@ export default function RemoveEnrollmentLogDialog({
     try {
       memberDb.removeEnrollment(
         enrollmentLog.member.id,
-        enrollmentLog.enrollment.id
+        enrollmentLog.enrollment.id,
       );
       logDb.remove(enrollmentLog.id);
       successToast(
         "Exclusão de Registro de Inscrição",
-        "Registro removido com sucesso!"
+        "Registro removido com sucesso!",
       );
     } catch (error) {
       errorToast(
         "Exclusão de Registro de Inscrição",
-        "Erro ao remover registro"
+        "Erro ao remover registro",
       );
     }
   };

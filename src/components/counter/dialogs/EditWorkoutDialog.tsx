@@ -12,12 +12,7 @@ import {
   DialogTitle,
   DialogClose,
 } from "@/components/ui/dialog";
-import {
-  ChangeEvent,
-  FocusEventHandler,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, FocusEventHandler, useEffect, useState } from "react";
 import { builtInAddTimeData, builtInRemoveTimeData } from "./dialogData";
 import { useStore } from "zustand";
 import workoutStore from "@/store/workoutStore";

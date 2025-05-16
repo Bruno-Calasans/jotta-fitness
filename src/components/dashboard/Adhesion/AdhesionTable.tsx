@@ -10,7 +10,7 @@ export default function AdhesionTable() {
   const { adhesions } = useAdhesionStore();
 
   const currentYearAdhesion = adhesions.find(
-    (adhesion) => adhesion.year === new Date().getFullYear()
+    (adhesion) => adhesion.year === new Date().getFullYear(),
   );
 
   return (

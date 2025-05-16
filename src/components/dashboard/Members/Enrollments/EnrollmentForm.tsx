@@ -11,8 +11,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { DialogClose } from "@/components/ui/dialog";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { useMemberStore } from "@/store/memberStore";
 import { PlanSelector } from "../PlanSelector";
@@ -21,55 +19,73 @@ import { Plan } from "@/types/Plan.type";
 import EnrollmentPaymentResume from "./EnrollmentPaymentResume";
 import { Enrollment } from "@/types/Enrollment.type";
 import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
+import CancelButton from "@/components/custom/Buttons/CancelButton";
+import ConfirmButton from "@/components/custom/Buttons/ConfirmButton";
+import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
+import { useLogStore } from "@/store/logStore";
+import { STAFF } from "@/data/MEMBERS_DATA";
 
-const subscriptionFormSchema = z.object({
+const enrollmentFormSchema = z.object({
   plan: z.string().min(1, "Plano é obrigatório"),
   months: z.coerce.number().min(1, "Meses deve ser maior ou igual a 1"),
 });
 
-type SubscribePlanFormInputs = z.infer<typeof subscriptionFormSchema>;
+type EnrollFormInputs = z.infer<typeof enrollmentFormSchema>;
 
-type SubscriptionFormProps = {
+type EnrollmentFormProps = {
   enrollment?: Enrollment;
   onSubmit: (success: boolean) => void;
 };
 
-export default function SubscriptionForm({
+export default function EnrollmentForm({
   enrollment,
   onSubmit,
-}: SubscriptionFormProps) {
+}: EnrollmentFormProps) {
+  const { selectedMember, updateEnrollment, addEnrollment } = useMemberStore();
+  const logDb = useLogStore();
   const { lateFee } = useEnrollmentResume();
   const { successToast, errorToast } = useCustomToast();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(
-    enrollment ? enrollment.plan : null
+    enrollment?.plan || null
   );
-  const { selectedMember } = useMemberStore();
-  const memberDb = useMemberStore();
 
-  const form = useForm<SubscribePlanFormInputs>({
-    resolver: zodResolver(subscriptionFormSchema),
+  const form = useForm<EnrollFormInputs>({
+    resolver: zodResolver(enrollmentFormSchema),
     defaultValues: {
-      plan: enrollment ? enrollment.plan.name : "",
-      months: enrollment ? enrollment.months : 1,
+      plan: enrollment?.plan.name || "",
+      months: enrollment?.months || 1,
     },
   });
 
-  const months = useWatch({ name: "months", control: form.control });
-
-  const submitHandler = (input: SubscribePlanFormInputs) => {
+  const submitHandler = (input: EnrollFormInputs) => {
     if (!selectedPlan || !selectedMember) return;
 
-    // Update plan payment
+    // Update enrollment
     if (enrollment) {
       try {
         form.reset();
-        // start loading
 
-        // Save to database
-        memberDb.updateEnrollment(selectedMember.id, enrollment.id, {
-          plan: selectedPlan,
-          months: input.months,
-        });
+        // Update member enrollment
+        const updatedEnrollment = updateEnrollment(
+          selectedMember.id,
+          enrollment.id,
+          {
+            plan: selectedPlan,
+            months: input.months,
+          }
+        );
+
+        // Update enrollment log
+        const enrollmentLog =
+          updatedEnrollment && logDb.getByEnrollmentId(updatedEnrollment.id);
+
+        if (enrollmentLog) {
+          logDb.update(enrollmentLog.id, {
+            type: "enrollment",
+            member: selectedMember,
+            enrollment,
+          });
+        }
 
         successToast(
           "Atualização de Plano",
@@ -83,14 +99,22 @@ export default function SubscriptionForm({
     } else {
       try {
         form.reset();
-        // start loading
 
-        // Save to database
-        memberDb.addEnrollment(selectedMember.id, {
+        // Add enrollment to member
+        const enrollment = addEnrollment(selectedMember.id, {
           months: input.months,
           plan: selectedPlan,
           lateFee,
         });
+
+        // Log enrollment
+        if (enrollment)
+          logDb.add({
+            type: "enrollment",
+            enrollment,
+            member: selectedMember,
+            createdBy: STAFF,
+          });
 
         successToast("Inscrição de Plano", "Inscrição realizada com sucesso");
         onSubmit(true);
@@ -100,6 +124,8 @@ export default function SubscriptionForm({
       }
     }
   };
+
+  const months = useWatch({ name: "months", control: form.control });
 
   if (!selectedMember) return null;
 
@@ -112,7 +138,9 @@ export default function SubscriptionForm({
           name="months"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Meses</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Meses</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
                 <Input type="number" placeholder="Meses" {...field} />
               </FormControl>
@@ -127,13 +155,14 @@ export default function SubscriptionForm({
           name="plan"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Plano</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Plano</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
                 <PlanSelector
                   value={field.value}
-                  defaultValue={field.value}
                   onValueChange={field.onChange}
-                  onSelected={setSelectedPlan}
+                  onItemSelected={setSelectedPlan}
                 />
               </FormControl>
               <FormMessage />
@@ -141,27 +170,21 @@ export default function SubscriptionForm({
           )}
         />
 
-        {/* Payment resume */}
-        {selectedPlan && months > 0 && (
-          <EnrollmentPaymentResume plan={selectedPlan} months={months} />
+        {/* enrollment resume */}
+        {selectedMember && selectedPlan && months > 0 && (
+          <EnrollmentPaymentResume
+            data={{
+              member: selectedMember,
+              plan: selectedPlan,
+              months,
+            }}
+          />
         )}
 
         {/* Form Actions */}
         <div className="flex justify-end gap-1">
-          <DialogClose asChild>
-            <Button
-              className="bg-red-500 hover:bg-red-600 transition-all"
-              type="button"
-            >
-              Cancelar
-            </Button>
-          </DialogClose>
-          <Button
-            className="bg-indigo-500 hover:bg-indigo-600 transition-all"
-            type="submit"
-          >
-            Salvar
-          </Button>
+          <CancelButton />
+          <ConfirmButton isEditing={!!enrollment} />
         </div>
       </form>
     </Form>

@@ -12,8 +12,8 @@ import { useState } from "react";
 import { useMemberStore } from "@/store/memberStore";
 
 export default function CreateEnrollmentDialog() {
-  const [open, setOpen] = useState(false);
   const { selectedMember } = useMemberStore();
+  const [open, setOpen] = useState(false);
 
   const submitFormHandler = (success: boolean) => {
     if (success) setOpen(false);

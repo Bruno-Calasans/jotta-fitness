@@ -13,12 +13,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { DialogClose } from "@/components/ui/dialog";
 import { usePlanStore } from "@/store/planStore";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { Plan } from "@/types/Plan.type";
-import { FocusEventHandler } from "react";
+import clearFieldOnFirstFocus from "@/utils/clearFieldOnFirstFocus";
+import CancelButton from "@/components/custom/Buttons/CancelButton";
+import ConfirmButton from "@/components/custom/Buttons/ConfirmButton";
+import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
 
 const planFormSchema = z.object({
   name: z.string().min(1, "Nome do plano é obrigatório"),
@@ -58,10 +59,8 @@ export default function PlanForm({ plan, onSubmit }: PlanFormProps) {
       try {
         form.reset();
 
-        // Save to database
         planDb.update(plan.id, inputs);
 
-        // Result
         successToast("Atualização de Plano", "Plano atualizado com sucesso!");
         onSubmit(true);
       } catch (error) {
@@ -87,16 +86,6 @@ export default function PlanForm({ plan, onSubmit }: PlanFormProps) {
     }
   };
 
-  // Clear number input value on the first focus
-  const focusHandler: FocusEventHandler<HTMLInputElement> = (e) => {
-    const value = e.target.value;
-    const isNumberField = e.target.type === "number";
-
-    if (value === "0" && isNumberField) {
-      e.target.value = "";
-    }
-  };
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(submitHandler)} className="space-y-8">
@@ -106,55 +95,70 @@ export default function PlanForm({ plan, onSubmit }: PlanFormProps) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nome</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Nome</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
-                <Input placeholder="Plano 1h" {...field} />
+                <Input
+                  id="plan-name-input"
+                  placeholder="Plano 1h"
+                  onFocus={(e) => clearFieldOnFirstFocus(e, form)}
+                  {...field}
+                />
               </FormControl>
-              <FormDescription>Nome do plano de treino</FormDescription>
+              <FormDescription>Nome do plano</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        {/* trainTime input */}
+
+        {/* train time input */}
         <FormField
           control={form.control}
           name="trainTime"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Tempo de treino (minutos)</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>
+                  Tempo de treino (minutos)
+                </RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
                 <Input
-                  onFocus={focusHandler}
-                  placeholder="60"
+                  id="plan-train-time-input"
                   type="number"
+                  placeholder="60"
+                  onFocus={(e) => clearFieldOnFirstFocus(e, form)}
                   {...field}
                 />
               </FormControl>
               <FormDescription>
-                Qual a duração do plano (em minutos) por dia
+                Duração do plano (em minutos) por dia.
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+
         {/* price input */}
         <FormField
           control={form.control}
           name="price"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Preço do plano (R$)</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Preço (R$)</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
                 <Input
-                  onFocus={focusHandler}
-                  placeholder="100"
+                  id="plan-price-input"
                   type="number"
+                  placeholder="100"
+                  onFocus={(e) => clearFieldOnFirstFocus(e, form)}
                   {...field}
                 />
               </FormControl>
-              <FormDescription>
-                Quanto vai custar seu plano por mês
-              </FormDescription>
+              <FormDescription>Custo do plano por mês.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -165,36 +169,27 @@ export default function PlanForm({ plan, onSubmit }: PlanFormProps) {
           name="diary"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Preço da Diária (R$)</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Diária (R$)</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
                 <Input
-                  onFocus={focusHandler}
-                  placeholder="100"
+                  id="plan-diary-input"
                   type="number"
+                  placeholder="100"
+                  onFocus={(e) => clearFieldOnFirstFocus(e, form)}
                   {...field}
                 />
               </FormControl>
-              <FormDescription>Quanto vai custar a diária</FormDescription>
+              <FormDescription>Custo da diária.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         {/* Form Actions */}
         <div className="flex justify-end gap-1">
-          <DialogClose asChild>
-            <Button
-              className="bg-red-500 hover:bg-red-600 transition-all"
-              type="button"
-            >
-              Cancelar
-            </Button>
-          </DialogClose>
-          <Button
-            className="bg-indigo-500 hover:bg-indigo-600 transition-all"
-            type="submit"
-          >
-            {plan ? "Salvar" : "Criar"}
-          </Button>
+          <CancelButton />
+          <ConfirmButton isEditing={!!plan} />
         </div>
       </form>
     </Form>

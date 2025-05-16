@@ -18,6 +18,7 @@ import createPlanDiary from "@/utils/createPlanDiary";
 import updatePlanDiary from "@/utils/updatePlanDiary";
 import updatePurchase from "@/utils/updatePurchase";
 import type { Optional } from "@/types/Optional.type";
+import { EnrollmentLog } from "@/types/Log.type";
 
 type MemberState = {
   members: Member[];

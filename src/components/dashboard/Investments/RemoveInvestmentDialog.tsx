@@ -28,7 +28,7 @@ export default function RemoveInvestmentDialog({
       remove(investment.id);
       successToast(
         "Exclusão de Investimento",
-        "Investimento removido com sucesso!"
+        "Investimento removido com sucesso!",
       );
     } catch (error) {
       errorToast("Exclusão de Investimento", "Erro ao remover investimento");

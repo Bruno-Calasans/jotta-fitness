@@ -10,15 +10,14 @@ export default function updateEnrollment(
     Enrollment & {
       createdBy: Member;
     }
-  >
+  >,
 ): Enrollment {
-  
   const currentDate = new Date();
   const isMonthsDiff = !!input.months && input.months != oldEnrollment.months;
   const pastDays = differenceInDays(oldEnrollment.startsIn, new Date());
   const activeEnrollmentsLeftDays = getActiveEnrollmentsLeftDays(
     member.enrollments,
-    [oldEnrollment.id]
+    [oldEnrollment.id],
   );
 
   return {
@@ -29,7 +28,7 @@ export default function updateEnrollment(
       input.months && isMonthsDiff
         ? addDays(
             currentDate,
-            input.months * 30 + activeEnrollmentsLeftDays - pastDays
+            input.months * 30 + activeEnrollmentsLeftDays - pastDays,
           )
         : oldEnrollment.expiresIn,
   };

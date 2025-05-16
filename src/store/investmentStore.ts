@@ -1,25 +1,23 @@
 "use client";
 
 import { INVESTIMENT_DATA } from "@/data/INVESTIMENT_DATA";
-import { Investment } from "@/types/Investment.type";
-import { v4 } from "uuid";
 import { create } from "zustand";
+import type { DB } from "@/types/Db.type";
+import type { Investment } from "@/types/Investment.type";
+import generateDbFields from "@/utils/generateDefaultDbFields";
 
 type InvestmentState = {
   investments: Investment[];
-  add: (input: Omit<Investment, "id" | "createdAt" | "updatedAt">) => void;
+  add: (input: Omit<Investment, keyof DB>) => void;
   remove: (id: string) => void;
-  update: (id: string, input: Partial<Omit<Investment, "id">>) => void;
+  update: (id: string, input: Partial<Omit<Investment, keyof DB>>) => void;
 };
 
 export const useInvestmentStore = create<InvestmentState>((set, get) => ({
   investments: INVESTIMENT_DATA,
   add(input) {
     set((state) => ({
-      investments: [
-        ...state.investments,
-        { id: v4(), createdAt: new Date(), updatedAt: new Date(), ...input },
-      ],
+      investments: [...state.investments, { ...generateDbFields(), ...input }],
     }));
   },
   remove(id) {

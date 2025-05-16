@@ -7,9 +7,8 @@ import type { Member } from "@/types/Member.type";
 export default function updatePlanDiary(
   oldPlanDiary: PlanDiary,
   input: Omit<PlanDiary, keyof DB | "expiresIn">,
-  member?: Member
+  member?: Member,
 ): PlanDiary {
-  
   const activePayments = member && getActiveEnrollments(member.enrollments);
   const lastActivePayment =
     activePayments && activePayments[activePayments.length - 1];

@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
 import { cn } from "@/lib/utils";
 

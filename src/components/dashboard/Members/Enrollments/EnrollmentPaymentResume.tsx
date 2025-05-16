@@ -1,45 +1,49 @@
-import { useMemberStore } from "@/store/memberStore";
-import { Plan } from "@/types/Plan.type";
+import calcEnrollmentLeftDays from "@/utils/calcEnrollmentLeftDays";
 import calcLateFee from "@/utils/calcLateFee";
-import { differenceInDays } from "date-fns";
+import memberHasEnrollment from "@/utils/memberHasEnrollment";
+import type { Member } from "@/types/Member.type";
+import type { Plan } from "@/types/Plan.type";
 
 type EnrollmentResumeProps = {
-  plan: Plan;
-  months: number;
+  data: {
+    member: Member;
+    plan: Plan;
+    months: number;
+  };
 };
 
 export default function EnrollmentPaymentResume({
-  plan,
-  months,
+  data: { member, plan, months },
 }: EnrollmentResumeProps) {
-  const { selectedMember } = useMemberStore();
-
-  if (!selectedMember) return null;
-
-  const enrollments = selectedMember.enrollments;
-  const hasPlansPayments = enrollments.length > 0;
-  const lastPayment = enrollments[enrollments.length - 1];
-
-  const leftDays = hasPlansPayments
-    ? differenceInDays(lastPayment.expiresIn, new Date())
+  const enrollments = member.enrollments;
+  const hasMemberEnrollment = memberHasEnrollment(member);
+  const enrollmentLeftDays = hasMemberEnrollment
+    ? calcEnrollmentLeftDays(enrollments[enrollments.length - 1])
     : 0;
 
-  const lateFee = leftDays < 0 ? calcLateFee(leftDays) : 0;
+  const lateFee = calcLateFee(enrollmentLeftDays);
 
   return (
     <div>
+      {/* Title */}
       <p className="text-2xl font-bold border-b-2 border-orange-500 mb-2">
         Resumo de pagamento
       </p>
+
+      {/* Plan Price info */}
       <p className="text-stone-800 text-lg">
-        Valor do plano: R$ {plan.price.toFixed(2)}
+        Valor do plano: R${plan.price.toFixed(2)}
       </p>
+
+      {/* Late fee info */}
       <p className="text-stone-800 text-lg">Meses a pagar: {months} mese(s)</p>
-      {leftDays < 0 && (
+      {enrollmentLeftDays < 0 && (
         <p className="text-red-700 font-semibold text-lg">
           Multa por atraso: R${lateFee.toFixed(2)}
         </p>
       )}
+
+      {/* Total info */}
       <p className="font-semibold italic border-t-2 border-orange-500 mt-2 text-lg">
         Total a pagar: R${(months * plan.price + lateFee).toFixed(2)}
       </p>

@@ -48,7 +48,7 @@ export default function AdhesionLogForm({
   const adhesionDb = useAdhesionStore();
   const { successToast, errorToast } = useCustomToast();
   const [selectedMember, setSelectedMember] = useState<Member | null>(
-    adhesionLog?.member || null
+    adhesionLog?.member || null,
   );
   const currentAdhesion = adhesionDb.getCurrentYearAdhesion();
   const currentMemberPlan =
@@ -73,11 +73,11 @@ export default function AdhesionLogForm({
         if (adhesionLog.member.id !== selectedMember.id) {
           memberDb.removeAdhesionPayment(
             selectedMember.id,
-            adhesionLog.adhesion.id
+            adhesionLog.adhesion.id,
           );
           memberDb.addAdhesionPayment(
             selectedMember.id,
-            adhesionLog.adhesion.year
+            adhesionLog.adhesion.year,
           );
         }
 
@@ -90,20 +90,20 @@ export default function AdhesionLogForm({
           price: calcAdhesionPrice(
             currentAdhesion,
             currentMemberPlan,
-            selectedMember
+            selectedMember,
           ),
         });
 
         // Show success message
         successToast(
           "Atualização de Registro de Adesão",
-          "Registro atualizado com sucesso"
+          "Registro atualizado com sucesso",
         );
         onSubmit(true);
       } catch (error) {
         errorToast(
           "Atualização de Registro de Adesão",
-          "Erro ao atualizar registro"
+          "Erro ao atualizar registro",
         );
         onSubmit(false);
       }
@@ -115,7 +115,7 @@ export default function AdhesionLogForm({
         // Pay member adhesion
         const adhesionPayment = memberDb.addAdhesionPayment(
           selectedMember.id,
-          new Date().getFullYear()
+          new Date().getFullYear(),
         );
 
         // create adhesion log
@@ -130,7 +130,7 @@ export default function AdhesionLogForm({
             price: calcAdhesionPrice(
               currentAdhesion,
               currentMemberPlan,
-              selectedMember
+              selectedMember,
             ),
           });
 

@@ -12,6 +12,7 @@ import { Trash } from "lucide-react";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { useMemberStore } from "@/store/memberStore";
 import { Purchase } from "@/types/Purchase.type";
+import RemoveDialog from "@/components/custom/Dialog/RemoveDialog";
 
 type RemovePurchaseDialogProps = {
   purchase: Purchase;
@@ -35,47 +36,15 @@ export default function RemovePurchaseDialog({
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          className="w-full flex items-center justify-start gap-1"
-        >
-          <Trash className="h-4 w-4" />
-          Remover
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>RemoverCompra</DialogTitle>
-          <div>
-            Tem certeza que deseja excluir a compra{" "}
-            <span className="font-bold text-orange-500">
-              {purchase.product.name}
-            </span>
-            ?
-          </div>
-        </DialogHeader>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              className="bg-stone-500 hover:bg-stone-600 transition-all"
-              type="button"
-            >
-              Cancelar
-            </Button>
-          </DialogClose>
-          <DialogClose asChild>
-            <Button
-              onClick={removeSubscriptionHandler}
-              className="bg-red-500 hover:bg-red-600 transition-all"
-              type="submit"
-            >
-              Excluir
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <RemoveDialog title="Remover compra" onRemove={removeSubscriptionHandler}>
+      <div>
+        Tem certeza que deseja excluir a compra de{" "}
+        <span className="font-bold">{purchase.amount}</span>x{" "}
+        <span className="font-bold text-orange-500">
+          {purchase.product.name}
+        </span>
+        ?
+      </div>
+    </RemoveDialog>
   );
 }

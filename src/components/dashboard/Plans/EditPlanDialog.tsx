@@ -8,8 +8,8 @@ import {
 import PlanForm from "./PlanForm";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
-import { Plan } from "@/types/Plan.type";
 import { useState } from "react";
+import type { Plan } from "@/types/Plan.type";
 
 type EditPlanModalProps = {
   plan: Plan;

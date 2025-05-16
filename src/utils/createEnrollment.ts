@@ -7,7 +7,7 @@ import { Member } from "@/types/Member.type";
 
 export default function createEnrollment(
   member: Member,
-  input: Omit<Enrollment, keyof DB | "expiresIn" | "startsIn">
+  input: Omit<Enrollment, keyof DB | "expiresIn" | "startsIn">,
 ): Enrollment {
   return {
     ...input,
@@ -15,7 +15,7 @@ export default function createEnrollment(
     startsIn: new Date(),
     expiresIn: addDays(
       new Date(),
-      input.months * 30 + getActivePlansLeftDays(member.enrollments)
+      input.months * 30 + getActivePlansLeftDays(member.enrollments),
     ),
   };
 }

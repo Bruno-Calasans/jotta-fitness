@@ -11,8 +11,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { DialogClose } from "@/components/ui/dialog";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { useMemberStore } from "@/store/memberStore";
 import { useEffect, useState } from "react";
@@ -21,33 +19,38 @@ import { Product } from "@/types/Product.type";
 import { ProductSelector } from "./ProductSelector";
 import PurchasePaymentResume from "./PurchasePaymentResume";
 import { useProductStore } from "@/store/productStore";
+import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
+import CancelButton from "@/components/custom/Buttons/CancelButton";
+import ConfirmButton from "@/components/custom/Buttons/ConfirmButton";
+import { useLogStore } from "@/store/logStore";
+import { STAFF } from "@/data/MEMBERS_DATA";
 
-const subscriptionFormSchema = z.object({
+const purchaseFormSchema = z.object({
   product: z.string().min(1, "Produto é obrigatório"),
   amount: z.coerce.number().min(1, "Quantidade deve ser maior ou igual a 1"),
 });
 
-type SubscribePlanFormInputs = z.infer<typeof subscriptionFormSchema>;
+type SubscribePlanFormInputs = z.infer<typeof purchaseFormSchema>;
 
-type SubscriptionFormProps = {
+type PurchaseFormProps = {
   purchase?: Purchase;
   onSubmit: (success: boolean) => void;
 };
 
-export default function SubscriptionForm({
+export default function PurchaseForm({
   purchase,
   onSubmit,
-}: SubscriptionFormProps) {
-  const memberDb = useMemberStore();
+}: PurchaseFormProps) {
+  const { selectedMember, updatePurchase, addPurchase } = useMemberStore();
   const productDb = useProductStore();
-  const { selectedMember } = useMemberStore();
+  const logDb = useLogStore();
   const { successToast, errorToast } = useCustomToast();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(
-    purchase ? purchase.product : null
+    purchase?.product || null
   );
 
   const form = useForm<SubscribePlanFormInputs>({
-    resolver: zodResolver(subscriptionFormSchema),
+    resolver: zodResolver(purchaseFormSchema),
     defaultValues: {
       product: purchase ? purchase.product.name : "",
       amount: purchase ? purchase.amount : 1,
@@ -69,13 +72,13 @@ export default function SubscriptionForm({
     if (purchase) {
       try {
         form.reset();
-        // start loading
 
-        // Save to database
-        memberDb.updatePurchase(selectedMember.id, purchase.id, {
+        const updatedPurchase = updatePurchase(selectedMember.id, purchase.id, {
           product: selectedProduct,
           amount,
         });
+
+        const purchaseLog = logDb.getByPurchaseId(purchase.id);
 
         // Update amount
         const amountDiff = amount - purchase.amount;
@@ -88,13 +91,17 @@ export default function SubscriptionForm({
           productDb.increaseAmount(selectedProduct.id, amountDiff);
         }
 
-        successToast(
-          "Atualização de Compra",
-          "Atualização realizada com sucesso"
-        );
+        if (updatedPurchase && purchaseLog)
+          logDb.update(purchaseLog.id, {
+            type: "purchase",
+            member: selectedMember,
+            purchase: updatedPurchase,
+          });
+
+        successToast("Atualização de Compra", "Atualizada com sucesso");
         onSubmit(true);
       } catch (error) {
-        errorToast("Atualização de Compra", "Atualização falhou");
+        errorToast("Atualização de Compra", "Erro ao atualizar");
         onSubmit(false);
       }
     } else {
@@ -103,7 +110,7 @@ export default function SubscriptionForm({
         // start loading
 
         // Save to database
-        memberDb.addPurchase(selectedMember.id, {
+        const purchase = addPurchase(selectedMember.id, {
           product: selectedProduct,
           amount,
         });
@@ -111,10 +118,18 @@ export default function SubscriptionForm({
         // Update product amount
         productDb.decreaseAmount(selectedProduct.id, amount);
 
-        successToast("Compra", "Compra realizada com sucesso");
+        if (purchase)
+          logDb.add({
+            type: "purchase",
+            member: selectedMember,
+            purchase,
+            createdBy: STAFF,
+          });
+
+        successToast("Criação de compra", "Criado com sucesso");
         onSubmit(true);
       } catch (error) {
-        errorToast("Compra", "Erro ao realizar ao comprar!");
+        errorToast("Criação de compra", "Erro ao criar compra");
         onSubmit(false);
       }
     }
@@ -131,7 +146,9 @@ export default function SubscriptionForm({
           name="product"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Produto</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Produto</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
                 <ProductSelector
                   value={field.value}
@@ -150,13 +167,14 @@ export default function SubscriptionForm({
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Quantidade</FormLabel>
+              <RequiredFieldTooltip>Quantidade</RequiredFieldTooltip>
               <FormControl>
                 <Input
                   type="number"
-                  {...field}
+                  placeholder="1"
                   max={selectedProduct?.amount}
                   onPaste={(e) => e.preventDefault()}
+                  {...field}
                 />
               </FormControl>
               <FormMessage />
@@ -166,25 +184,18 @@ export default function SubscriptionForm({
 
         {/* Payment resume */}
         {selectedProduct && amount > 0 && (
-          <PurchasePaymentResume product={selectedProduct} amount={amount} />
+          <PurchasePaymentResume
+            data={{
+              product: selectedProduct,
+              amount,
+            }}
+          />
         )}
 
         {/* Form Actions */}
         <div className="flex justify-end gap-1">
-          <DialogClose asChild>
-            <Button
-              className="bg-red-500 hover:bg-red-600 transition-all"
-              type="button"
-            >
-              Cancelar
-            </Button>
-          </DialogClose>
-          <Button
-            className="bg-indigo-500 hover:bg-indigo-600 transition-all"
-            type="submit"
-          >
-            Salvar
-          </Button>
+          <CancelButton />
+          <ConfirmButton isEditing={!!purchase} />
         </div>
       </form>
     </Form>

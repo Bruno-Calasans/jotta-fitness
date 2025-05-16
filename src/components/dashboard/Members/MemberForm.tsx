@@ -13,12 +13,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { DialogClose } from "@/components/ui/dialog";
 import { useMemberStore } from "@/store/memberStore";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { Member } from "@/types/Member.type";
 import phoneMask from "@/utils/phoneMask";
+import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
+import CancelButton from "@/components/custom/Buttons/CancelButton";
+import ConfirmButton from "@/components/custom/Buttons/ConfirmButton";
 
 const memberFormSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
@@ -39,8 +40,8 @@ export default function MemberForm({ member, onSubmit }: MemberFormProps) {
   const form = useForm<MemberFormInputs>({
     resolver: zodResolver(memberFormSchema),
     defaultValues: {
-      name: member ? member.name : "",
-      phone: member ? phoneMask(member.phone) : "",
+      name: member?.name || "",
+      phone: phoneMask(member?.phone || ""),
     },
   });
 
@@ -50,10 +51,8 @@ export default function MemberForm({ member, onSubmit }: MemberFormProps) {
       try {
         form.reset();
 
-        // Save to database
-        memberDb.update(member.id, { ...input });
+        memberDb.update(member.id, input);
 
-        // Result
         successToast("Atualização de Membro", "Membro atualizado com sucesso!");
         onSubmit(true);
       } catch (error) {
@@ -65,12 +64,8 @@ export default function MemberForm({ member, onSubmit }: MemberFormProps) {
     } else {
       try {
         form.reset();
-        // start loading
 
-        // Save to database
-        memberDb.add({
-          ...input,
-        });
+        memberDb.add(input);
 
         successToast("Criação de Membro", "Membro criado com sucesso!");
         onSubmit(true);
@@ -95,22 +90,28 @@ export default function MemberForm({ member, onSubmit }: MemberFormProps) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nome</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Nome</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
-                <Input placeholder="Seu nome" {...field} />
+                <Input placeholder="Nome do membro" {...field} />
               </FormControl>
-              <FormDescription>Nome para ficar salvo</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
+        {/* Phone input */}
         <FormField
           control={form.control}
           name="phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Celular</FormLabel>
+              <FormLabel>
+                <FormDescription>
+                  <RequiredFieldTooltip>Celular</RequiredFieldTooltip>
+                </FormDescription>
+              </FormLabel>
               <FormControl>
                 <Input
                   type="tel"
@@ -120,7 +121,7 @@ export default function MemberForm({ member, onSubmit }: MemberFormProps) {
                   {...field}
                 />
               </FormControl>
-              <FormDescription>Seu número de celular</FormDescription>
+              <FormDescription>Número do celular</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -128,20 +129,8 @@ export default function MemberForm({ member, onSubmit }: MemberFormProps) {
 
         {/* Form Actions */}
         <div className="flex justify-end gap-1">
-          <DialogClose asChild>
-            <Button
-              className="bg-red-500 hover:bg-red-600 transition-all"
-              type="button"
-            >
-              Cancelar
-            </Button>
-          </DialogClose>
-          <Button
-            className="bg-indigo-500 hover:bg-indigo-600 transition-all"
-            type="submit"
-          >
-            {member ? "Salvar" : "Criar"}
-          </Button>
+          <CancelButton />
+          <ConfirmButton isEditing={!!member} />
         </div>
       </form>
     </Form>

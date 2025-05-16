@@ -8,7 +8,7 @@ import {
   Calendar1,
   CalendarDays,
   Dumbbell,
-  HandCoins
+  HandCoins,
 } from "lucide-react";
 
 export const DashboardSidebarItems = {

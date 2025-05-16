@@ -8,7 +8,7 @@ import calcDiscount from "./calcDiscount";
 export default function calcAdhesionPrice(
   adhesion: Adhesion,
   plan: Plan,
-  member: Member
+  member: Member,
 ) {
   let price = plan.price;
   const isNewbie = isMemberNewbie(member);

@@ -13,12 +13,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { DialogClose } from "@/components/ui/dialog";
 import { useProductStore } from "@/store/productStore";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { Product } from "@/types/Product.type";
-import { FocusEventHandler } from "react";
+import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
+import clearFieldOnFirstFocus from "@/utils/clearFieldOnFirstFocus";
+import CancelButton from "@/components/custom/Buttons/CancelButton";
+import ConfirmButton from "@/components/custom/Buttons/ConfirmButton";
 
 const productFormSchema = z.object({
   name: z.string().min(1, "Nome do produto é obrigatório"),
@@ -47,7 +48,7 @@ export default function ProductForm({ product, onSubmit }: ProductFormProps) {
     defaultValues: {
       name: product ? product.name : "",
       price: product ? product.price : 1,
-      amount: product ? product.amount : 0,
+      amount: product ? product.amount : 1,
     },
   });
 
@@ -75,7 +76,6 @@ export default function ProductForm({ product, onSubmit }: ProductFormProps) {
     } else {
       try {
         form.reset();
-        // start loading
 
         // Save to database
         productDb.add(inputs);
@@ -89,16 +89,6 @@ export default function ProductForm({ product, onSubmit }: ProductFormProps) {
     }
   };
 
-  // Clear number input value on the first focus
-  const focusHandler: FocusEventHandler<HTMLInputElement> = (e) => {
-    const value = e.target.value;
-    const isNumberField = e.target.type === "number";
-
-    if (value === "0" && isNumberField) {
-      e.target.value = "";
-    }
-  };
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(submitHandler)} className="space-y-8">
@@ -108,11 +98,17 @@ export default function ProductForm({ product, onSubmit }: ProductFormProps) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nome</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Nome</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
-                <Input placeholder="Produto" {...field} />
+                <Input
+                  placeholder="Luvas"
+                  onFocus={(e) => clearFieldOnFirstFocus(e, form)}
+                  {...field}
+                />
               </FormControl>
-              <FormDescription>Qual o nome do produto.</FormDescription>
+              <FormDescription>Nome do produto.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -124,18 +120,18 @@ export default function ProductForm({ product, onSubmit }: ProductFormProps) {
           name="price"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Preço (R$)</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Preço (R$)</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
                 <Input
-                  onFocus={focusHandler}
-                  placeholder="0"
-                  {...field}
                   type="number"
+                  placeholder="100"
+                  onFocus={(e) => clearFieldOnFirstFocus(e, form)}
+                  {...field}
                 />
               </FormControl>
-              <FormDescription>
-                Qual o preço unitário do produto.
-              </FormDescription>
+              <FormDescription>Preço unitário do produto.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -147,17 +143,19 @@ export default function ProductForm({ product, onSubmit }: ProductFormProps) {
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Quantidade</FormLabel>
+              <FormLabel>
+                <RequiredFieldTooltip>Quantidade</RequiredFieldTooltip>
+              </FormLabel>
               <FormControl>
                 <Input
-                  onFocus={focusHandler}
-                  placeholder="100"
-                  {...field}
                   type="number"
+                  placeholder="100"
+                  onFocus={(e) => clearFieldOnFirstFocus(e, form)}
+                  {...field}
                 />
               </FormControl>
               <FormDescription>
-                Quantos produtos você tem disponível no estoque.
+                Produtos disponíveis no estoque.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -165,20 +163,8 @@ export default function ProductForm({ product, onSubmit }: ProductFormProps) {
         />
         {/* Form Actions */}
         <div className="flex justify-end gap-1">
-          <DialogClose asChild>
-            <Button
-              className="bg-red-500 hover:bg-red-600 transition-all"
-              type="button"
-            >
-              Cancelar
-            </Button>
-          </DialogClose>
-          <Button
-            className="bg-indigo-500 hover:bg-indigo-600 transition-all"
-            type="submit"
-          >
-            {product ? "Salvar" : "Criar"}
-          </Button>
+          <CancelButton />
+          <ConfirmButton isEditing={!!product} />
         </div>
       </form>
     </Form>
