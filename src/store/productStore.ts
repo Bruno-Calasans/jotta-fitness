@@ -26,7 +26,7 @@ export const useProductStore = create<ProductState>((set, get) => ({
   },
   remove(id) {
     const updatedProducts = get().products.filter(
-      (product) => product.id !== id
+      (product) => product.id !== id,
     );
     set((state) => ({ ...state, products: updatedProducts }), true);
   },
@@ -43,14 +43,14 @@ export const useProductStore = create<ProductState>((set, get) => ({
   getByName(productName) {
     const foundProduct = get().products.find(
       (product) =>
-        product.name.trim().toLowerCase() === productName.trim().toLowerCase()
+        product.name.trim().toLowerCase() === productName.trim().toLowerCase(),
     );
     if (!foundProduct) return null;
     return foundProduct;
   },
   getById(productId) {
     const foundProduct = get().products.find(
-      (product) => product.id === productId
+      (product) => product.id === productId,
     );
 
     if (!foundProduct) return null;

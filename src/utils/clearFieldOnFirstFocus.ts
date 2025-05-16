@@ -4,7 +4,7 @@ import type { FieldValues, Path } from "react-hook-form";
 
 export default function clearFieldOnFirstFocus<TFormValues extends FieldValues>(
   { target }: FocusEvent<HTMLInputElement, Element>,
-  form: UseFormReturn<TFormValues>
+  form: UseFormReturn<TFormValues>,
 ) {
   const fieldName = target.name;
   const { isTouched } = form.getFieldState(fieldName as Path<TFormValues>);

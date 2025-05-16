@@ -46,7 +46,7 @@ export default function PurchaseForm({
   const logDb = useLogStore();
   const { successToast, errorToast } = useCustomToast();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(
-    purchase?.product || null
+    purchase?.product || null,
   );
 
   const form = useForm<SubscribePlanFormInputs>({

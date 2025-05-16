@@ -56,13 +56,13 @@ export default function InvestmentForm({
         // Result
         successToast(
           "Atualização de Investimento",
-          "Investimento atualizado com sucesso!"
+          "Investimento atualizado com sucesso!",
         );
         onSubmit(true);
       } catch (error) {
         errorToast(
           "Atualização de Investimento",
-          "Erro ao atualizar investimento!"
+          "Erro ao atualizar investimento!",
         );
         onSubmit(false);
       }
@@ -78,7 +78,7 @@ export default function InvestmentForm({
 
         successToast(
           "Criação de Investimento",
-          "Investimento criado com sucesso!"
+          "Investimento criado com sucesso!",
         );
         onSubmit(true);
       } catch (error) {

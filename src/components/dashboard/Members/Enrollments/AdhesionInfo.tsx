@@ -25,7 +25,7 @@ export default function AdhesionInfo() {
     try {
       const adhesionPayment = addAdhesionPayment(
         selectedMember.id,
-        currentAdhesion.year
+        currentAdhesion.year,
       );
       if (adhesionPayment) {
         logDb.add({

@@ -9,7 +9,7 @@ export default function CurrentAdhesionInfo() {
       <p
         className={cn(
           "text-red-500 font-bold",
-          isCurrentAdhesionPaid && "text-emerald-500"
+          isCurrentAdhesionPaid && "text-emerald-500",
         )}
       >
         {isCurrentAdhesionPaid ? "Sim" : "Não"}
