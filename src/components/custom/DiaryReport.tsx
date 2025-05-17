@@ -22,7 +22,7 @@ export default function DiaryReport() {
 
   const profit = calcProfit(
     [purchaseIncome, enrollmentIncome, planDiaryIncome, adhesionIncome],
-    [investmentLoss, expenseLoss]
+    [investmentLoss, expenseLoss],
   );
 
   return (
