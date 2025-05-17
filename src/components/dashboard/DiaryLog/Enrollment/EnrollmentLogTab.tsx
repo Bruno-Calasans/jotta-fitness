@@ -6,7 +6,7 @@ import isDateEqual from "@/utils/isDateEquals";
 import SelectedDateNotResultMsg from "../SelectedDateNotResultMsg";
 
 export default function EnrollmentLogTab() {
-  const { selectedDate, getAllEnrollmentLogs } = useLogStore();
+  const { selectedDate, loading, getAllEnrollmentLogs } = useLogStore();
 
   const enrollmentLogs = getAllEnrollmentLogs();
   const filteredEnrollmentLogs = selectedDate
@@ -21,6 +21,8 @@ export default function EnrollmentLogTab() {
           <CreateEnrollmentLogDialog />
         </div>
         <DataTable
+          loading={loading}
+          loadingMsg="Carregando registros de inscrição"
           columns={enrollmentLogColumns}
           data={filteredEnrollmentLogs}
           noResultMsg={<SelectedDateNotResultMsg />}

@@ -7,10 +7,10 @@ import CreateAdhesionDialog from "./CreateAdhesionDialog";
 import InfoMsg from "@/components/custom/InfoMsg";
 
 export default function AdhesionTable() {
-  const { adhesions } = useAdhesionStore();
+  const { loading, adhesions } = useAdhesionStore();
 
   const currentYearAdhesion = adhesions.find(
-    (adhesion) => adhesion.year === new Date().getFullYear(),
+    (adhesion) => adhesion.year === new Date().getFullYear()
   );
 
   return (
@@ -25,6 +25,8 @@ export default function AdhesionTable() {
         </InfoMsg>
       )}
       <DataTable
+        loading={loading}
+        loadingMsg="Carregando Adesões"
         columns={adhesionColumns}
         data={adhesions}
         noResultMsg="Nenhuma adesão encontrada"

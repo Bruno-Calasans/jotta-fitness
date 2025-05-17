@@ -26,8 +26,11 @@ import { useState } from "react";
 import DataTablePagination from "./DataTablePagination";
 import DataTableSearch from "./DataTableSearch";
 import { cn } from "@/lib/utils";
+import Loader from "../Loader";
 
 type DataTableProps<TData, TValue> = {
+  loading?: boolean;
+  loadingMsg?: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   noResultMsg?: React.ReactNode;
@@ -37,6 +40,8 @@ type DataTableProps<TData, TValue> = {
 };
 
 export default function DataTable<TData, TValue>({
+  loading,
+  loadingMsg,
   columns,
   data,
   noResultMsg,
@@ -71,6 +76,8 @@ export default function DataTable<TData, TValue>({
     setSelectedRow(row);
   };
 
+  const tableHasRows = table.getRowModel().rows?.length > 0;
+
   return (
     <div className="flex flex-col gap-2">
       <div className="rounded-md border">
@@ -94,7 +101,7 @@ export default function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -103,13 +110,27 @@ export default function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {/* Loading State */}
+            {loading && (
+              <TableRow className="p-10">
+                <TableCell
+                  className="p-10"
+                  rowSpan={table.getRowModel().rows.length}
+                  colSpan={table._getColumnDefs().length}
+                >
+                  <Loader text={loadingMsg} />
+                </TableCell>
+              </TableRow>
+            )}
+            {/* No loading state with rows */}
+            {!loading &&
+              tableHasRows &&
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className={cn(
-                    "cursor-pointer hover:bg-stone-600 transition-all",
+                    "cursor-pointer hover:bg-stone-600 transition-all"
                     // row.id === selectedRow?.id && "bg-stone-700"
                   )}
                   onClick={() => selectionHandler(row)}
@@ -118,13 +139,15 @@ export default function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}
                 </TableRow>
-              ))
-            ) : (
+              ))}
+
+            {/* No loading state without rows */}
+            {!loading && !tableHasRows && (
               // No rows
               <TableRow>
                 <TableCell

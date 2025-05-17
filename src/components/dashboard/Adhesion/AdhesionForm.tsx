@@ -29,7 +29,7 @@ const adhesionFormSchema = z.object({
     .number()
     .min(
       new Date().getFullYear(),
-      "Ano da adesão não pode ser inferior ao ano atual",
+      "Ano da adesão não pode ser inferior ao ano atual"
     ),
   discountMaxDate: z.string(),
   newbieDiscount: z.coerce.number().min(0, "Disconto não pode ser negativo"),
@@ -58,7 +58,7 @@ export default function AdhesionForm({
       veteranDiscount: adhesion?.veteranDiscount || 0,
       // discountMaxDate: adhesion?.discountMaxDate || new Date(),
       discountMaxDate: dateToInputFormat(
-        adhesion?.discountMaxDate || new Date(),
+        adhesion?.discountMaxDate || new Date()
       ),
     },
   });

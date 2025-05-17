@@ -9,6 +9,8 @@ import { persist } from "zustand/middleware";
 
 type AdhesionState = {
   adhesions: Adhesion[];
+  loading: boolean;
+  setLoading: (value: boolean) => void;
   add: (input: Omit<Adhesion, keyof DB>) => void;
   remove: (id: string) => void;
   update: (id: string, input: Partial<Omit<Adhesion, "id">>) => void;
@@ -20,6 +22,10 @@ export const useAdhesionStore = create<AdhesionState>()(
   persist(
     (set, get) => ({
       adhesions: ADHESION_DATA,
+      loading: true,
+      setLoading(value) {
+        set(() => ({ loading: value }));
+      },
       add(input) {
         set((state) => ({
           adhesions: [
@@ -30,7 +36,7 @@ export const useAdhesionStore = create<AdhesionState>()(
       },
       remove(id) {
         const updatedAdhesions = get().adhesions.filter(
-          (adhesion) => adhesion.id !== id,
+          (adhesion) => adhesion.id !== id
         );
         set((state) => ({ ...state, adhesions: updatedAdhesions }), true);
       },
@@ -46,7 +52,7 @@ export const useAdhesionStore = create<AdhesionState>()(
       },
       getAdhesionByYear(year) {
         const adhesion = get().adhesions.find(
-          (adhesion) => adhesion.year === year,
+          (adhesion) => adhesion.year === year
         );
         if (!adhesion) return null;
         return adhesion;
@@ -55,6 +61,17 @@ export const useAdhesionStore = create<AdhesionState>()(
         return get().getAdhesionByYear(new Date().getFullYear());
       },
     }),
-    { name: "adhesion-storage" },
-  ),
+    {
+      name: "adhesion-storage",
+      onRehydrateStorage: (state) => {
+        return (state, error) => {
+          if (error) {
+            console.log(error);
+          } else {
+            state?.setLoading(false);
+          }
+        };
+      },
+    }
+  )
 );

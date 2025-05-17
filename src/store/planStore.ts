@@ -9,6 +9,8 @@ import { persist } from "zustand/middleware";
 
 type PlanState = {
   plans: Plan[];
+  loading: boolean;
+  setLoading: (value: boolean) => void;
   getByName: (planName: string) => Plan | null;
   add: (input: Omit<Plan, keyof DB>) => void;
   remove: (id: string) => void;
@@ -19,6 +21,10 @@ export const usePlanStore = create<PlanState>()(
   persist(
     (set, get) => ({
       plans: PLANS_DATA,
+      loading: true,
+      setLoading(value) {
+        set(() => ({ loading: value }));
+      },
       add(input) {
         set((state) => ({
           plans: [...state.plans, { ...generateDbFields(), ...input }],
@@ -41,7 +47,7 @@ export const usePlanStore = create<PlanState>()(
       getByName(planName) {
         const foundPlan = get().plans.find(
           (plan) =>
-            plan.name.trim().toLowerCase() === planName.trim().toLowerCase(),
+            plan.name.trim().toLowerCase() === planName.trim().toLowerCase()
         );
         if (!foundPlan) return null;
 
@@ -50,6 +56,15 @@ export const usePlanStore = create<PlanState>()(
     }),
     {
       name: "plan-storage",
-    },
-  ),
+      onRehydrateStorage: (state) => {
+        return (state, error) => {
+          if (error) {
+            console.log(error);
+          } else {
+            state?.setLoading(false);
+          }
+        };
+      },
+    }
+  )
 );

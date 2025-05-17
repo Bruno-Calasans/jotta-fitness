@@ -6,7 +6,7 @@ import isDateEqual from "@/utils/isDateEquals";
 import SelectedDateNotResultMsg from "../SelectedDateNotResultMsg";
 
 export default function PlanDiaryLogTab() {
-  const { selectedDate, getAllPlanDiaryLogs } = useLogStore();
+  const { loading, selectedDate, getAllPlanDiaryLogs } = useLogStore();
 
   const planDiaryLogs = getAllPlanDiaryLogs();
   const filteredPlanDiaryLogs = selectedDate
@@ -21,6 +21,8 @@ export default function PlanDiaryLogTab() {
           <CreatePlanDiaryLogDialog />
         </div>
         <DataTable
+          loading={loading}
+          loadingMsg="Carregando registros de diária"
           columns={planDiaryColumns}
           data={filteredPlanDiaryLogs}
           noResultMsg={<SelectedDateNotResultMsg />}

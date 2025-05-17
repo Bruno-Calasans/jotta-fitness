@@ -7,7 +7,7 @@ import CreateInvestmentDialog from "@/components/dashboard/Investments/CreateInv
 import { investmentColumns } from "@/components/dashboard/Investments/InvestmentTableColumns";
 
 export default function DashboardInvestments() {
-  const { investments } = useInvestmentStore();
+  const { loading, investments } = useInvestmentStore();
 
   return (
     <ContentContainer>
@@ -17,6 +17,8 @@ export default function DashboardInvestments() {
       </div>
 
       <DataTable
+        loading={loading}
+        loadingMsg="Carregando Investimentos"
         columns={investmentColumns}
         data={investments}
         noResultMsg="Nenhum investimento encontrada"

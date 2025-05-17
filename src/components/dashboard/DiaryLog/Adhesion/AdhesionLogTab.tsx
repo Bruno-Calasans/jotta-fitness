@@ -6,7 +6,7 @@ import SelectedDateNotResultMsg from "../SelectedDateNotResultMsg";
 import { adhesionLogColumns } from "./AdhesionLogColumns";
 
 export default function AdhesionLogTab() {
-  const { selectedDate, getAllAdhesionLogs } = useLogStore();
+  const { loading, selectedDate, getAllAdhesionLogs } = useLogStore();
   const adhesionLogs = getAllAdhesionLogs();
   const filteredAdhesionLogs = selectedDate
     ? adhesionLogs.filter((log) => isDateEqual(log.createdAt, selectedDate))
@@ -20,6 +20,8 @@ export default function AdhesionLogTab() {
           <CreateAdhesionLogDialog />
         </div>
         <DataTable
+          loading={loading}
+          loadingMsg="Carregando registros de adesão"
           columns={adhesionLogColumns}
           data={filteredAdhesionLogs}
           noResultMsg={<SelectedDateNotResultMsg />}

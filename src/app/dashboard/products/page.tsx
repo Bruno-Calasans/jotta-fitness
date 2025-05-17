@@ -7,7 +7,7 @@ import CreateProductDialog from "@/components/dashboard/Products/CreateProductDi
 import { productColumns } from "@/components/dashboard/Products/ProductTableColumns";
 
 export default function DashboardProductss() {
-  const { products } = useProductStore();
+  const { loading, products } = useProductStore();
 
   return (
     <ContentContainer>
@@ -17,6 +17,8 @@ export default function DashboardProductss() {
       </div>
 
       <DataTable
+        loading={loading}
+        loadingMsg="Carregando produtos"
         columns={productColumns}
         data={products}
         noResultMsg="Nenhum produto encontrado"

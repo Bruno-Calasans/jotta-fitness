@@ -4,10 +4,9 @@ import DataTable from "@/components/custom/DataTable/DataTable";
 import { membersColumns } from "@/components/dashboard/Members/MembersTableColumns";
 import { useMemberStore } from "@/store/memberStore";
 import CreateMemberDialog from "./CreateMemberDialog";
-import { useRouter } from "next/navigation";
 
 export default function MembersTable() {
-  const { members } = useMemberStore();
+  const { loading, members } = useMemberStore();
 
   return (
     <div>
@@ -16,6 +15,8 @@ export default function MembersTable() {
         <CreateMemberDialog />
       </div>
       <DataTable
+        loading={loading}
+        loadingMsg="Carregando membros"
         columns={membersColumns}
         data={members}
         noResultMsg="Nenhum membro encontrado"

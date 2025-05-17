@@ -8,16 +8,22 @@ import generateDbFields from "@/utils/generateDefaultDbFields";
 import { persist } from "zustand/middleware";
 
 type InvestmentState = {
+  loading: boolean;
   investments: Investment[];
   add: (input: Omit<Investment, keyof DB>) => void;
   remove: (id: string) => void;
   update: (id: string, input: Partial<Omit<Investment, keyof DB>>) => void;
+  setLoading: (value: boolean) => void;
 };
 
 export const useInvestmentStore = create<InvestmentState>()(
   persist(
     (set, get) => ({
+      loading: true,
       investments: INVESTIMENT_DATA,
+      setLoading(value) {
+        set(() => ({ loading: value }));
+      },
       add(input) {
         set((state) => ({
           investments: [
@@ -28,7 +34,7 @@ export const useInvestmentStore = create<InvestmentState>()(
       },
       remove(id) {
         const updatedInvestments = get().investments.filter(
-          (investment) => investment.id !== id,
+          (investment) => investment.id !== id
         );
         set((state) => ({ ...state, investments: updatedInvestments }), true);
       },
@@ -43,6 +49,17 @@ export const useInvestmentStore = create<InvestmentState>()(
         set((state) => ({ ...state, investments: updatedInvestments }), true);
       },
     }),
-    { name: "investment-storage" },
-  ),
+    {
+      name: "investment-storage",
+      onRehydrateStorage: (state) => {
+        return (state, error) => {
+          if (error) {
+            console.log(error);
+          } else {
+            state?.setLoading(false);
+          }
+        };
+      },
+    }
+  )
 );

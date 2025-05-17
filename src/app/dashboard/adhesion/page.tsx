@@ -1,3 +1,4 @@
+import Loader from "@/components/custom/Loader";
 import AdhesionTable from "@/components/dashboard/Adhesion/AdhesionTable";
 import ContentContainer from "@/components/general/ContentContainer";
 

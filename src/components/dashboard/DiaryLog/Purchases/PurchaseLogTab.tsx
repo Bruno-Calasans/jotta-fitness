@@ -6,7 +6,7 @@ import isDateEqual from "@/utils/isDateEquals";
 import SelectedDateNotResultMsg from "../SelectedDateNotResultMsg";
 
 export default function PurchaseLogTab() {
-  const { selectedDate, getAllPurchaseLogs } = useLogStore();
+  const { loading, selectedDate, getAllPurchaseLogs } = useLogStore();
   const purchaseLogs = getAllPurchaseLogs();
   const filteredPurchaseLogs = selectedDate
     ? purchaseLogs.filter((log) => isDateEqual(log.createdAt, selectedDate))
@@ -20,6 +20,8 @@ export default function PurchaseLogTab() {
           <CreatePurchaseLogDialog />
         </div>
         <DataTable
+          loading={loading}
+          loadingMsg="Carregando registros de compra"
           columns={purchaseLogColumns}
           data={filteredPurchaseLogs}
           noResultMsg={<SelectedDateNotResultMsg />}

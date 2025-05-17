@@ -6,7 +6,7 @@ import isDateEqual from "@/utils/isDateEquals";
 import SelectedDateNotResultMsg from "../SelectedDateNotResultMsg";
 
 export default function LossLogTab() {
-  const { selectedDate, getAllLossLogs } = useLogStore();
+  const {loading, selectedDate, getAllLossLogs } = useLogStore();
   const lossLogs = getAllLossLogs();
   const filteredLossLogs = selectedDate
     ? lossLogs.filter((log) => isDateEqual(log.createdAt, selectedDate))
@@ -20,6 +20,8 @@ export default function LossLogTab() {
           <CreateLossLogDialog />
         </div>
         <DataTable
+          loading={loading}
+          loadingMsg="Carregando registros de perda"
           columns={lossLogColumns}
           data={filteredLossLogs}
           noResultMsg={<SelectedDateNotResultMsg />}

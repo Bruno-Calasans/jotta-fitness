@@ -7,7 +7,7 @@ import { usePlanStore } from "@/store/planStore";
 import CreatePlanDialog from "@/components/dashboard/Plans/CreatePlanDialog";
 
 export default function DashboardPlans() {
-  const { plans } = usePlanStore();
+  const { loading, plans } = usePlanStore();
 
   return (
     <ContentContainer>
@@ -17,6 +17,8 @@ export default function DashboardPlans() {
       </div>
 
       <DataTable
+        loading={loading}
+        loadingMsg="Carregando planos"
         columns={planColumns}
         data={plans}
         noResultMsg="Nenhum plano encontrado"

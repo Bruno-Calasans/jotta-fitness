@@ -7,7 +7,7 @@ import CreateExpenseDialog from "@/components/dashboard/Expenses/CreateExpenseDi
 import { expenseColumns } from "@/components/dashboard/Expenses/ExpenseTableColumns";
 
 export default function DashboardExpenses() {
-  const { expenses } = useExpenseStore();
+  const { loading, expenses } = useExpenseStore();
 
   return (
     <ContentContainer>
@@ -17,6 +17,8 @@ export default function DashboardExpenses() {
       </div>
 
       <DataTable
+        loading={loading}
+        loadingMsg="Carregando despesas"
         columns={expenseColumns}
         data={expenses}
         noResultMsg="Nenhuma despesa encontrada"
