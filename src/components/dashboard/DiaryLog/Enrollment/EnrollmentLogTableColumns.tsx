@@ -4,6 +4,8 @@ import type { EnrollmentLog } from "@/types/Log.type";
 import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
 import EditEnrollmentLogDialog from "./EditEnrollmentLogDialog";
 import RemoveEnrollmentLogDialog from "./RemoveEnrollmentLogDialog";
+import calcEnrollmentPrice from "@/utils/calcEnrollmentPrice";
+import defaultDateFormat from "@/utils/defaultDateFormat";
 
 export const enrollmentLogColumns: ColumnDef<EnrollmentLog>[] = [
   {
@@ -30,6 +32,21 @@ export const enrollmentLogColumns: ColumnDef<EnrollmentLog>[] = [
     ),
   },
   {
+    id: "total",
+    accessorKey: "enrollment.months",
+    header: ({ column }) => (
+      <DataTableSortableHeader
+        column={column}
+        headerName="Total (R$)"
+        type="numeral"
+      />
+    ),
+    cell: ({ row }) => {
+      const { enrollment } = row.original;
+      return <p>{calcEnrollmentPrice(enrollment).toFixed(2)}</p>;
+    },
+  },
+  {
     accessorKey: "enrollment.startsIn",
     header: ({ column }) => (
       <DataTableSortableHeader
@@ -40,7 +57,7 @@ export const enrollmentLogColumns: ColumnDef<EnrollmentLog>[] = [
     ),
     cell: ({ row }) => {
       const { enrollment } = row.original;
-      return <p>{enrollment.startsIn.toLocaleDateString()}</p>;
+      return <p>{defaultDateFormat(enrollment.startsIn)}</p>;
     },
   },
   {
@@ -54,7 +71,7 @@ export const enrollmentLogColumns: ColumnDef<EnrollmentLog>[] = [
     ),
     cell: ({ row }) => {
       const { enrollment } = row.original;
-      return <p>{enrollment.expiresIn.toLocaleDateString()}</p>;
+      return <p>{defaultDateFormat(enrollment.expiresIn)}</p>;
     },
   },
   {
