@@ -7,16 +7,31 @@ import {
 import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function DashboardSideBarButton() {
-  const { open, toggleSidebar } = useSidebar();
+  const { open, toggleSidebar, setOpen } = useSidebar();
+
+  const toggleSideBarHandler = () => {
+    if (open) {
+      localStorage.removeItem("side-bar");
+    } else {
+      localStorage.setItem("side-bar", "true");
+    }
+
+    toggleSidebar();
+  };
+
+  useEffect(() => {
+    setOpen(!!localStorage.getItem("side-bar"));
+  }, []);
 
   return (
     <button
       id="trigger"
       className={cn(
         "flex justify-end p-1 transition-all",
-        !open && "justify-center",
+        !open && "justify-center"
       )}
     >
       {open ? (
@@ -27,13 +42,13 @@ export default function DashboardSideBarButton() {
           </Link>
           <SquareChevronLeft
             className="text-orange-600"
-            onClick={toggleSidebar}
+            onClick={toggleSideBarHandler}
           />
         </div>
       ) : (
         <SquareChevronRight
           className="text-orange-600"
-          onClick={toggleSidebar}
+          onClick={toggleSideBarHandler}
         />
       )}
     </button>
