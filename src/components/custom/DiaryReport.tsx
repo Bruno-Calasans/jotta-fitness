@@ -1,9 +1,11 @@
 import { useLogStore } from "@/store/logStore";
 import ReportInfo from "./ReportInfo";
 import toRealFormat from "@/utils/toRealFormat";
+import calcProfit from "@/utils/calcProfit";
 
 export default function DiaryReport() {
   const {
+    selectedDate,
     sumAllPurchasesLogsByDate,
     sumAllEnrollmentLogsByDate,
     sumAllPlanDiaryLogsByDate,
@@ -11,20 +13,17 @@ export default function DiaryReport() {
     sumAllLossLogsByDate,
   } = useLogStore();
 
-  const currentDate = new Date();
+  const currentDate = selectedDate || new Date();
   const purchaseIncome = sumAllPurchasesLogsByDate(currentDate);
   const enrollmentIncome = sumAllEnrollmentLogsByDate(currentDate);
   const planDiaryIncome = sumAllPlanDiaryLogsByDate(currentDate);
   const adhesionIncome = sumAllAdhesionLogsByDate(currentDate);
   const { expenseLoss, investmentLoss } = sumAllLossLogsByDate(currentDate);
 
-  const profit =
-    purchaseIncome +
-    enrollmentIncome +
-    planDiaryIncome +
-    adhesionIncome -
-    investmentLoss -
-    expenseLoss;
+  const profit = calcProfit(
+    [purchaseIncome, enrollmentIncome, planDiaryIncome, adhesionIncome],
+    [investmentLoss, expenseLoss]
+  );
 
   return (
     <div className="flex gap-2 flex-wrap mb-3">

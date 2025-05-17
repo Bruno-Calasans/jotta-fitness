@@ -19,7 +19,7 @@ export default function ReportInfo({
     <div
       className={cn(
         "flex flex-col items-center justify-center border-2 border-emerald-500 rounded-md w-fit p-2 text-emerald-50",
-        classnames?.container
+        classnames?.container,
       )}
     >
       <p className={cn("text-lg font-bold text-center", classnames?.title)}>
