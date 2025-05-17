@@ -34,7 +34,7 @@ export const useInvestmentStore = create<InvestmentState>()(
       },
       remove(id) {
         const updatedInvestments = get().investments.filter(
-          (investment) => investment.id !== id
+          (investment) => investment.id !== id,
         );
         set((state) => ({ ...state, investments: updatedInvestments }), true);
       },
@@ -60,6 +60,6 @@ export const useInvestmentStore = create<InvestmentState>()(
           }
         };
       },
-    }
-  )
+    },
+  ),
 );

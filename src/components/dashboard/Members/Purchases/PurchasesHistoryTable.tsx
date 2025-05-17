@@ -6,7 +6,7 @@ import { useMemberStore } from "@/store/memberStore";
 import CreatePurchaseDialog from "./CreatePurchaseDialog";
 
 export default function PurchasesHistoryTable() {
-  const { selectedMember } = useMemberStore();
+  const { loading, selectedMember } = useMemberStore();
 
   if (!selectedMember) return null;
 
@@ -19,6 +19,8 @@ export default function PurchasesHistoryTable() {
         <CreatePurchaseDialog />
       </div>
       <DataTable
+        loading={loading}
+        loadingMsg="Carregando compras"
         columns={purchasesColumns}
         data={purchases.length > 0 ? purchases : []}
         noResultMsg="Nenhuma compra encontrada"

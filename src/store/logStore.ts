@@ -83,12 +83,12 @@ export const useLogStore = create<LogState>()(
       },
       getAllEnrollmentLogs() {
         return get().logs.filter(
-          (log) => log.type === "enrollment"
+          (log) => log.type === "enrollment",
         ) as EnrollmentLog[];
       },
       getAllPlanDiaryLogs() {
         return get().logs.filter(
-          (log) => log.type === "plan-diary"
+          (log) => log.type === "plan-diary",
         ) as PlanDiaryLog[];
       },
       getAllPurchaseLogs() {
@@ -98,23 +98,24 @@ export const useLogStore = create<LogState>()(
       },
       getAllLossLogs() {
         return get().logs.filter(
-          (log) => log.type === "investment" || "expense"
+          (log) => log.type === "investment" || "expense",
         ) as LossLog[];
       },
       getAllAdhesionLogs() {
         return get().logs.filter(
-          (log) => log.type === "adhesion"
+          (log) => log.type === "adhesion",
         ) as AdhesionLog[];
       },
       getLogsByDate(type, selectedDate) {
         return get().logs.filter(
-          (log) => log.type === type && isDateEqual(log.createdAt, selectedDate)
+          (log) =>
+            log.type === type && isDateEqual(log.createdAt, selectedDate),
         );
       },
       getByEnrollmentId(enrollmentId) {
         const foundLog = get().logs.find(
           (log) =>
-            log.type === "enrollment" && log.enrollment.id === enrollmentId
+            log.type === "enrollment" && log.enrollment.id === enrollmentId,
         );
 
         if (!foundLog) return null;
@@ -123,7 +124,7 @@ export const useLogStore = create<LogState>()(
       },
       getByPurchaseId(purchaseId) {
         const foundLog = get().logs.find(
-          (log) => log.type === "purchase" && log.purchase.id === purchaseId
+          (log) => log.type === "purchase" && log.purchase.id === purchaseId,
         );
 
         if (!foundLog) return null;
@@ -133,7 +134,7 @@ export const useLogStore = create<LogState>()(
       sumAllPurchasesLogsByDate(date) {
         const purchaseLogs = get().getLogsByDate(
           "purchase",
-          date
+          date,
         ) as PurchaseLog[];
 
         if (purchaseLogs.length === 0) return 0;
@@ -145,7 +146,7 @@ export const useLogStore = create<LogState>()(
       sumAllEnrollmentLogsByDate(date) {
         const enrollmentLogs = get().getLogsByDate(
           "enrollment",
-          date
+          date,
         ) as EnrollmentLog[];
 
         if (enrollmentLogs.length === 0) return 0;
@@ -157,7 +158,7 @@ export const useLogStore = create<LogState>()(
       sumAllPlanDiaryLogsByDate(date) {
         const planDiaries = get().getLogsByDate(
           "plan-diary",
-          date
+          date,
         ) as PlanDiaryLog[];
 
         if (planDiaries.length === 0) return 0;
@@ -169,14 +170,14 @@ export const useLogStore = create<LogState>()(
       sumAllAdhesionLogsByDate(date) {
         const adhesionLogs = get().getLogsByDate(
           "adhesion",
-          date
+          date,
         ) as AdhesionLog[];
 
         if (adhesionLogs.length === 0) return 0;
 
         return adhesionLogs
           .map(({ adhesion, plan, member }) =>
-            calcAdhesionPrice(adhesion, plan, member)
+            calcAdhesionPrice(adhesion, plan, member),
           )
           .reduce(sumNumbers);
       },
@@ -184,7 +185,7 @@ export const useLogStore = create<LogState>()(
         const expenseLogs = get().getLogsByDate("expense", date) as LossLog[];
         const investimentLogs = get().getLogsByDate(
           "investment",
-          date
+          date,
         ) as LossLog[];
 
         if (expenseLogs.length === 0 && investimentLogs.length === 0)
@@ -222,6 +223,6 @@ export const useLogStore = create<LogState>()(
           }
         };
       },
-    }
-  )
+    },
+  ),
 );

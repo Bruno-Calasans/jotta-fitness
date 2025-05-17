@@ -22,7 +22,7 @@ export default function useConcat({
           curr.endsWith(
             concatTextAmountBeforeReset && concatText
               ? concatText.repeat(concatTextAmountBeforeReset)
-              : "..."
+              : "...",
           )
         )
           return defaultText;

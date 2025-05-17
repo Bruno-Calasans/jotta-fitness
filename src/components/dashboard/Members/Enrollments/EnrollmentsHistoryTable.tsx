@@ -5,8 +5,7 @@ import DataTable from "@/components/custom/DataTable/DataTable";
 import CreateSubscriptionDialog from "./CreateEnrollmentDialog";
 
 export default function EnrollmentsHistoryTable() {
-  const { selectedMember } = useMemberStore();
-  const logDb = useLogStore();
+  const { loading, selectedMember } = useMemberStore();
 
   if (!selectedMember) return null;
 
@@ -19,6 +18,8 @@ export default function EnrollmentsHistoryTable() {
         <CreateSubscriptionDialog />
       </div>
       <DataTable
+        loading={loading}
+        loadingMsg="Carregando inscrições"
         columns={enrollmentColumns}
         data={enrollments.length > 0 ? enrollments : []}
         noResultMsg="Nenhuma inscrição encontrada"
