@@ -41,7 +41,7 @@ export const usePlanStore = create<PlanState>()(
       getByName(planName) {
         const foundPlan = get().plans.find(
           (plan) =>
-            plan.name.trim().toLowerCase() === planName.trim().toLowerCase()
+            plan.name.trim().toLowerCase() === planName.trim().toLowerCase(),
         );
         if (!foundPlan) return null;
 
@@ -50,6 +50,6 @@ export const usePlanStore = create<PlanState>()(
     }),
     {
       name: "plan-storage",
-    }
-  )
+    },
+  ),
 );

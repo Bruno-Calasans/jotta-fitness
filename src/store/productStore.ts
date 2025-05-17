@@ -32,7 +32,7 @@ export const useProductStore = create<ProductState>()(
       },
       remove(id) {
         const updatedProducts = get().products.filter(
-          (product) => product.id !== id
+          (product) => product.id !== id,
         );
         set((state) => ({ ...state, products: updatedProducts }), true);
       },
@@ -50,14 +50,14 @@ export const useProductStore = create<ProductState>()(
         const foundProduct = get().products.find(
           (product) =>
             product.name.trim().toLowerCase() ===
-            productName.trim().toLowerCase()
+            productName.trim().toLowerCase(),
         );
         if (!foundProduct) return null;
         return foundProduct;
       },
       getById(productId) {
         const foundProduct = get().products.find(
-          (product) => product.id === productId
+          (product) => product.id === productId,
         );
 
         if (!foundProduct) return null;
@@ -81,6 +81,6 @@ export const useProductStore = create<ProductState>()(
         });
       },
     }),
-    { name: "product-storage" }
-  )
+    { name: "product-storage" },
+  ),
 );

@@ -30,7 +30,7 @@ export const useAdhesionStore = create<AdhesionState>()(
       },
       remove(id) {
         const updatedAdhesions = get().adhesions.filter(
-          (adhesion) => adhesion.id !== id
+          (adhesion) => adhesion.id !== id,
         );
         set((state) => ({ ...state, adhesions: updatedAdhesions }), true);
       },
@@ -46,7 +46,7 @@ export const useAdhesionStore = create<AdhesionState>()(
       },
       getAdhesionByYear(year) {
         const adhesion = get().adhesions.find(
-          (adhesion) => adhesion.year === year
+          (adhesion) => adhesion.year === year,
         );
         if (!adhesion) return null;
         return adhesion;
@@ -55,6 +55,6 @@ export const useAdhesionStore = create<AdhesionState>()(
         return get().getAdhesionByYear(new Date().getFullYear());
       },
     }),
-    { name: "adhesion-storage" }
-  )
+    { name: "adhesion-storage" },
+  ),
 );

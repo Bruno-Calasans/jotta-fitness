@@ -25,7 +25,7 @@ export const useExpenseStore = create<ExpenseState>()(
       },
       remove(id) {
         const updatedExpenses = get().expenses.filter(
-          (expense) => expense.id !== id
+          (expense) => expense.id !== id,
         );
         set((state) => ({ ...state, expenses: updatedExpenses }), true);
       },
@@ -40,6 +40,6 @@ export const useExpenseStore = create<ExpenseState>()(
         set((state) => ({ ...state, expenses: updatedExpenses }), true);
       },
     }),
-    { name: "expense-storage" }
-  )
+    { name: "expense-storage" },
+  ),
 );
