@@ -37,7 +37,7 @@ export default function DiaryReport() {
           subtitle: profit >= 0 ? "text-emerald-200" : "text-red-200",
         }}
       />
-      {/* Gain */}
+      {/* Gains */}
       <div className="flex gap-2">
         {/* Product Info */}
         <ReportInfo
