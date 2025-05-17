@@ -5,6 +5,7 @@ import { create } from "zustand";
 import generateDbFields from "@/utils/generateDefaultDbFields";
 import type { Expense } from "@/types/Expense.type";
 import type { DB } from "@/types/Db.type";
+import { persist } from "zustand/middleware";
 
 type ExpenseState = {
   expenses: Expense[];
@@ -13,27 +14,32 @@ type ExpenseState = {
   update: (id: string, input: Partial<Omit<Expense, keyof DB>>) => void;
 };
 
-export const useExpenseStore = create<ExpenseState>((set, get) => ({
-  expenses: EXPENSE_DATA,
-  add(input) {
-    set((state) => ({
-      expenses: [...state.expenses, { ...generateDbFields(), ...input }],
-    }));
-  },
-  remove(id) {
-    const updatedExpenses = get().expenses.filter(
-      (expense) => expense.id !== id,
-    );
-    set((state) => ({ ...state, expenses: updatedExpenses }), true);
-  },
-  update(id, input) {
-    const updatedExpenses = get().expenses.map((expense) => {
-      if (expense.id === id) {
-        return { ...expense, updatedAt: new Date(), ...input };
-      }
-      return expense;
-    });
+export const useExpenseStore = create<ExpenseState>()(
+  persist(
+    (set, get) => ({
+      expenses: EXPENSE_DATA,
+      add(input) {
+        set((state) => ({
+          expenses: [...state.expenses, { ...generateDbFields(), ...input }],
+        }));
+      },
+      remove(id) {
+        const updatedExpenses = get().expenses.filter(
+          (expense) => expense.id !== id
+        );
+        set((state) => ({ ...state, expenses: updatedExpenses }), true);
+      },
+      update(id, input) {
+        const updatedExpenses = get().expenses.map((expense) => {
+          if (expense.id === id) {
+            return { ...expense, updatedAt: new Date(), ...input };
+          }
+          return expense;
+        });
 
-    set((state) => ({ ...state, expenses: updatedExpenses }), true);
-  },
-}));
+        set((state) => ({ ...state, expenses: updatedExpenses }), true);
+      },
+    }),
+    { name: "expense-storage" }
+  )
+);

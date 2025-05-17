@@ -18,7 +18,7 @@ import createPlanDiary from "@/utils/createPlanDiary";
 import updatePlanDiary from "@/utils/updatePlanDiary";
 import updatePurchase from "@/utils/updatePurchase";
 import type { Optional } from "@/types/Optional.type";
-import { EnrollmentLog } from "@/types/Log.type";
+import { persist } from "zustand/middleware";
 
 type MemberState = {
   members: Member[];
@@ -31,282 +31,298 @@ type MemberState = {
     input: Optional<
       Omit<Member, keyof DB>,
       "adhesionsPayments" | "diaries" | "enrollments" | "purchases" | "role"
-    >,
+    >
   ) => void;
   remove: (id: string) => void;
   update: (
     memberId: string,
-    input: Partial<Omit<Member, keyof DB>>,
+    input: Partial<Omit<Member, keyof DB>>
   ) => Member | null;
   addEnrollment: (
     memberId: string,
-    input: Omit<Enrollment, keyof DB | "startsIn" | "expiresIn">,
+    input: Omit<Enrollment, keyof DB | "startsIn" | "expiresIn">
   ) => Enrollment | null;
   removeEnrollment: (memberId: string, enrollmentId: string) => void;
   updateEnrollment: (
     memberId: string,
     enrollmentId: string,
-    input: Partial<{ plan: Plan; months: number }>,
+    input: Partial<{ plan: Plan; months: number }>
   ) => Enrollment | null;
   addPurchase: (
     memberId: string,
-    input: Omit<Purchase, keyof DB>,
+    input: Omit<Purchase, keyof DB>
   ) => Purchase | null;
   updatePurchase: (
     memberId: string,
     purchaseId: string,
-    input: Partial<Omit<Purchase, keyof DB>>,
+    input: Partial<Omit<Purchase, keyof DB>>
   ) => Purchase | null;
   removePurchase: (memberId: string, purchaseId: string) => void;
   addAdhesionPayment: (
     memberId: string,
-    adhesionYear: number,
+    adhesionYear: number
   ) => AdhesionPayment | null;
   removeAdhesionPayment: (memberId: string, adhesionId: string) => void;
   addDiary: (
     memberId: string,
-    input: Omit<PlanDiary, keyof DB | "expiresIn">,
+    input: Omit<PlanDiary, keyof DB | "expiresIn">
   ) => PlanDiary | null;
   updateDiary: (
     memberId: string,
     diaryId: string,
-    input: Omit<PlanDiary, keyof DB | "expiresIn">,
+    input: Omit<PlanDiary, keyof DB | "expiresIn">
   ) => PlanDiary | null;
   removeDiary: (memberId: string, diaryId: string) => void;
 };
 
-export const useMemberStore = create<MemberState>((set, get) => ({
-  members: MEMBERS_DATA,
-  selectedMember: null,
-  selectedEnrollment: null,
-  setSelectedEnrollment(enrollment) {
-    set(() => ({ selectedEnrollment: enrollment }));
-  },
-  setSelectedMember(member) {
-    set(() => ({ selectedMember: member }));
-  },
-  getMemberById(memberId) {
-    const foundMember = get().members.find((member) => member.id === memberId);
-    if (!foundMember) return null;
-    return foundMember;
-  },
-  add(input) {
-    set((state) => ({
-      members: [
-        ...state.members,
-        {
-          ...generateDefaultDbFields(),
-          role: null,
-          adhesionsPayments: [],
-          enrollments: [],
-          diaries: [],
-          purchases: [],
-          ...input,
-        },
-      ],
-    }));
-  },
-  update(memberId, input) {
-    let updatedMember: Member | null = null;
+export const useMemberStore = create<MemberState>()(
+  persist(
+    (set, get) => ({
+      members: MEMBERS_DATA,
+      selectedMember: null,
+      selectedEnrollment: null,
+      setSelectedEnrollment(enrollment) {
+        set(() => ({ selectedEnrollment: enrollment }));
+      },
+      setSelectedMember(member) {
+        set(() => ({ selectedMember: member }));
+      },
+      getMemberById(memberId) {
+        const foundMember = get().members.find(
+          (member) => member.id === memberId
+        );
+        if (!foundMember) return null;
+        return foundMember;
+      },
+      add(input) {
+        set((state) => ({
+          members: [
+            ...state.members,
+            {
+              ...generateDefaultDbFields(),
+              role: null,
+              adhesionsPayments: [],
+              enrollments: [],
+              diaries: [],
+              purchases: [],
+              ...input,
+            },
+          ],
+        }));
+      },
+      update(memberId, input) {
+        let updatedMember: Member | null = null;
 
-    const updatedMembers = get().members.map((member) => {
-      if (member.id === memberId) {
-        updatedMember = { ...member, updatedAt: new Date(), ...input };
+        const updatedMembers = get().members.map((member) => {
+          if (member.id === memberId) {
+            updatedMember = { ...member, updatedAt: new Date(), ...input };
+            return updatedMember;
+          }
+          return member;
+        });
+
+        set((state) => ({ ...state, members: updatedMembers }), true);
+
         return updatedMember;
-      }
-      return member;
-    });
+      },
+      remove(memberId) {
+        const updatedMembers = get().members.filter(
+          (member) => member.id !== memberId
+        );
+        set((state) => ({ ...state, members: updatedMembers }), true);
+      },
+      addEnrollment(memberId, input) {
+        // Check if members exists
+        const member = get().getMemberById(memberId);
+        if (!member) return null;
 
-    set((state) => ({ ...state, members: updatedMembers }), true);
+        // Create enrollment
+        const enrollment = createEnrollment(member, input);
 
-    return updatedMember;
-  },
-  remove(memberId) {
-    const updatedMembers = get().members.filter(
-      (member) => member.id !== memberId,
-    );
-    set((state) => ({ ...state, members: updatedMembers }), true);
-  },
-  addEnrollment(memberId, input) {
-    // Check if members exists
-    const member = get().getMemberById(memberId);
-    if (!member) return null;
+        const updatedMember = get().update(memberId, {
+          ...member,
+          enrollments: [...member.enrollments, enrollment],
+        });
 
-    // Create enrollment
-    const enrollment = createEnrollment(member, input);
+        // Update selected member
+        if (updatedMember) get().setSelectedMember(updatedMember);
 
-    const updatedMember = get().update(memberId, {
-      ...member,
-      enrollments: [...member.enrollments, enrollment],
-    });
+        return enrollment;
+      },
+      updateEnrollment(memberId, enrollmentId, input) {
+        // Found member
+        const foundMember = get().getMemberById(memberId);
+        if (!foundMember) return null;
 
-    // Update selected member
-    if (updatedMember) get().setSelectedMember(updatedMember);
+        let updatedEnrollment: Enrollment | null = null;
 
-    return enrollment;
-  },
-  updateEnrollment(memberId, enrollmentId, input) {
-    // Found member
-    const foundMember = get().getMemberById(memberId);
-    if (!foundMember) return null;
+        // Update specific plan payment
+        const updatedEnrollments = foundMember.enrollments.map((enrollment) => {
+          // Find and update the specific enrollment
+          if (enrollment.id === enrollmentId) {
+            updatedEnrollment = updateEnrollment(
+              enrollment,
+              foundMember,
+              input
+            );
+            return updatedEnrollment;
+          }
 
-    let updatedEnrollment: Enrollment | null = null;
+          // Return others plan payments
+          return enrollment;
+        });
 
-    // Update specific plan payment
-    const updatedEnrollments = foundMember.enrollments.map((enrollment) => {
-      // Find and update the specific enrollment
-      if (enrollment.id === enrollmentId) {
-        updatedEnrollment = updateEnrollment(enrollment, foundMember, input);
+        const updatedMember = get().update(foundMember.id, {
+          ...foundMember,
+          enrollments: updatedEnrollments,
+        });
+
+        get().setSelectedMember(updatedMember);
+
         return updatedEnrollment;
-      }
+      },
+      removeEnrollment(memberId, enrollmentId) {
+        // Found member
+        const foundMember = get().getMemberById(memberId);
+        if (!foundMember) return;
 
-      // Return others plan payments
-      return enrollment;
-    });
+        // Change specific plan payment
+        const updatedEnrollments = foundMember.enrollments.filter(
+          (enrollment) => enrollment.id != enrollmentId
+        );
 
-    const updatedMember = get().update(foundMember.id, {
-      ...foundMember,
-      enrollments: updatedEnrollments,
-    });
+        // Update plan payments
+        const updatedMember = get().update(memberId, {
+          enrollments: updatedEnrollments,
+        });
 
-    get().setSelectedMember(updatedMember);
+        // Update selected member
+        get().setSelectedMember(updatedMember);
+      },
+      addPurchase(memberId, input) {
+        const foundMember = get().getMemberById(memberId);
+        if (!foundMember) return null;
 
-    return updatedEnrollment;
-  },
-  removeEnrollment(memberId, enrollmentId) {
-    // Found member
-    const foundMember = get().getMemberById(memberId);
-    if (!foundMember) return;
+        const newPurchase = createPurchase(input);
 
-    // Change specific plan payment
-    const updatedEnrollments = foundMember.enrollments.filter(
-      (enrollment) => enrollment.id != enrollmentId,
-    );
+        const updatedMember = get().update(memberId, {
+          purchases: [...foundMember.purchases, newPurchase],
+        });
 
-    // Update plan payments
-    const updatedMember = get().update(memberId, {
-      enrollments: updatedEnrollments,
-    });
+        get().setSelectedMember(updatedMember);
 
-    // Update selected member
-    get().setSelectedMember(updatedMember);
-  },
-  addPurchase(memberId, input) {
-    const foundMember = get().getMemberById(memberId);
-    if (!foundMember) return null;
+        return newPurchase;
+      },
+      updatePurchase(memberId, purchaseId, input) {
+        const foundMember = get().getMemberById(memberId);
+        if (!foundMember) return null;
 
-    const newPurchase = createPurchase(input);
+        let updatedPurchase: Purchase | null = null;
 
-    const updatedMember = get().update(memberId, {
-      purchases: [...foundMember.purchases, newPurchase],
-    });
+        const updatedPurchases = foundMember.purchases.map((purchase) => {
+          if (purchase.id === purchaseId) {
+            updatedPurchase = updatePurchase(purchase, input);
+            return updatedPurchase;
+          }
+          return purchase;
+        });
 
-    get().setSelectedMember(updatedMember);
+        const updatedMember = get().update(foundMember.id, {
+          purchases: updatedPurchases,
+        });
 
-    return newPurchase;
-  },
-  updatePurchase(memberId, purchaseId, input) {
-    const foundMember = get().getMemberById(memberId);
-    if (!foundMember) return null;
+        get().setSelectedMember(updatedMember);
 
-    let updatedPurchase: Purchase | null = null;
-
-    const updatedPurchases = foundMember.purchases.map((purchase) => {
-      if (purchase.id === purchaseId) {
-        updatedPurchase = updatePurchase(purchase, input);
         return updatedPurchase;
-      }
-      return purchase;
-    });
+      },
+      removePurchase(memberId, purchaseId) {
+        const foundMember = get().getMemberById(memberId);
+        if (!foundMember) return;
 
-    const updatedMember = get().update(foundMember.id, {
-      purchases: updatedPurchases,
-    });
+        const updatedPurchases = foundMember.purchases.filter(
+          (purchase) => purchase.id !== purchaseId
+        );
 
-    get().setSelectedMember(updatedMember);
+        const updatedMember = get().update(foundMember.id, {
+          purchases: updatedPurchases,
+        });
 
-    return updatedPurchase;
-  },
-  removePurchase(memberId, purchaseId) {
-    const foundMember = get().getMemberById(memberId);
-    if (!foundMember) return;
+        get().setSelectedMember(updatedMember);
+      },
+      addAdhesionPayment(memberId, adhesionYear) {
+        const foundMember = get().getMemberById(memberId);
+        if (!foundMember) return null;
 
-    const updatedPurchases = foundMember.purchases.filter(
-      (purchase) => purchase.id !== purchaseId,
-    );
+        const newAdhesionPayment = createAdhesionPayment({
+          year: adhesionYear,
+        });
 
-    const updatedMember = get().update(foundMember.id, {
-      purchases: updatedPurchases,
-    });
+        const updatedMember = get().update(foundMember.id, {
+          ...foundMember,
+          adhesionsPayments: [
+            ...foundMember.adhesionsPayments,
+            newAdhesionPayment,
+          ],
+        });
 
-    get().setSelectedMember(updatedMember);
-  },
-  addAdhesionPayment(memberId, adhesionYear) {
-    const foundMember = get().getMemberById(memberId);
-    if (!foundMember) return null;
+        get().setSelectedMember(updatedMember);
 
-    const newAdhesionPayment = createAdhesionPayment({ year: adhesionYear });
+        return newAdhesionPayment;
+      },
+      removeAdhesionPayment(memberId, adhesionPaymentId) {
+        const foundMember = get().getMemberById(memberId);
+        if (!foundMember) return;
 
-    const updatedMember = get().update(foundMember.id, {
-      ...foundMember,
-      adhesionsPayments: [...foundMember.adhesionsPayments, newAdhesionPayment],
-    });
+        const updatedAdhesionPayments = foundMember.adhesionsPayments.filter(
+          (adhesionPayment) => adhesionPayment.id !== adhesionPaymentId
+        );
 
-    get().setSelectedMember(updatedMember);
+        get().update(foundMember.id, {
+          adhesionsPayments: updatedAdhesionPayments,
+        });
+      },
+      addDiary(memberId, input) {
+        const foundMember = get().getMemberById(memberId);
+        if (!foundMember) return null;
 
-    return newAdhesionPayment;
-  },
-  removeAdhesionPayment(memberId, adhesionPaymentId) {
-    const foundMember = get().getMemberById(memberId);
-    if (!foundMember) return;
+        const newDiary = createPlanDiary(input, foundMember);
 
-    const updatedAdhesionPayments = foundMember.adhesionsPayments.filter(
-      (adhesionPayment) => adhesionPayment.id !== adhesionPaymentId,
-    );
+        get().update(memberId, { diaries: [...foundMember.diaries, newDiary] });
 
-    get().update(foundMember.id, {
-      adhesionsPayments: updatedAdhesionPayments,
-    });
-  },
-  addDiary(memberId, input) {
-    const foundMember = get().getMemberById(memberId);
-    if (!foundMember) return null;
+        return newDiary;
+      },
+      updateDiary(memberId, diaryId, input) {
+        const foundMember = get().getMemberById(memberId);
+        if (!foundMember) return null;
 
-    const newDiary = createPlanDiary(input, foundMember);
+        const updatedDiary: PlanDiary | null = null;
 
-    get().update(memberId, { diaries: [...foundMember.diaries, newDiary] });
+        const updatedDiaries = foundMember.diaries.map((diary) => {
+          if (diary.id === diaryId) {
+            return updatePlanDiary(diary, input, foundMember);
+          }
+          return diary;
+        });
 
-    return newDiary;
-  },
-  updateDiary(memberId, diaryId, input) {
-    const foundMember = get().getMemberById(memberId);
-    if (!foundMember) return null;
+        get().update(memberId, {
+          diaries: updatedDiaries,
+        });
 
-    const updatedDiary: PlanDiary | null = null;
+        return updatedDiary;
+      },
+      removeDiary(memberId, diaryId) {
+        const foundMember = get().getMemberById(memberId);
+        if (!foundMember) return null;
 
-    const updatedDiaries = foundMember.diaries.map((diary) => {
-      if (diary.id === diaryId) {
-        return updatePlanDiary(diary, input, foundMember);
-      }
-      return diary;
-    });
+        const updatedDiaries = foundMember.diaries.filter(
+          (diary) => (diary.id! += diaryId)
+        );
 
-    get().update(memberId, {
-      diaries: updatedDiaries,
-    });
-
-    return updatedDiary;
-  },
-  removeDiary(memberId, diaryId) {
-    const foundMember = get().getMemberById(memberId);
-    if (!foundMember) return null;
-
-    const updatedDiaries = foundMember.diaries.filter(
-      (diary) => (diary.id! += diaryId),
-    );
-
-    get().update(memberId, {
-      diaries: updatedDiaries,
-    });
-  },
-}));
+        get().update(memberId, {
+          diaries: updatedDiaries,
+        });
+      },
+    }),
+    { name: "member-storage" }
+  )
+);

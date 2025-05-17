@@ -19,6 +19,7 @@ import calcEnrollmentPrice from "@/utils/calcEnrollmentPrice";
 import calcPlanDiaryPrice from "@/utils/calcPlanDiaryPrice";
 import calcAdhesionPrice from "@/utils/calcAdhesionPrice";
 import sumNumbers from "@/utils/sumNumbers";
+import { persist } from "zustand/middleware";
 
 type LogState = {
   logs: Log[];
@@ -46,150 +47,164 @@ type LogState = {
   };
 };
 
-export const useLogStore = create<LogState>((set, get) => ({
-  logs: [],
-  selectedDate: new Date(),
-  setSelectedDate(value) {
-    set(() => ({ selectedDate: value }));
-  },
-  add(input) {
-    const newLog = { ...generateDbFields(), ...input } as Log;
-    set((state) => ({
-      logs: [...state.logs, newLog],
-    }));
-  },
-  remove(id) {
-    const updatedLogs = get().logs.filter((log) => log.id !== id);
-    set((state) => ({ ...state, logs: updatedLogs }), true);
-  },
-  update(id, input) {
-    const updatedLogs = get().logs.map((log) => {
-      if (log.id === id) {
-        return { ...log, ...input, updatedAt: new Date() };
-      }
-      return log;
-    }) as Log[];
+export const useLogStore = create<LogState>()(
+  persist(
+    (set, get) => ({
+      logs: [],
+      selectedDate: new Date(),
+      setSelectedDate(value) {
+        set(() => ({ selectedDate: value }));
+      },
+      add(input) {
+        const newLog = { ...generateDbFields(), ...input } as Log;
+        set((state) => ({
+          logs: [...state.logs, newLog],
+        }));
+      },
+      remove(id) {
+        const updatedLogs = get().logs.filter((log) => log.id !== id);
+        set((state) => ({ ...state, logs: updatedLogs }), true);
+      },
+      update(id, input) {
+        const updatedLogs = get().logs.map((log) => {
+          if (log.id === id) {
+            return { ...log, ...input, updatedAt: new Date() };
+          }
+          return log;
+        }) as Log[];
 
-    set((state) => ({ ...state, logs: updatedLogs }), true);
-  },
-  getAllEnrollmentLogs() {
-    return get().logs.filter(
-      (log) => log.type === "enrollment",
-    ) as EnrollmentLog[];
-  },
-  getAllPlanDiaryLogs() {
-    return get().logs.filter(
-      (log) => log.type === "plan-diary",
-    ) as PlanDiaryLog[];
-  },
-  getAllPurchaseLogs() {
-    return get().logs.filter((log) => log.type === "purchase") as (Log & {
-      type: "purchase";
-    })[];
-  },
-  getAllLossLogs() {
-    return get().logs.filter(
-      (log) => log.type === "investment" || "expense",
-    ) as LossLog[];
-  },
-  getAllAdhesionLogs() {
-    return get().logs.filter((log) => log.type === "adhesion") as AdhesionLog[];
-  },
-  getLogsByDate(type, selectedDate) {
-    return get().logs.filter(
-      (log) => log.type === type && isDateEqual(log.createdAt, selectedDate),
-    );
-  },
-  getByEnrollmentId(enrollmentId) {
-    const foundLog = get().logs.find(
-      (log) => log.type === "enrollment" && log.enrollment.id === enrollmentId,
-    );
+        set((state) => ({ ...state, logs: updatedLogs }), true);
+      },
+      getAllEnrollmentLogs() {
+        return get().logs.filter(
+          (log) => log.type === "enrollment"
+        ) as EnrollmentLog[];
+      },
+      getAllPlanDiaryLogs() {
+        return get().logs.filter(
+          (log) => log.type === "plan-diary"
+        ) as PlanDiaryLog[];
+      },
+      getAllPurchaseLogs() {
+        return get().logs.filter((log) => log.type === "purchase") as (Log & {
+          type: "purchase";
+        })[];
+      },
+      getAllLossLogs() {
+        return get().logs.filter(
+          (log) => log.type === "investment" || "expense"
+        ) as LossLog[];
+      },
+      getAllAdhesionLogs() {
+        return get().logs.filter(
+          (log) => log.type === "adhesion"
+        ) as AdhesionLog[];
+      },
+      getLogsByDate(type, selectedDate) {
+        return get().logs.filter(
+          (log) => log.type === type && isDateEqual(log.createdAt, selectedDate)
+        );
+      },
+      getByEnrollmentId(enrollmentId) {
+        const foundLog = get().logs.find(
+          (log) =>
+            log.type === "enrollment" && log.enrollment.id === enrollmentId
+        );
 
-    if (!foundLog) return null;
+        if (!foundLog) return null;
 
-    return foundLog as EnrollmentLog;
-  },
-  getByPurchaseId(purchaseId) {
-    const foundLog = get().logs.find(
-      (log) => log.type === "purchase" && log.purchase.id === purchaseId,
-    );
+        return foundLog as EnrollmentLog;
+      },
+      getByPurchaseId(purchaseId) {
+        const foundLog = get().logs.find(
+          (log) => log.type === "purchase" && log.purchase.id === purchaseId
+        );
 
-    if (!foundLog) return null;
+        if (!foundLog) return null;
 
-    return foundLog as PurchaseLog;
-  },
-  sumAllPurchasesLogsByDate(date) {
-    const purchaseLogs = get().getLogsByDate("purchase", date) as PurchaseLog[];
+        return foundLog as PurchaseLog;
+      },
+      sumAllPurchasesLogsByDate(date) {
+        const purchaseLogs = get().getLogsByDate(
+          "purchase",
+          date
+        ) as PurchaseLog[];
 
-    if (purchaseLogs.length === 0) return 0;
+        if (purchaseLogs.length === 0) return 0;
 
-    return purchaseLogs
-      .map(({ purchase }) => calcPurchasePrice(purchase))
-      .reduce(sumNumbers);
-  },
-  sumAllEnrollmentLogsByDate(date) {
-    const enrollmentLogs = get().getLogsByDate(
-      "enrollment",
-      date,
-    ) as EnrollmentLog[];
+        return purchaseLogs
+          .map(({ purchase }) => calcPurchasePrice(purchase))
+          .reduce(sumNumbers);
+      },
+      sumAllEnrollmentLogsByDate(date) {
+        const enrollmentLogs = get().getLogsByDate(
+          "enrollment",
+          date
+        ) as EnrollmentLog[];
 
-    if (enrollmentLogs.length === 0) return 0;
+        if (enrollmentLogs.length === 0) return 0;
 
-    return enrollmentLogs
-      .map(({ enrollment }) => calcEnrollmentPrice(enrollment))
-      .reduce(sumNumbers);
-  },
-  sumAllPlanDiaryLogsByDate(date) {
-    const planDiaries = get().getLogsByDate(
-      "plan-diary",
-      date,
-    ) as PlanDiaryLog[];
+        return enrollmentLogs
+          .map(({ enrollment }) => calcEnrollmentPrice(enrollment))
+          .reduce(sumNumbers);
+      },
+      sumAllPlanDiaryLogsByDate(date) {
+        const planDiaries = get().getLogsByDate(
+          "plan-diary",
+          date
+        ) as PlanDiaryLog[];
 
-    if (planDiaries.length === 0) return 0;
+        if (planDiaries.length === 0) return 0;
 
-    return planDiaries
-      .map(({ planDiary }) => calcPlanDiaryPrice(planDiary))
-      .reduce(sumNumbers);
-  },
-  sumAllAdhesionLogsByDate(date) {
-    const adhesionLogs = get().getLogsByDate("adhesion", date) as AdhesionLog[];
+        return planDiaries
+          .map(({ planDiary }) => calcPlanDiaryPrice(planDiary))
+          .reduce(sumNumbers);
+      },
+      sumAllAdhesionLogsByDate(date) {
+        const adhesionLogs = get().getLogsByDate(
+          "adhesion",
+          date
+        ) as AdhesionLog[];
 
-    if (adhesionLogs.length === 0) return 0;
+        if (adhesionLogs.length === 0) return 0;
 
-    return adhesionLogs
-      .map(({ adhesion, plan, member }) =>
-        calcAdhesionPrice(adhesion, plan, member),
-      )
-      .reduce(sumNumbers);
-  },
-  sumAllLossLogsByDate(date) {
-    const expenseLogs = get().getLogsByDate("expense", date) as LossLog[];
-    const investimentLogs = get().getLogsByDate(
-      "investment",
-      date,
-    ) as LossLog[];
+        return adhesionLogs
+          .map(({ adhesion, plan, member }) =>
+            calcAdhesionPrice(adhesion, plan, member)
+          )
+          .reduce(sumNumbers);
+      },
+      sumAllLossLogsByDate(date) {
+        const expenseLogs = get().getLogsByDate("expense", date) as LossLog[];
+        const investimentLogs = get().getLogsByDate(
+          "investment",
+          date
+        ) as LossLog[];
 
-    if (expenseLogs.length === 0 && investimentLogs.length === 0)
-      return {
-        expenseLoss: 0,
-        investmentLoss: 0,
-        loss: 0,
-      };
+        if (expenseLogs.length === 0 && investimentLogs.length === 0)
+          return {
+            expenseLoss: 0,
+            investmentLoss: 0,
+            loss: 0,
+          };
 
-    const expenseLoss =
-      expenseLogs.length > 0
-        ? expenseLogs.map((log) => log.value).reduce(sumNumbers)
-        : 0;
+        const expenseLoss =
+          expenseLogs.length > 0
+            ? expenseLogs.map((log) => log.value).reduce(sumNumbers)
+            : 0;
 
-    const investmentLoss =
-      investimentLogs.length > 0
-        ? investimentLogs.map((log) => log.value).reduce(sumNumbers)
-        : 0;
+        const investmentLoss =
+          investimentLogs.length > 0
+            ? investimentLogs.map((log) => log.value).reduce(sumNumbers)
+            : 0;
 
-    return {
-      expenseLoss,
-      investmentLoss,
-      loss: expenseLoss + investmentLoss,
-    };
-  },
-}));
+        return {
+          expenseLoss,
+          investmentLoss,
+          loss: expenseLoss + investmentLoss,
+        };
+      },
+    }),
+    { name: "log-storage" }
+  )
+);
