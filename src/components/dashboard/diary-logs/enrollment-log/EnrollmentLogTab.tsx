@@ -1,3 +1,5 @@
+"use client";
+
 import DataTable from "@/components/custom/dataTable/DataTable";
 import { enrollmentLogColumns } from "./EnrollmentLogTableColumns";
 import { useLogStore } from "@/store/logStore";

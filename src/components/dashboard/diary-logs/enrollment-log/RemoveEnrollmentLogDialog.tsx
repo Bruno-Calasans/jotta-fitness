@@ -13,6 +13,7 @@ import useCustomToast from "@/hooks/use-custom-toast";
 import { useLogStore } from "@/store/logStore";
 import { useMemberStore } from "@/store/memberStore";
 import type { Log } from "@/types/Log.type";
+import defaultDateFormat from "@/utils/defaultDateFormat";
 
 type RemoveEnrollmentLogDialogProps = {
   enrollmentLog: Log & { type: "enrollment" };
@@ -29,17 +30,17 @@ export default function RemoveEnrollmentLogDialog({
     try {
       memberDb.removeEnrollment(
         enrollmentLog.member.id,
-        enrollmentLog.enrollment.id,
+        enrollmentLog.enrollment.id
       );
       logDb.remove(enrollmentLog.id);
       successToast(
         "Exclusão de Registro de Inscrição",
-        "Registro removido com sucesso!",
+        "Registro removido com sucesso!"
       );
     } catch (error) {
       errorToast(
         "Exclusão de Registro de Inscrição",
-        "Erro ao remover registro",
+        "Erro ao remover registro"
       );
     }
   };
@@ -65,7 +66,7 @@ export default function RemoveEnrollmentLogDialog({
             </span>
             do dia{" "}
             <span className="font-bold">
-              {enrollmentLog.createdAt.toLocaleDateString()}
+              {defaultDateFormat(enrollmentLog.createdAt)}
             </span>
             ?
           </div>

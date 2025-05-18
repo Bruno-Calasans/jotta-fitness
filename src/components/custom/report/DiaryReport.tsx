@@ -1,29 +1,31 @@
+"use client";
+
 import { useLogStore } from "@/store/logStore";
 import ReportInfo from "./ReportInfo";
 import toRealFormat from "@/utils/toRealFormat";
-import calcProfit from "@/utils/calcProfit";
+import calcProfit, { defaultProfitInfo, ProfitInfo } from "@/utils/calcProfit";
+import { useEffect, useState } from "react";
 
 export default function DiaryReport() {
+  const { selectedDate, getLogsByDate } = useLogStore();
+  const [profitInfo, setProfitInfo] = useState<ProfitInfo>(defaultProfitInfo);
+
+  useEffect(() => {
+    if (selectedDate) {
+      const logsByDate = getLogsByDate(selectedDate);
+      setProfitInfo(calcProfit(logsByDate));
+    }
+  }, [selectedDate]);
+
   const {
-    selectedDate,
-    sumAllPurchasesLogsByDate,
-    sumAllEnrollmentLogsByDate,
-    sumAllPlanDiaryLogsByDate,
-    sumAllAdhesionLogsByDate,
-    sumAllLossLogsByDate,
-  } = useLogStore();
-
-  const currentDate = selectedDate || new Date();
-  const purchaseIncome = sumAllPurchasesLogsByDate(currentDate);
-  const enrollmentIncome = sumAllEnrollmentLogsByDate(currentDate);
-  const planDiaryIncome = sumAllPlanDiaryLogsByDate(currentDate);
-  const adhesionIncome = sumAllAdhesionLogsByDate(currentDate);
-  const { expenseLoss, investmentLoss } = sumAllLossLogsByDate(currentDate);
-
-  const profit = calcProfit(
-    [purchaseIncome, enrollmentIncome, planDiaryIncome, adhesionIncome],
-    [investmentLoss, expenseLoss],
-  );
+    profit,
+    enrollmentIncome,
+    purchaseIncome,
+    planDiaryIncome,
+    adhesionIncome,
+    expenseLoss,
+    investmentLoss,
+  } = profitInfo;
 
   return (
     <div className="flex gap-2 flex-wrap mb-3">
