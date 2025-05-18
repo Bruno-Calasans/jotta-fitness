@@ -64,7 +64,7 @@ export default function ProductForm({ product, onSubmit }: ProductFormProps) {
         // Result
         successToast(
           "Atualização de Produto",
-          "Produto atualizado com sucesso!"
+          "Produto atualizado com sucesso!",
         );
         onSubmit(true);
       } catch (error) {

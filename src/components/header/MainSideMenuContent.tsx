@@ -9,7 +9,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
-import { mainItems, socialItems, adminItems } from "./headerMenuData";
+import { adminItems, mainItems, socialItems } from "./headerMenuData";
 
 export default function MainSideMenuContent() {
   return (

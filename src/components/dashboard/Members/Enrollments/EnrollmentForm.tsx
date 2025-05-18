@@ -46,7 +46,7 @@ export default function EnrollmentForm({
   const { lateFee } = useEnrollmentResume();
   const { successToast, errorToast } = useCustomToast();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(
-    enrollment?.plan || null
+    enrollment?.plan || null,
   );
 
   const form = useForm<EnrollFormInputs>({
@@ -72,7 +72,7 @@ export default function EnrollmentForm({
           {
             plan: selectedPlan,
             months: input.months,
-          }
+          },
         );
 
         // Update enrollment log
@@ -89,7 +89,7 @@ export default function EnrollmentForm({
 
         successToast(
           "Atualização de Plano",
-          "Atualização realizada com sucesso"
+          "Atualização realizada com sucesso",
         );
         onSubmit(true);
       } catch (error) {

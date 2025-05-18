@@ -43,7 +43,7 @@ export default function LossLogForm({ lossLog, onSubmit }: LossLogFormProps) {
   const logDb = useLogStore();
   const { successToast, errorToast } = useCustomToast();
   const [selectedLoss, setSelectedLoss] = useState<Expense | Investment | null>(
-    lossLog?.item || null
+    lossLog?.item || null,
   );
 
   const form = useForm<LossLogFormInputs>({
@@ -72,13 +72,13 @@ export default function LossLogForm({ lossLog, onSubmit }: LossLogFormProps) {
         // Show success message
         successToast(
           "Atualização de Registro de Perda",
-          "Registro de perda atualizado com sucecsso"
+          "Registro de perda atualizado com sucecsso",
         );
         onSubmit(true);
       } catch (error) {
         errorToast(
           "Atualização de Registro de Perda",
-          "Erro ao atualizar registro de perda"
+          "Erro ao atualizar registro de perda",
         );
         onSubmit(false);
       }
@@ -94,7 +94,7 @@ export default function LossLogForm({ lossLog, onSubmit }: LossLogFormProps) {
 
         successToast(
           "Criação de Registro de Perda",
-          "Registro criado com sucesso"
+          "Registro criado com sucesso",
         );
         onSubmit(true);
       } catch (error) {

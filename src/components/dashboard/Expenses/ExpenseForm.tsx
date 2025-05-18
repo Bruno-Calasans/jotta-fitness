@@ -54,7 +54,7 @@ export default function ExpenseForm({ expense, onSubmit }: ExpenseFormProps) {
         // Result
         successToast(
           "Atualização de Despesa",
-          "Despesa atualizado com sucesso!"
+          "Despesa atualizado com sucesso!",
         );
         onSubmit(true);
       } catch (error) {

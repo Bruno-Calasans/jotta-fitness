@@ -1,14 +1,14 @@
 import {
-  CircleDollarSign,
-  Package,
-  User,
   BanknoteArrowDown,
-  ShieldUser,
-  CalendarCheck,
   Calendar1,
+  CalendarCheck,
   CalendarDays,
+  CircleDollarSign,
   Dumbbell,
   HandCoins,
+  Package,
+  ShieldUser,
+  User,
 } from "lucide-react";
 
 export const DashboardSidebarItems = {

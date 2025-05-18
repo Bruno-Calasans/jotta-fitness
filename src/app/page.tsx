@@ -1,9 +1,9 @@
 import ContentContainer from "@/components/custom/others/ContentContainer";
 import HomeSection from "@/components/home/HomeSection";
 import {
+  benefitsItems,
   planItems,
   serviceItems,
-  benefitsItems,
 } from "@/components/home/HomeMenuData";
 import PlanCard from "@/components/home/PlanItem";
 import ServiceCard from "@/components/home/ServiceItem";

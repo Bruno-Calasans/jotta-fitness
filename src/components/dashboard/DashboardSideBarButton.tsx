@@ -1,7 +1,7 @@
 import {
+  LayoutDashboard,
   SquareChevronLeft,
   SquareChevronRight,
-  LayoutDashboard,
 } from "lucide-react";
 
 import { useSidebar } from "@/components/ui/sidebar";

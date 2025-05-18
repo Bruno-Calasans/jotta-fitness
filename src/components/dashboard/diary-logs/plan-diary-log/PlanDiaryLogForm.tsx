@@ -6,11 +6,11 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -51,10 +51,10 @@ export default function PlanDiaryLogForm({
   const memberDb = useMemberStore();
   const { successToast, errorToast } = useCustomToast();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(
-    planDiaryLog?.planDiary.plan || null
+    planDiaryLog?.planDiary.plan || null,
   );
   const [selectedMember, setSelectedMember] = useState<Member | null>(
-    planDiaryLog?.member || null
+    planDiaryLog?.member || null,
   );
 
   const form = useForm<PlanDiaryLogFormInputs>({
@@ -83,7 +83,7 @@ export default function PlanDiaryLogForm({
             {
               plan: selectedPlan,
               days,
-            }
+            },
           );
 
           if (updatedPlanDiary)
@@ -106,13 +106,13 @@ export default function PlanDiaryLogForm({
 
         successToast(
           "Atualização de Registro de Diária",
-          "Registro atualizado com sucesso"
+          "Registro atualizado com sucesso",
         );
         onSubmit(true);
       } catch (error) {
         errorToast(
           "Atualização de Registro de Diária",
-          "Erro ao atualizar registro"
+          "Erro ao atualizar registro",
         );
         onSubmit(false);
       }

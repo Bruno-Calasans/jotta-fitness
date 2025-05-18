@@ -1,9 +1,9 @@
 import {
+  Arrow,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-  Arrow,
 } from "@/components/ui/tooltip";
 import { Asterisk } from "lucide-react";
 

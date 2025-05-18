@@ -6,11 +6,11 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -53,10 +53,10 @@ export default function PurchaseLogForm({
   const productDb = useProductStore();
   const { successToast, errorToast } = useCustomToast();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(
-    purchaseLog?.purchase.product || null
+    purchaseLog?.purchase.product || null,
   );
   const [selectedMember, setSelectedMember] = useState<Member | null>(
-    purchaseLog?.member || null
+    purchaseLog?.member || null,
   );
 
   const form = useForm<SubscribePlanFormInputs>({
@@ -86,7 +86,7 @@ export default function PurchaseLogForm({
             {
               product: selectedProduct,
               amount,
-            }
+            },
           );
 
           // Update purchase log
@@ -121,13 +121,13 @@ export default function PurchaseLogForm({
         // Show success message
         successToast(
           "Atualização de Registro de Compra",
-          "Registro atualizada com sucesso"
+          "Registro atualizada com sucesso",
         );
         onSubmit(true);
       } catch (error) {
         errorToast(
           "Atualização de Registro de Compra",
-          "Erro ao atualizar registro"
+          "Erro ao atualizar registro",
         );
         onSubmit(false);
       }

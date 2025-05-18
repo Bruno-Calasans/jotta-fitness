@@ -50,10 +50,10 @@ export default function EnrollmentLogForm({
   const { lateFee } = useEnrollmentResume();
   const { successToast, errorToast } = useCustomToast();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(
-    enrollmentLog?.enrollment.plan || null
+    enrollmentLog?.enrollment.plan || null,
   );
   const [selectedMember, setSelectedMember] = useState<Member | null>(
-    enrollmentLog?.member || null
+    enrollmentLog?.member || null,
   );
 
   const form = useForm<SubscribePlanFormInputs>({
@@ -82,7 +82,7 @@ export default function EnrollmentLogForm({
           {
             plan: selectedPlan,
             months,
-          }
+          },
         );
 
         // Update enrollment log
@@ -96,7 +96,7 @@ export default function EnrollmentLogForm({
         // Show success message
         successToast(
           "Atualização de Inscrição",
-          "Inscrição atualizada com sucesso"
+          "Inscrição atualizada com sucesso",
         );
         onSubmit(true);
       } catch (error) {

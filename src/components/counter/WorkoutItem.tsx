@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil, Trash2, EllipsisVertical, Pause, Play } from "lucide-react";
+import { EllipsisVertical, Pause, Pencil, Play, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
