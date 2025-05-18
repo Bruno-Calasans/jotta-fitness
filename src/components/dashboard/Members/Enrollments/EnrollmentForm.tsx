@@ -13,15 +13,15 @@ import {
 import { Input } from "@/components/ui/input";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { useMemberStore } from "@/store/memberStore";
-import { PlanSelector } from "../PlanSelector";
+import PlanSelector from "../PlanSelector";
 import { useState } from "react";
 import { Plan } from "@/types/Plan.type";
 import EnrollmentPaymentResume from "./EnrollmentPaymentResume";
 import { Enrollment } from "@/types/Enrollment.type";
 import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
-import CancelButton from "@/components/custom/Buttons/CancelButton";
-import ConfirmButton from "@/components/custom/Buttons/ConfirmButton";
-import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
+import CancelButton from "@/components/custom/buttons/CancelButton";
+import ConfirmButton from "@/components/custom/buttons/ConfirmButton";
+import RequiredFieldTooltip from "@/components/custom/others/RequiredFieldTooltip";
 import { useLogStore } from "@/store/logStore";
 import { STAFF } from "@/data/MEMBERS_DATA";
 
@@ -46,7 +46,7 @@ export default function EnrollmentForm({
   const { lateFee } = useEnrollmentResume();
   const { successToast, errorToast } = useCustomToast();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(
-    enrollment?.plan || null,
+    enrollment?.plan || null
   );
 
   const form = useForm<EnrollFormInputs>({
@@ -72,7 +72,7 @@ export default function EnrollmentForm({
           {
             plan: selectedPlan,
             months: input.months,
-          },
+          }
         );
 
         // Update enrollment log
@@ -89,7 +89,7 @@ export default function EnrollmentForm({
 
         successToast(
           "Atualização de Plano",
-          "Atualização realizada com sucesso",
+          "Atualização realizada com sucesso"
         );
         onSubmit(true);
       } catch (error) {

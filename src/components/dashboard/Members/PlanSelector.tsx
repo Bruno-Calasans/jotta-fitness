@@ -1,7 +1,7 @@
 "use client";
 
 import { usePlanStore } from "@/store/planStore";
-import Selector from "@/components/custom/Selector";
+import Selector from "@/components/custom/others/Selector";
 import type { Plan } from "@/types/Plan.type";
 
 type PlanSelectorProps = {
@@ -10,7 +10,7 @@ type PlanSelectorProps = {
   onItemSelected: (item: Plan) => void;
 };
 
-export function PlanSelector({
+export default function PlanSelector({
   value,
   onValueChange,
   onItemSelected,

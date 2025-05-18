@@ -16,12 +16,12 @@ import { useMemberStore } from "@/store/memberStore";
 import { useEffect, useState } from "react";
 import { Purchase } from "@/types/Purchase.type";
 import { Product } from "@/types/Product.type";
-import { ProductSelector } from "./ProductSelector";
+import ProductSelector from "./ProductSelector";
 import PurchasePaymentResume from "./PurchasePaymentResume";
 import { useProductStore } from "@/store/productStore";
-import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
-import CancelButton from "@/components/custom/Buttons/CancelButton";
-import ConfirmButton from "@/components/custom/Buttons/ConfirmButton";
+import RequiredFieldTooltip from "@/components/custom/others/RequiredFieldTooltip";
+import CancelButton from "@/components/custom/buttons/CancelButton";
+import ConfirmButton from "@/components/custom/buttons/ConfirmButton";
 import { useLogStore } from "@/store/logStore";
 import { STAFF } from "@/data/MEMBERS_DATA";
 
@@ -46,7 +46,7 @@ export default function PurchaseForm({
   const logDb = useLogStore();
   const { successToast, errorToast } = useCustomToast();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(
-    purchase?.product || null,
+    purchase?.product || null
   );
 
   const form = useForm<SubscribePlanFormInputs>({

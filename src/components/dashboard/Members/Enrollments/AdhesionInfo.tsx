@@ -1,4 +1,4 @@
-import ErrorMsg from "@/components/custom/ErrorMsg";
+import ErrorMsg from "@/components/custom/msgs/ErrorMsg";
 import { Button } from "@/components/ui/button";
 import { STAFF } from "@/data/MEMBERS_DATA";
 import useCustomToast from "@/hooks/use-custom-toast";
@@ -25,7 +25,7 @@ export default function AdhesionInfo() {
     try {
       const adhesionPayment = addAdhesionPayment(
         selectedMember.id,
-        currentAdhesion.year,
+        currentAdhesion.year
       );
       if (adhesionPayment) {
         logDb.add({

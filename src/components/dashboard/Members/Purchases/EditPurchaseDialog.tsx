@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
-import SubscriptionForm from "./PurchaseForm";
+import PurchaseForm from "./PurchaseForm";
 import { Purchase } from "@/types/Purchase.type";
 
 type EditPurchaseDialogProps = {
@@ -39,7 +39,7 @@ export default function EditPurchaseDialog({
         <DialogHeader>
           <DialogTitle>Editar Compra</DialogTitle>
         </DialogHeader>
-        <SubscriptionForm purchase={purchase} onSubmit={submitFormHandler} />
+        <PurchaseForm purchase={purchase} onSubmit={submitFormHandler} />
       </DialogContent>
     </Dialog>
   );

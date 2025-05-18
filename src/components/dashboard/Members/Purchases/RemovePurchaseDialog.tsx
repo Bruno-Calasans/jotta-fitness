@@ -12,7 +12,7 @@ import { Trash } from "lucide-react";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { useMemberStore } from "@/store/memberStore";
 import { Purchase } from "@/types/Purchase.type";
-import RemoveDialog from "@/components/custom/Dialog/RemoveDialog";
+import RemoveDialog from "@/components/custom/dialogs/RemoveDialog";
 
 type RemovePurchaseDialogProps = {
   purchase: Purchase;

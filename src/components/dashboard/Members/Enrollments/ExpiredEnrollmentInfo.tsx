@@ -1,4 +1,4 @@
-import ErrorMsg from "@/components/custom/ErrorMsg";
+import ErrorMsg from "@/components/custom/msgs/ErrorMsg";
 import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
 
 export default function ExpiredEnrollmentInfo() {

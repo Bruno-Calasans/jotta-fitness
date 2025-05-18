@@ -1,9 +1,9 @@
 "use client";
 
-import Loader from "@/components/custom/Loader";
-import MemberPageBreadcrumbs from "@/components/dashboard/Members/MemberPageBreadcrumbs";
-import MemberTabs from "@/components/dashboard/Members/MemberTabs";
-import ContentContainer from "@/components/general/ContentContainer";
+import DataLoader from "@/components/custom/loaders/DataLoader";
+import MemberPageBreadcrumbs from "@/components/dashboard/members/MemberPageBreadcrumbs";
+import MemberTabs from "@/components/dashboard/members/MemberTabs";
+import ContentContainer from "@/components/custom/others/ContentContainer";
 import { useMemberStore } from "@/store/memberStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -33,7 +33,7 @@ export default function MemberInfoPage({ params }: MemberInfoPageProps) {
   if (loading)
     return (
       <div className="flex justify-center items-center flex-1">
-        <Loader text="Procurando membro" />
+        <DataLoader text="Procurando membro" />
       </div>
     );
 

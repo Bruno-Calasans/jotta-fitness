@@ -1,10 +1,10 @@
 "use client";
 
-import DataTable from "@/components/custom/DataTable/DataTable";
-import ContentContainer from "@/components/general/ContentContainer";
-import { planColumns } from "@/components/dashboard/Plans/PlansTableColumns";
+import DataTable from "@/components/custom/dataTable/DataTable";
+import ContentContainer from "@/components/custom/others/ContentContainer";
+import { planColumns } from "@/components/dashboard/plans/PlansTableColumns";
 import { usePlanStore } from "@/store/planStore";
-import CreatePlanDialog from "@/components/dashboard/Plans/CreatePlanDialog";
+import CreatePlanDialog from "@/components/dashboard/plans/CreatePlanDialog";
 
 export default function DashboardPlans() {
   const { loading, plans } = usePlanStore();

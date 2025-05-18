@@ -1,6 +1,5 @@
-import Loader from "@/components/custom/Loader";
-import AdhesionTable from "@/components/dashboard/Adhesion/AdhesionTable";
-import ContentContainer from "@/components/general/ContentContainer";
+import AdhesionTable from "@/components/dashboard/adhesions/AdhesionTable";
+import ContentContainer from "@/components/custom/others/ContentContainer";
 
 export default function AdhesionPage() {
   return (

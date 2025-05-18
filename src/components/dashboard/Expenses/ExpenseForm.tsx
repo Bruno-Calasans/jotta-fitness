@@ -16,9 +16,9 @@ import { Input } from "@/components/ui/input";
 import { useExpenseStore } from "@/store/expenseStore";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { Expense } from "@/types/Expense.type";
-import CancelButton from "@/components/custom/Buttons/CancelButton";
-import ConfirmButton from "@/components/custom/Buttons/ConfirmButton";
-import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
+import CancelButton from "@/components/custom/buttons/CancelButton";
+import ConfirmButton from "@/components/custom/buttons/ConfirmButton";
+import RequiredFieldTooltip from "@/components/custom/others/RequiredFieldTooltip";
 
 const expenseFormSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
@@ -54,7 +54,7 @@ export default function ExpenseForm({ expense, onSubmit }: ExpenseFormProps) {
         // Result
         successToast(
           "Atualização de Despesa",
-          "Despesa atualizado com sucesso!",
+          "Despesa atualizado com sucesso!"
         );
         onSubmit(true);
       } catch (error) {

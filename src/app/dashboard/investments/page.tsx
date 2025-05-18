@@ -1,10 +1,10 @@
 "use client";
 
-import DataTable from "@/components/custom/DataTable/DataTable";
-import ContentContainer from "@/components/general/ContentContainer";
+import DataTable from "@/components/custom/dataTable/DataTable";
+import ContentContainer from "@/components/custom/others/ContentContainer";
 import { useInvestmentStore } from "@/store/investmentStore";
-import CreateInvestmentDialog from "@/components/dashboard/Investments/CreateInvestmentDialog";
-import { investmentColumns } from "@/components/dashboard/Investments/InvestmentTableColumns";
+import CreateInvestmentDialog from "@/components/dashboard/investments/CreateInvestmentDialog";
+import { investmentColumns } from "@/components/dashboard/investments/InvestmentTableColumns";
 
 export default function DashboardInvestments() {
   const { loading, investments } = useInvestmentStore();

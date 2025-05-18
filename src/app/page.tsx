@@ -1,4 +1,4 @@
-import ContentContainer from "@/components/general/ContentContainer";
+import ContentContainer from "@/components/custom/others/ContentContainer";
 import HomeSection from "@/components/home/HomeSection";
 import {
   planItems,

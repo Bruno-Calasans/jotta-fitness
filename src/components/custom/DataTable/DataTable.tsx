@@ -26,7 +26,7 @@ import { useState } from "react";
 import DataTablePagination from "./DataTablePagination";
 import DataTableSearch from "./DataTableSearch";
 import { cn } from "@/lib/utils";
-import Loader from "../Loader";
+import DataLoader from "@/components/custom/loaders/DataLoader";
 
 type DataTableProps<TData, TValue> = {
   loading?: boolean;
@@ -101,7 +101,7 @@ export default function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -118,7 +118,7 @@ export default function DataTable<TData, TValue>({
                   rowSpan={table.getRowModel().rows.length}
                   colSpan={table._getColumnDefs().length}
                 >
-                  <Loader text={loadingMsg} />
+                  <DataLoader text={loadingMsg} />
                 </TableCell>
               </TableRow>
             )}
@@ -130,7 +130,7 @@ export default function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className={cn(
-                    "cursor-pointer hover:bg-stone-600 transition-all",
+                    "cursor-pointer hover:bg-stone-600 transition-all"
                     // row.id === selectedRow?.id && "bg-stone-700"
                   )}
                   onClick={() => selectionHandler(row)}
@@ -139,7 +139,7 @@ export default function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

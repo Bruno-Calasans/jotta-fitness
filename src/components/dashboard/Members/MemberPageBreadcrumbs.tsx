@@ -1,4 +1,4 @@
-import CustomBreadcrumb from "@/components/custom/CustomBreadcrumb";
+import CustomBreadcrumb from "@/components/custom/others/CustomBreadcrumb";
 import { useMemberStore } from "@/store/memberStore";
 import { House } from "lucide-react";
 

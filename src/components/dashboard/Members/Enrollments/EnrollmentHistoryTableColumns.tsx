@@ -1,8 +1,8 @@
-import DataTableSortableHeader from "@/components/custom/DataTable/DataTableSortableHeader";
+import DataTableSortableHeader from "@/components/custom/dataTable/DataTableSortableHeader";
 import type { ColumnDef } from "@tanstack/react-table";
-import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
+import MoreOptionsDropdown from "@/components/custom/dataTable/MoreOptionsDropdown";
 import { Enrollment } from "@/types/Enrollment.type";
-import RemoveSubscriptionDialog from "./RemoveEnrollmentDialog";
+import RemoveEnrollmentDialog from "./RemoveEnrollmentDialog";
 import EditSubscriptionDialog from "./EditEnrollmentDialog";
 import PlanStatus from "./EnrollmentStatus";
 import defaultDateFormat from "@/utils/defaultDateFormat";
@@ -73,7 +73,7 @@ export const enrollmentColumns: ColumnDef<Enrollment>[] = [
         <MoreOptionsDropdown>
           <div className="flex flex-col gap-1">
             <EditSubscriptionDialog enrollment={enrollment} />
-            <RemoveSubscriptionDialog enrollment={enrollment} />
+            <RemoveEnrollmentDialog enrollment={enrollment} />
           </div>
         </MoreOptionsDropdown>
       );

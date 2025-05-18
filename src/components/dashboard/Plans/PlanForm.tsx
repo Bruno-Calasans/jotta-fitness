@@ -17,9 +17,9 @@ import { usePlanStore } from "@/store/planStore";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { Plan } from "@/types/Plan.type";
 import clearFieldOnFirstFocus from "@/utils/clearFieldOnFirstFocus";
-import CancelButton from "@/components/custom/Buttons/CancelButton";
-import ConfirmButton from "@/components/custom/Buttons/ConfirmButton";
-import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
+import CancelButton from "@/components/custom/buttons/CancelButton";
+import ConfirmButton from "@/components/custom/buttons/ConfirmButton";
+import RequiredFieldTooltip from "@/components/custom/others/RequiredFieldTooltip";
 
 const planFormSchema = z.object({
   name: z.string().min(1, "Nome do plano é obrigatório"),

@@ -18,7 +18,7 @@ type ProductSelectorProps = {
   onSelected: (product: Product) => void;
 };
 
-export function ProductSelector({
+export default function ProductSelector({
   value,
   onValueChange,
   onSelected,

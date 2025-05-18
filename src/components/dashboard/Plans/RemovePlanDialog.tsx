@@ -1,7 +1,7 @@
 import type { Plan } from "@/types/Plan.type";
 import { usePlanStore } from "@/store/planStore";
 import useCustomToast from "@/hooks/use-custom-toast";
-import RemoveDialog from "@/components/custom/Dialog/RemoveDialog";
+import RemoveDialog from "@/components/custom/dialogs/RemoveDialog";
 
 type RemovePlanDialogProps = {
   plan: Plan;

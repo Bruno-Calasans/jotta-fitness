@@ -1,7 +1,7 @@
 import { Expense } from "@/types/Expense.type";
 import { useExpenseStore } from "@/store/expenseStore";
 import useCustomToast from "@/hooks/use-custom-toast";
-import RemoveDialog from "@/components/custom/Dialog/RemoveDialog";
+import RemoveDialog from "@/components/custom/dialogs/RemoveDialog";
 
 type RemoveExpenseDialogProps = {
   expense: Expense;

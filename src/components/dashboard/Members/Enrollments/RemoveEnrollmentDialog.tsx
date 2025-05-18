@@ -1,5 +1,5 @@
 import useCustomToast from "@/hooks/use-custom-toast";
-import RemoveDialog from "@/components/custom/Dialog/RemoveDialog";
+import RemoveDialog from "@/components/custom/dialogs/RemoveDialog";
 import { useMemberStore } from "@/store/memberStore";
 import { useLogStore } from "@/store/logStore";
 import type { Enrollment } from "@/types/Enrollment.type";

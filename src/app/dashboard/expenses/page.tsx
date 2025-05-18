@@ -1,10 +1,10 @@
 "use client";
 
-import DataTable from "@/components/custom/DataTable/DataTable";
-import ContentContainer from "@/components/general/ContentContainer";
+import DataTable from "@/components/custom/dataTable/DataTable";
+import ContentContainer from "@/components/custom/others/ContentContainer";
 import { useExpenseStore } from "@/store/expenseStore";
-import CreateExpenseDialog from "@/components/dashboard/Expenses/CreateExpenseDialog";
-import { expenseColumns } from "@/components/dashboard/Expenses/ExpenseTableColumns";
+import CreateExpenseDialog from "@/components/dashboard/expenses/CreateExpenseDialog";
+import { expenseColumns } from "@/components/dashboard/expenses/ExpenseTableColumns";
 
 export default function DashboardExpenses() {
   const { loading, expenses } = useExpenseStore();

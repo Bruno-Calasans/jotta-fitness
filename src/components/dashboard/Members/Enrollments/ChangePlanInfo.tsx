@@ -1,4 +1,4 @@
-import InfoMsg from "@/components/custom/InfoMsg";
+import InfoMsg from "@/components/custom/msgs/InfoMsg";
 import { BUSINESS_RULES } from "@/config/BusinessRules";
 import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
 

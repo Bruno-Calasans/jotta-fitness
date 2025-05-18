@@ -1,7 +1,7 @@
 import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
 import { useMemberStore } from "@/store/memberStore";
-import NewbieBadge from "@/components/custom/NewbieBadge";
-import VeteranBadge from "@/components/custom/VeteranBadge";
+import NewbieBadge from "@/components/custom/badges/NewbieBadge";
+import VeteranBadge from "@/components/custom/badges/VeteranBadge";
 import defaultDateFormat from "@/utils/defaultDateFormat";
 
 export default function MemberSinceInfo() {

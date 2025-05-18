@@ -1,12 +1,12 @@
-import DataTableSortableHeader from "@/components/custom/DataTable/DataTableSortableHeader";
+import DataTableSortableHeader from "@/components/custom/dataTable/DataTableSortableHeader";
 import type { Member } from "@/types/Member.type";
 import type { ColumnDef } from "@tanstack/react-table";
 import EditMemberDialog from "./EditMemberDialog";
-import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
+import MoreOptionsDropdown from "@/components/custom/dataTable/MoreOptionsDropdown";
 import RemoveMemberDialog from "./RemoveMemberDialog";
 import { Badge } from "@/components/ui/badge";
 import phoneMask from "@/utils/phoneMask";
-import PlanStatus from "./Enrollments/EnrollmentStatus";
+import PlanStatus from "./enrollments/EnrollmentStatus";
 import MoreDetails from "./MoreDetails";
 
 export const membersColumns: ColumnDef<Member>[] = [

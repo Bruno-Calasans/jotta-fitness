@@ -1,10 +1,10 @@
 "use client";
 
-import DataTable from "@/components/custom/DataTable/DataTable";
-import ContentContainer from "@/components/general/ContentContainer";
+import DataTable from "@/components/custom/dataTable/DataTable";
+import ContentContainer from "@/components/custom/others/ContentContainer";
 import { useProductStore } from "@/store/productStore";
-import CreateProductDialog from "@/components/dashboard/Products/CreateProductDialog";
-import { productColumns } from "@/components/dashboard/Products/ProductTableColumns";
+import CreateProductDialog from "@/components/dashboard/products/CreateProductDialog";
+import { productColumns } from "@/components/dashboard/products/ProductTableColumns";
 
 export default function DashboardProductss() {
   const { loading, products } = useProductStore();

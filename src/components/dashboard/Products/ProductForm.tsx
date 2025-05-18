@@ -16,10 +16,10 @@ import { Input } from "@/components/ui/input";
 import { useProductStore } from "@/store/productStore";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { Product } from "@/types/Product.type";
-import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
+import RequiredFieldTooltip from "@/components/custom/others/RequiredFieldTooltip";
 import clearFieldOnFirstFocus from "@/utils/clearFieldOnFirstFocus";
-import CancelButton from "@/components/custom/Buttons/CancelButton";
-import ConfirmButton from "@/components/custom/Buttons/ConfirmButton";
+import CancelButton from "@/components/custom/buttons/CancelButton";
+import ConfirmButton from "@/components/custom/buttons/ConfirmButton";
 
 const productFormSchema = z.object({
   name: z.string().min(1, "Nome do produto é obrigatório"),
@@ -64,7 +64,7 @@ export default function ProductForm({ product, onSubmit }: ProductFormProps) {
         // Result
         successToast(
           "Atualização de Produto",
-          "Produto atualizado com sucesso!",
+          "Produto atualizado com sucesso!"
         );
         onSubmit(true);
       } catch (error) {

@@ -1,9 +1,9 @@
 "use client";
 
-import DatePicker from "@/components/custom/DatePicker";
-import DiaryReport from "@/components/custom/DiaryReport";
-import LogTabs from "@/components/dashboard/DiaryLog/LogTabs";
-import ContentContainer from "@/components/general/ContentContainer";
+import DatePicker from "@/components/custom/others/DatePicker";
+import DiaryReport from "@/components/custom/report/DiaryReport";
+import LogTabs from "@/components/dashboard/diary-logs/LogTabs";
+import ContentContainer from "@/components/custom/others/ContentContainer";
 import { useLogStore } from "@/store/logStore";
 
 export default function DiaryLogPage() {

@@ -15,9 +15,9 @@ import { Input } from "@/components/ui/input";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { Investment } from "@/types/Investment.type";
 import { useInvestmentStore } from "@/store/investmentStore";
-import RequiredFieldTooltip from "@/components/custom/RequiredFieldTooltip";
-import CancelButton from "@/components/custom/Buttons/CancelButton";
-import ConfirmButton from "@/components/custom/Buttons/ConfirmButton";
+import RequiredFieldTooltip from "@/components/custom/others/RequiredFieldTooltip";
+import CancelButton from "@/components/custom/buttons/CancelButton";
+import ConfirmButton from "@/components/custom/buttons/ConfirmButton";
 
 const investmentFormSchema = z.object({
   name: z.string().min(1, "Nome do investimento é obrigatório"),
@@ -56,13 +56,13 @@ export default function InvestmentForm({
         // Result
         successToast(
           "Atualização de Investimento",
-          "Investimento atualizado com sucesso!",
+          "Investimento atualizado com sucesso!"
         );
         onSubmit(true);
       } catch (error) {
         errorToast(
           "Atualização de Investimento",
-          "Erro ao atualizar investimento!",
+          "Erro ao atualizar investimento!"
         );
         onSubmit(false);
       }
@@ -78,7 +78,7 @@ export default function InvestmentForm({
 
         successToast(
           "Criação de Investimento",
-          "Investimento criado com sucesso!",
+          "Investimento criado com sucesso!"
         );
         onSubmit(true);
       } catch (error) {

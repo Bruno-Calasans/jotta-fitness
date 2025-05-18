@@ -1,8 +1,8 @@
-import DataTableSortableHeader from "@/components/custom/DataTable/DataTableSortableHeader";
+import DataTableSortableHeader from "@/components/custom/dataTable/DataTableSortableHeader";
 import type { Product } from "@/types/Product.type";
 import type { ColumnDef } from "@tanstack/react-table";
 import EditProductDialog from "./EditProductDialog";
-import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
+import MoreOptionsDropdown from "@/components/custom/dataTable/MoreOptionsDropdown";
 import RemoveProductDialog from "./RemoveProductDialog";
 import defaultDateFormat from "@/utils/defaultDateFormat";
 

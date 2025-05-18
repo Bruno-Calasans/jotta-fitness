@@ -1,7 +1,7 @@
 "use client";
 
-import DataTable from "@/components/custom/DataTable/DataTable";
-import { membersColumns } from "@/components/dashboard/Members/MembersTableColumns";
+import DataTable from "@/components/custom/dataTable/DataTable";
+import { membersColumns } from "@/components/dashboard/members/MembersTableColumns";
 import { useMemberStore } from "@/store/memberStore";
 import CreateMemberDialog from "./CreateMemberDialog";
 

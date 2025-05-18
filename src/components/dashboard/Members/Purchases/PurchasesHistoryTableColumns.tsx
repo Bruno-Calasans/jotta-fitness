@@ -1,5 +1,5 @@
-import DataTableSortableHeader from "@/components/custom/DataTable/DataTableSortableHeader";
-import MoreOptionsDropdown from "@/components/custom/MoreOptionsDropdown";
+import DataTableSortableHeader from "@/components/custom/dataTable/DataTableSortableHeader";
+import MoreOptionsDropdown from "@/components/custom/dataTable/MoreOptionsDropdown";
 import EditPurchaseDialog from "./EditPurchaseDialog";
 import RemovePurchaseDialog from "./RemovePurchaseDialog";
 import defaultDateFormat from "@/utils/defaultDateFormat";

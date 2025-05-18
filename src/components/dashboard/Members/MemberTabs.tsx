@@ -1,8 +1,8 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import PlanMemberTab from "./Enrollments/EnrollmentTab";
-import PurchasesTab from "./Purchases/PurchasesTab";
+import PlanMemberTab from "./enrollments/EnrollmentTab";
+import PurchasesTab from "./purchases/PurchasesTab";
 
 const tabData = [
   {

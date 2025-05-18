@@ -1,6 +1,6 @@
 "use client";
 
-import DataTable from "@/components/custom/DataTable/DataTable";
+import DataTable from "@/components/custom/dataTable/DataTable";
 import { purchasesColumns } from "./PurchasesHistoryTableColumns";
 import { useMemberStore } from "@/store/memberStore";
 import CreatePurchaseDialog from "./CreatePurchaseDialog";

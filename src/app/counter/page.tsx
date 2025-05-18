@@ -1,6 +1,6 @@
 "use client";
 
-import ContentContainer from "@/components/general/ContentContainer";
+import ContentContainer from "@/components/custom/others/ContentContainer";
 import WorkoutSearchBar from "@/components/counter/SearchBar";
 import WorkoutList from "@/components/counter/WorkoutList";
 import EditWorkoutDialog from "@/components/counter/dialogs/EditWorkoutDialog";
