@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import { persist, createJSONStorage, devtools } from "zustand/middleware";
+import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import type { Workout } from "@/types/Workout";
 import {
   compareByDateAsc,
@@ -28,7 +28,7 @@ interface WorkoutState {
   updateWorkout(
     id: string,
     property: keyof Workout,
-    newValue: Workout[keyof Workout]
+    newValue: Workout[keyof Workout],
   ): void;
   sortWorkoutsByDate(order: "asc" | "desc"): void;
   sortWorkoutsByTime(order: "asc" | "desc"): void;
@@ -53,7 +53,7 @@ const workoutStore = create<WorkoutState>()(
         },
         removeWorkout(workout) {
           const filtedWorkouts = get().workouts.filter(
-            (w) => w.id != workout.id
+            (w) => w.id != workout.id,
           );
           set(() => ({ workouts: filtedWorkouts }));
         },
@@ -134,21 +134,21 @@ const workoutStore = create<WorkoutState>()(
             const ongoingWorkouts = get().getGoingOnWorkouts();
             return keyword != ""
               ? ongoingWorkouts.filter((w) =>
-                  w.name.toLowerCase().includes(keyword.toLowerCase())
+                  w.name.toLowerCase().includes(keyword.toLowerCase()),
                 )
               : ongoingWorkouts;
           } else if (type == "finished") {
             const finishedWorkouts = get().getFinishedWorkouts();
             return keyword != ""
               ? finishedWorkouts.filter((w) =>
-                  w.name.toLowerCase().includes(keyword.toLowerCase())
+                  w.name.toLowerCase().includes(keyword.toLowerCase()),
                 )
               : finishedWorkouts;
           } else {
             const workouts = get().workouts;
             return keyword != ""
               ? workouts.filter((w) =>
-                  w.name.toLowerCase().includes(keyword.toLowerCase())
+                  w.name.toLowerCase().includes(keyword.toLowerCase()),
                 )
               : workouts;
           }
@@ -176,9 +176,9 @@ const workoutStore = create<WorkoutState>()(
       {
         name: "workout-storage",
         storage: createJSONStorage(() => sessionStorage),
-      }
-    )
-  )
+      },
+    ),
+  ),
 );
 
 export default workoutStore;

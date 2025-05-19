@@ -1,17 +1,17 @@
 "use client";
 
-import { Plus, Eraser } from "lucide-react";
+import { Eraser, Plus } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { ChangeEvent, FocusEventHandler, useState } from "react";
 import { v4 as uuidv4 } from "uuid";

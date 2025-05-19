@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import {
-  Trash2,
-  CalendarArrowUp,
   CalendarArrowDown,
-  ClockArrowUp,
+  CalendarArrowUp,
   ClockArrowDown,
+  ClockArrowUp,
+  Trash2,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { ChangeEvent, useState } from "react";
@@ -73,7 +73,7 @@ export default function WorkoutSearchBar() {
             size="icon"
             className={cn(
               "bg-orange-500 hover:bg-orange-600",
-              timeSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600"
+              timeSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600",
             )}
           >
             {timeSortType === "asc" ? <ClockArrowDown /> : <ClockArrowUp />}
@@ -90,7 +90,7 @@ export default function WorkoutSearchBar() {
             size="icon"
             className={cn(
               "bg-orange-500 hover:bg-orange-600",
-              dateSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600"
+              dateSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600",
             )}
           >
             {dateSortType === "asc" ? (

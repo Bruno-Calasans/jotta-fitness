@@ -1,4 +1,4 @@
-import { Dumbbell, Salad, PiggyBank, BicepsFlexed } from "lucide-react";
+import { BicepsFlexed, Dumbbell, PiggyBank, Salad } from "lucide-react";
 import { PlanItemData } from "./PlanItem";
 import { ServiceItemData } from "./ServiceItem";
 import { BenefitItemData } from "./BenefitItem";

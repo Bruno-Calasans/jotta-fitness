@@ -1,12 +1,12 @@
 import {
+  CircleDollarSign,
+  Dumbbell,
+  HandHelping,
   House,
   LayoutDashboard,
   Timer,
-  CircleDollarSign,
-  HandHelping,
-  Dumbbell,
 } from "lucide-react";
-import { SiWhatsapp, SiInstagram } from "@icons-pack/react-simple-icons";
+import { SiInstagram, SiWhatsapp } from "@icons-pack/react-simple-icons";
 
 export const mainItems = [
   {

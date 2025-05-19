@@ -20,7 +20,7 @@ export default function HomeSection({
       id={id}
       className={cn(
         "text-white flex flex-col items-center h-full py-10 rounded-sm mx-5",
-        className
+        className,
       )}
     >
       {/* Header */}
