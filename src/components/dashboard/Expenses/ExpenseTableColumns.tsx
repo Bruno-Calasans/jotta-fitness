@@ -1,8 +1,8 @@
-import DataTableSortableHeader from "@/components/custom/dataTable/DataTableSortableHeader";
+import DataTableSortableHeader from "@/components/custom/data-table/DataTableSortableHeader";
 import type { Expense } from "@/types/Expense.type";
 import type { ColumnDef } from "@tanstack/react-table";
 import EditExpenseDialog from "./EditExpenseDialog";
-import MoreOptionsDropdown from "@/components/custom/dataTable/MoreOptionsDropdown";
+import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropdown";
 import RemoveExpenseDialog from "./RemoveExpenseDialog";
 import defaultDateFormat from "@/utils/defaultDateFormat";
 

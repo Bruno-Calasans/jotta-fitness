@@ -1,4 +1,4 @@
-import DataTable from "@/components/custom/dataTable/DataTable";
+import DataTable from "@/components/custom/data-table/DataTable";
 import { useLogStore } from "@/store/logStore";
 import { planDiaryColumns } from "./PlanDiaryTableColumns";
 import CreatePlanDiaryLogDialog from "./CreatePlanDiaryLogDialog";

@@ -1,4 +1,4 @@
-import DataTable from "@/components/custom/dataTable/DataTable";
+import DataTable from "@/components/custom/data-table/DataTable";
 import { lossLogColumns } from "./LossLogTableColumns";
 import { useLogStore } from "@/store/logStore";
 import CreateLossLogDialog from "./CreateLossLogDialog";

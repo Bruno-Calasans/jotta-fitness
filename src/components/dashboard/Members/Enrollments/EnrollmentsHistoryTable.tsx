@@ -1,7 +1,7 @@
 import { enrollmentColumns } from "./EnrollmentHistoryTableColumns";
 import { useMemberStore } from "@/store/memberStore";
 import { useLogStore } from "@/store/logStore";
-import DataTable from "@/components/custom/dataTable/DataTable";
+import DataTable from "@/components/custom/data-table/DataTable";
 import CreateSubscriptionDialog from "./CreateEnrollmentDialog";
 
 export default function EnrollmentsHistoryTable() {

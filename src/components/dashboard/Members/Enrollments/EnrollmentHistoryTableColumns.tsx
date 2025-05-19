@@ -1,6 +1,6 @@
-import DataTableSortableHeader from "@/components/custom/dataTable/DataTableSortableHeader";
+import DataTableSortableHeader from "@/components/custom/data-table/DataTableSortableHeader";
 import type { ColumnDef } from "@tanstack/react-table";
-import MoreOptionsDropdown from "@/components/custom/dataTable/MoreOptionsDropdown";
+import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropdown";
 import { Enrollment } from "@/types/Enrollment.type";
 import RemoveEnrollmentDialog from "./RemoveEnrollmentDialog";
 import EditSubscriptionDialog from "./EditEnrollmentDialog";

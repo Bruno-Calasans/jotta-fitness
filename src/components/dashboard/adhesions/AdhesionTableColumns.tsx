@@ -1,6 +1,6 @@
-import DataTableSortableHeader from "@/components/custom/dataTable/DataTableSortableHeader";
+import DataTableSortableHeader from "@/components/custom/data-table/DataTableSortableHeader";
 import type { ColumnDef } from "@tanstack/react-table";
-import MoreOptionsDropdown from "@/components/custom/dataTable/MoreOptionsDropdown";
+import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropdown";
 import { Adhesion } from "@/types/Adhesion.type";
 import RemoveAdhesionDialog from "./RemoveAdhesionDialog";
 import EditAdhesionDialog from "./EditAdhesionDialog";

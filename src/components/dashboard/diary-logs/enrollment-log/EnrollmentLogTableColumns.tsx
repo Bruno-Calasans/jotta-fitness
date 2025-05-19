@@ -1,7 +1,7 @@
-import DataTableSortableHeader from "@/components/custom/dataTable/DataTableSortableHeader";
+import DataTableSortableHeader from "@/components/custom/data-table/DataTableSortableHeader";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { EnrollmentLog } from "@/types/Log.type";
-import MoreOptionsDropdown from "@/components/custom/dataTable/MoreOptionsDropdown";
+import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropdown";
 import EditEnrollmentLogDialog from "./EditEnrollmentLogDialog";
 import RemoveEnrollmentLogDialog from "./RemoveEnrollmentLogDialog";
 import calcEnrollmentPrice from "@/utils/calcEnrollmentPrice";

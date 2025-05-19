@@ -29,7 +29,7 @@ export default function RemoveLossLogDialog({
       logDb.remove(lossLog.id);
       successToast(
         "Exclusão de Registro de Perda",
-        "Registro removido com sucesso!"
+        "Registro removido com sucesso!",
       );
     } catch (error) {
       errorToast("Exclusão de Registro de Perda", "Erro ao remover registro");

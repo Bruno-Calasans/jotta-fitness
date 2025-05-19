@@ -1,4 +1,4 @@
-import DataTable from "@/components/custom/dataTable/DataTable";
+import DataTable from "@/components/custom/data-table/DataTable";
 import { useLogStore } from "@/store/logStore";
 import CreateAdhesionLogDialog from "./CreateAdhesionLogDialog";
 import SelectedDateNotResultMsg from "../SelectedDateNotResultMsg";

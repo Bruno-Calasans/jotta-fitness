@@ -1,9 +1,9 @@
-import { RowActionFn } from "@/components/custom/dataTable/DataTableRowActions";
-import DataTableSortableHeader from "@/components/custom/dataTable/DataTableSortableHeader";
+import { RowActionFn } from "@/components/custom/data-table/DataTableRowActions";
+import DataTableSortableHeader from "@/components/custom/data-table/DataTableSortableHeader";
 import type { Plan } from "@/types/Plan.type";
 import type { ColumnDef } from "@tanstack/react-table";
 import EditPlanDialog from "./EditPlanDialog";
-import MoreOptionsDropdown from "@/components/custom/dataTable/MoreOptionsDropdown";
+import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropdown";
 import RemovePlanDialog from "./RemovePlanDialog";
 import defaultDateFormat from "@/utils/defaultDateFormat";
 

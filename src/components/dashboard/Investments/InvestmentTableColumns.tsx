@@ -1,8 +1,8 @@
-import DataTableSortableHeader from "@/components/custom/dataTable/DataTableSortableHeader";
+import DataTableSortableHeader from "@/components/custom/data-table/DataTableSortableHeader";
 import type { Investment } from "@/types/Investment.type";
 import type { ColumnDef } from "@tanstack/react-table";
 import EditInvestmentDialog from "./EditInvestmentDialog";
-import MoreOptionsDropdown from "@/components/custom/dataTable/MoreOptionsDropdown";
+import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropdown";
 import RemoveInvestmentDialog from "./RemoveInvestmentDialog";
 import defaultDateFormat from "@/utils/defaultDateFormat";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import DataTable from "@/components/custom/dataTable/DataTable";
+import DataTable from "@/components/custom/data-table/DataTable";
 import ContentContainer from "@/components/custom/others/ContentContainer";
 import { useExpenseStore } from "@/store/expenseStore";
 import CreateExpenseDialog from "@/components/dashboard/expenses/CreateExpenseDialog";

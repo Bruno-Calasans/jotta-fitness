@@ -1,6 +1,6 @@
 "use client";
 
-import DataTable from "@/components/custom/dataTable/DataTable";
+import DataTable from "@/components/custom/data-table/DataTable";
 import { adhesionColumns } from "./AdhesionTableColumns";
 import { useAdhesionStore } from "@/store/adhesionStore";
 import CreateAdhesionDialog from "./CreateAdhesionDialog";
@@ -10,7 +10,7 @@ export default function AdhesionTable() {
   const { loading, adhesions } = useAdhesionStore();
 
   const currentYearAdhesion = adhesions.find(
-    (adhesion) => adhesion.year === new Date().getFullYear(),
+    (adhesion) => adhesion.year === new Date().getFullYear()
   );
 
   return (

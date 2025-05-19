@@ -1,8 +1,8 @@
-import DataTableSortableHeader from "@/components/custom/dataTable/DataTableSortableHeader";
+import DataTableSortableHeader from "@/components/custom/data-table/DataTableSortableHeader";
 import type { Member } from "@/types/Member.type";
 import type { ColumnDef } from "@tanstack/react-table";
 import EditMemberDialog from "./EditMemberDialog";
-import MoreOptionsDropdown from "@/components/custom/dataTable/MoreOptionsDropdown";
+import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropdown";
 import RemoveMemberDialog from "./RemoveMemberDialog";
 import { Badge } from "@/components/ui/badge";
 import phoneMask from "@/utils/phoneMask";
