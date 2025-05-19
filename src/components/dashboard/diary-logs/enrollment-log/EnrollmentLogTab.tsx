@@ -4,16 +4,22 @@ import DataTable from "@/components/custom/dataTable/DataTable";
 import { enrollmentLogColumns } from "./EnrollmentLogTableColumns";
 import { useLogStore } from "@/store/logStore";
 import CreateEnrollmentLogDialog from "./CreateEnrollmentLogDialog";
-import isDateEqual from "@/utils/isDateEquals";
 import SelectedDateNotResultMsg from "../SelectedDateNotResultMsg";
+import { useEffect, useState } from "react";
+import type { EnrollmentLog } from "@/types/Log.type";
 
 export default function EnrollmentLogTab() {
-  const { selectedDate, loading, getAllEnrollmentLogs } = useLogStore();
+  const { selectedDate, loading, getLogsByDate } = useLogStore();
+  const [enrollmentLogs, setEnrollmentLogs] = useState<EnrollmentLog[]>([]);
 
-  const enrollmentLogs = getAllEnrollmentLogs();
-  const filteredEnrollmentLogs = selectedDate
-    ? enrollmentLogs.filter((log) => isDateEqual(log.createdAt, selectedDate))
-    : enrollmentLogs;
+  useEffect(() => {
+    if (selectedDate) {
+      const logs = getLogsByDate(selectedDate, [
+        "enrollment",
+      ]) as EnrollmentLog[];
+      setEnrollmentLogs(logs);
+    }
+  }, [selectedDate]);
 
   return (
     <div>
@@ -26,7 +32,7 @@ export default function EnrollmentLogTab() {
           loading={loading}
           loadingMsg="Carregando registros de inscrição"
           columns={enrollmentLogColumns}
-          data={filteredEnrollmentLogs}
+          data={enrollmentLogs}
           noResultMsg={<SelectedDateNotResultMsg />}
         />
       </div>

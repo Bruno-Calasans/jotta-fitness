@@ -1,6 +1,6 @@
 export default function groupBy<T, K extends keyof T>(
   items: T[],
-  key: K
+  key: K,
 ): Record<string, T[]> {
   const groupedItems: Record<string, T[]> = {};
 

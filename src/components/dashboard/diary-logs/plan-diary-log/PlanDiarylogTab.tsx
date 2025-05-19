@@ -2,16 +2,22 @@ import DataTable from "@/components/custom/dataTable/DataTable";
 import { useLogStore } from "@/store/logStore";
 import { planDiaryColumns } from "./PlanDiaryTableColumns";
 import CreatePlanDiaryLogDialog from "./CreatePlanDiaryLogDialog";
-import isDateEqual from "@/utils/isDateEquals";
 import SelectedDateNotResultMsg from "../SelectedDateNotResultMsg";
+import { useEffect, useState } from "react";
+import { PlanDiaryLog } from "@/types/Log.type";
 
 export default function PlanDiaryLogTab() {
-  const { loading, selectedDate, getAllPlanDiaryLogs } = useLogStore();
+  const { loading, selectedDate, getLogsByDate } = useLogStore();
+  const [planDiaryLogs, setPlanDiaryLogs] = useState<PlanDiaryLog[]>([]);
 
-  const planDiaryLogs = getAllPlanDiaryLogs();
-  const filteredPlanDiaryLogs = selectedDate
-    ? planDiaryLogs.filter((log) => isDateEqual(log.createdAt, selectedDate))
-    : planDiaryLogs;
+  useEffect(() => {
+    if (selectedDate) {
+      const logs = getLogsByDate(selectedDate, [
+        "plan-diary",
+      ]) as PlanDiaryLog[];
+      setPlanDiaryLogs(logs);
+    }
+  }, [selectedDate]);
 
   return (
     <div>
@@ -24,7 +30,7 @@ export default function PlanDiaryLogTab() {
           loading={loading}
           loadingMsg="Carregando registros de diária"
           columns={planDiaryColumns}
-          data={filteredPlanDiaryLogs}
+          data={planDiaryLogs}
           noResultMsg={<SelectedDateNotResultMsg />}
         />
       </div>

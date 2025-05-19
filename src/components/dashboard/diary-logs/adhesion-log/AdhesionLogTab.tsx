@@ -1,16 +1,21 @@
 import DataTable from "@/components/custom/dataTable/DataTable";
 import { useLogStore } from "@/store/logStore";
 import CreateAdhesionLogDialog from "./CreateAdhesionLogDialog";
-import isDateEqual from "@/utils/isDateEquals";
 import SelectedDateNotResultMsg from "../SelectedDateNotResultMsg";
 import { adhesionLogColumns } from "./AdhesionLogColumns";
+import { AdhesionLog } from "@/types/Log.type";
+import { useEffect, useState } from "react";
 
 export default function AdhesionLogTab() {
-  const { loading, selectedDate, getAllAdhesionLogs } = useLogStore();
-  const adhesionLogs = getAllAdhesionLogs();
-  const filteredAdhesionLogs = selectedDate
-    ? adhesionLogs.filter((log) => isDateEqual(log.createdAt, selectedDate))
-    : adhesionLogs;
+  const { loading, selectedDate, getLogsByDate } = useLogStore();
+  const [adhesionLogs, setadhesionLogs] = useState<AdhesionLog[]>([]);
+
+  useEffect(() => {
+    if (selectedDate) {
+      const logs = getLogsByDate(selectedDate, ["adhesion"]) as AdhesionLog[];
+      setadhesionLogs(logs);
+    }
+  }, [selectedDate]);
 
   return (
     <div>
@@ -23,7 +28,7 @@ export default function AdhesionLogTab() {
           loading={loading}
           loadingMsg="Carregando registros de adesão"
           columns={adhesionLogColumns}
-          data={filteredAdhesionLogs}
+          data={adhesionLogs}
           noResultMsg={<SelectedDateNotResultMsg />}
         />
       </div>

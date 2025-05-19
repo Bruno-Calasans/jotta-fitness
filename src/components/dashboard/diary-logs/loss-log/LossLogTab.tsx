@@ -2,16 +2,23 @@ import DataTable from "@/components/custom/dataTable/DataTable";
 import { lossLogColumns } from "./LossLogTableColumns";
 import { useLogStore } from "@/store/logStore";
 import CreateLossLogDialog from "./CreateLossLogDialog";
-import isDateEqual from "@/utils/isDateEquals";
 import SelectedDateNotResultMsg from "../SelectedDateNotResultMsg";
+import { useEffect, useState } from "react";
+import type { LossLog } from "@/types/Log.type";
 
 export default function LossLogTab() {
-  const { loading, selectedDate, getAllLossLogs } = useLogStore();
-  const lossLogs = getAllLossLogs();
-  const filteredLossLogs = selectedDate
-    ? lossLogs.filter((log) => isDateEqual(log.createdAt, selectedDate))
-    : lossLogs;
+  const { loading, selectedDate, getLogsByDate } = useLogStore();
+  const [lossLogs, setLossLogs] = useState<LossLog[]>([]);
 
+  useEffect(() => {
+    if (selectedDate) {
+      const logs = getLogsByDate(selectedDate, [
+        "expense",
+        "investment",
+      ]) as LossLog[];
+      setLossLogs(logs);
+    }
+  }, [selectedDate]);
   return (
     <div>
       <div>
@@ -23,7 +30,7 @@ export default function LossLogTab() {
           loading={loading}
           loadingMsg="Carregando registros de perda"
           columns={lossLogColumns}
-          data={filteredLossLogs}
+          data={lossLogs}
           noResultMsg={<SelectedDateNotResultMsg />}
         />
       </div>

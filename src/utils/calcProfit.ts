@@ -53,7 +53,7 @@ export default function calcProfit(logs: Log[]) {
 
   const profit = sumProfit(
     [purchaseIncome, enrollmentIncome, planDiaryIncome, adhesionIncome],
-    [investmentLoss, expenseLoss]
+    [investmentLoss, expenseLoss],
   );
 
   // return profitInfo

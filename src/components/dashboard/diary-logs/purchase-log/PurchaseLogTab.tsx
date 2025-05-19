@@ -2,15 +2,20 @@ import DataTable from "@/components/custom/dataTable/DataTable";
 import { useLogStore } from "@/store/logStore";
 import CreatePurchaseLogDialog from "./CreatePurchaseLogDialog";
 import { purchaseLogColumns } from "./PurchaseLogTableColumns";
-import isDateEqual from "@/utils/isDateEquals";
 import SelectedDateNotResultMsg from "../SelectedDateNotResultMsg";
+import { useEffect, useState } from "react";
+import type { PurchaseLog } from "@/types/Log.type";
 
 export default function PurchaseLogTab() {
-  const { loading, selectedDate, getAllPurchaseLogs } = useLogStore();
-  const purchaseLogs = getAllPurchaseLogs();
-  const filteredPurchaseLogs = selectedDate
-    ? purchaseLogs.filter((log) => isDateEqual(log.createdAt, selectedDate))
-    : purchaseLogs;
+  const { loading, selectedDate, getLogsByDate } = useLogStore();
+  const [purchaseLogs, setPurchaseLogs] = useState<PurchaseLog[]>([]);
+
+  useEffect(() => {
+    if (selectedDate) {
+      const logs = getLogsByDate(selectedDate, ["purchase"]) as PurchaseLog[];
+      setPurchaseLogs(logs);
+    }
+  }, [selectedDate]);
 
   return (
     <div>
@@ -23,7 +28,7 @@ export default function PurchaseLogTab() {
           loading={loading}
           loadingMsg="Carregando registros de compra"
           columns={purchaseLogColumns}
-          data={filteredPurchaseLogs}
+          data={purchaseLogs}
           noResultMsg={<SelectedDateNotResultMsg />}
         />
       </div>

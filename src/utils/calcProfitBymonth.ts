@@ -1,6 +1,3 @@
 import { Log } from "@/types/Log.type";
 
-
-export default  function calcMonthlyProfit(logs: Log[]) {
-
-}
+export default function calcMonthlyProfit(logs: Log[]) {}

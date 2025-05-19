@@ -1,6 +1,6 @@
 import { useLogStore } from "@/store/logStore";
+import defaultDateFormat from "@/utils/defaultDateFormat";
 import isDateEqual from "@/utils/isDateEquals";
-import { formatDate } from "date-fns";
 
 export default function SelectedDateNotResultMsg() {
   const { selectedDate } = useLogStore();
@@ -10,5 +10,5 @@ export default function SelectedDateNotResultMsg() {
   const isToday = isDateEqual(selectedDate, new Date());
   if (isToday) return <p>Nenhum registro para hoje</p>;
 
-  return <p>Nenhum registro para data {formatDate(selectedDate, "d/M/Y")}</p>;
+  return <p>Nenhum registro para data {defaultDateFormat(selectedDate)}</p>;
 }

@@ -12,6 +12,7 @@ import { Trash } from "lucide-react";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { useLogStore } from "@/store/logStore";
 import type { LossLog } from "@/types/Log.type";
+import defaultDateFormat from "@/utils/defaultDateFormat";
 
 type RemoveLossLogDialogProps = {
   lossLog: LossLog;
@@ -28,7 +29,7 @@ export default function RemoveLossLogDialog({
       logDb.remove(lossLog.id);
       successToast(
         "Exclusão de Registro de Perda",
-        "Registro removido com sucesso!",
+        "Registro removido com sucesso!"
       );
     } catch (error) {
       errorToast("Exclusão de Registro de Perda", "Erro ao remover registro");
@@ -56,7 +57,7 @@ export default function RemoveLossLogDialog({
             </span>{" "}
             do dia{" "}
             <span className="font-bold">
-              {lossLog.createdAt.toLocaleDateString()}
+              {defaultDateFormat(lossLog.createdAt)}
             </span>
             ?
           </div>
