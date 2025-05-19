@@ -9,24 +9,26 @@ import sumAdhesionLogs from "./sumAdhesionLogs";
 import sumLossLogs from "./sumLossLogs";
 import sumProfit from "./sumProfit";
 
+export type ProfitItem = { value: number; amount: number };
+
 export type ProfitInfo = {
   profit: number;
-  purchaseIncome: number;
-  enrollmentIncome: number;
-  planDiaryIncome: number;
-  adhesionIncome: number;
-  expenseLoss: number;
-  investmentLoss: number;
+  purchase: ProfitItem;
+  enrollment: ProfitItem;
+  planDiary: ProfitItem;
+  adhesion: ProfitItem;
+  expense: ProfitItem;
+  investment: ProfitItem;
 };
 
 export const defaultProfitInfo: ProfitInfo = {
   profit: 0,
-  purchaseIncome: 0,
-  enrollmentIncome: 0,
-  planDiaryIncome: 0,
-  adhesionIncome: 0,
-  expenseLoss: 0,
-  investmentLoss: 0,
+  purchase: { value: 0, amount: 0 },
+  enrollment: { value: 0, amount: 0 },
+  planDiary: { value: 0, amount: 0 },
+  adhesion: { value: 0, amount: 0 },
+  expense: { value: 0, amount: 0 },
+  investment: { value: 0, amount: 0 },
 };
 
 export default function calcProfit(logs: Log[]) {
@@ -53,18 +55,16 @@ export default function calcProfit(logs: Log[]) {
 
   const profit = sumProfit(
     [purchaseIncome, enrollmentIncome, planDiaryIncome, adhesionIncome],
-    [investmentLoss, expenseLoss],
+    [investmentLoss, expenseLoss]
   );
-
-  // return profitInfo
 
   return {
     profit,
-    purchaseIncome,
-    enrollmentIncome,
-    planDiaryIncome,
-    adhesionIncome,
-    expenseLoss,
-    investmentLoss,
+    purchase: { value: purchaseIncome, amount: purchaseLogs.length },
+    enrollment: { value: enrollmentIncome, amount: enrollmentLogs.length },
+    planDiary: { value: planDiaryIncome, amount: planDiaryLogs.length },
+    adhesion: { value: adhesionIncome, amount: adhesionLogs.length },
+    expense: { value: expenseLoss, amount: expenseLogs.length },
+    investment: { value: investmentLoss, amount: investmentLogs.length },
   } as ProfitInfo;
 }

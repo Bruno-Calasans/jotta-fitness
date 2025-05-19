@@ -6,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useEffect, useState } from "react";
 
 type SelectorData<ItemType> = {
   label: string;
@@ -16,10 +17,11 @@ type SelectorData<ItemType> = {
 type SelectorProps<ItemType> = {
   value?: string;
   data: SelectorData<ItemType>[];
-  onValueChange: (value: string) => void;
+  onValueChange?: (value: string) => void;
   onItemSelect?: (item: ItemType) => void;
   itemAcessorKey?: keyof ItemType;
   placeholder?: string;
+  defaultValue?: string;
 };
 
 export default function Selector<ItemType>({
@@ -27,27 +29,34 @@ export default function Selector<ItemType>({
   data,
   itemAcessorKey,
   placeholder,
+  defaultValue,
   onItemSelect,
   onValueChange,
 }: SelectorProps<ItemType>) {
-  const changeHandler = (value: string) => {
+  const [innerValue, setInnerValue] = useState(defaultValue);
+
+  const changeHandler = (selectedValue: string) => {
     const foundItem = data
       .map(({ item }) => item)
       .find((item) => {
         if (item && itemAcessorKey)
           return (
             (item[itemAcessorKey] as string).toLowerCase() ===
-            value.toLowerCase()
+            selectedValue.toLowerCase()
           );
       });
-
     if (foundItem && onItemSelect) onItemSelect(foundItem);
-    onValueChange(value);
+    if (onValueChange) onValueChange(selectedValue);
+    if (!onValueChange) setInnerValue(selectedValue);
   };
 
+  useEffect(() => {
+    if (defaultValue) changeHandler(defaultValue);
+  }, [defaultValue]);
+
   return (
-    <Select value={value} onValueChange={changeHandler}>
-      <SelectTrigger className="w-full">
+    <Select value={value || innerValue} onValueChange={changeHandler}>
+      <SelectTrigger className="w-fit">
         <SelectValue placeholder={placeholder || "Selecione um item"} />
       </SelectTrigger>
       <SelectContent className="w-full">

@@ -19,12 +19,12 @@ export default function DiaryReport() {
 
   const {
     profit,
-    enrollmentIncome,
-    purchaseIncome,
-    planDiaryIncome,
-    adhesionIncome,
-    expenseLoss,
-    investmentLoss,
+    enrollment,
+    purchase,
+    planDiary,
+    adhesion,
+    expense,
+    investment,
   } = profitInfo;
 
   return (
@@ -44,7 +44,7 @@ export default function DiaryReport() {
         {/* Product Info */}
         <ReportInfo
           title="Compras"
-          subtitle={toRealFormat(purchaseIncome)}
+          subtitle={toRealFormat(purchase.value)}
           classnames={{
             container: "border-indigo-500",
             title: "text-indigo-500",
@@ -55,7 +55,7 @@ export default function DiaryReport() {
         {/* Enrollments */}
         <ReportInfo
           title="Inscrições"
-          subtitle={toRealFormat(enrollmentIncome)}
+          subtitle={toRealFormat(enrollment.value)}
           classnames={{
             container: "border-indigo-500",
             title: "text-indigo-500",
@@ -66,7 +66,7 @@ export default function DiaryReport() {
         {/* Plan Diaries */}
         <ReportInfo
           title="Diárias"
-          subtitle={toRealFormat(planDiaryIncome)}
+          subtitle={toRealFormat(planDiary.value)}
           classnames={{
             container: "border-indigo-500",
             title: "text-indigo-500",
@@ -77,7 +77,7 @@ export default function DiaryReport() {
         {/* Adhesions */}
         <ReportInfo
           title="Adesões"
-          subtitle={toRealFormat(adhesionIncome)}
+          subtitle={toRealFormat(adhesion.value)}
           classnames={{
             container: "border-indigo-500",
             title: "text-indigo-500",
@@ -90,7 +90,7 @@ export default function DiaryReport() {
       <div className="flex gap-2">
         <ReportInfo
           title="Investimentos"
-          subtitle={toRealFormat(investmentLoss)}
+          subtitle={toRealFormat(investment.value)}
           classnames={{
             container: "border-orange-500",
             title: "text-orange-500",
@@ -101,7 +101,7 @@ export default function DiaryReport() {
         {/* Losses */}
         <ReportInfo
           title="Despesas"
-          subtitle={toRealFormat(expenseLoss)}
+          subtitle={toRealFormat(expense.value)}
           classnames={{
             container: "border-orange-500",
             title: "text-orange-500",

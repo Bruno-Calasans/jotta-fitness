@@ -2,8 +2,8 @@ import Selector from "@/components/custom/others/Selector";
 import { MonthData, MONTHS } from "@/data/MONTHS_DATA";
 
 type MonthSelectorProps = {
-  value: string;
-  onValueChange: (value: string) => void;
+  value?: string;
+  onValueChange?: (value: string) => void;
   onItemSelected: (item: MonthData) => void;
 };
 
@@ -13,8 +13,8 @@ export default function MonthSelector({
   onItemSelected,
 }: MonthSelectorProps) {
   const monthData = MONTHS.map((month) => ({
-    label: month.shortName,
-    value: month.name,
+    label: month.name,
+    value: month.shortName,
     item: month,
   }));
 
@@ -24,8 +24,9 @@ export default function MonthSelector({
       value={value}
       onValueChange={onValueChange}
       onItemSelect={onItemSelected}
-      itemAcessorKey="name"
+      itemAcessorKey="shortName"
       placeholder="Escolha um mês"
+      defaultValue="Jan"
     />
   );
 }

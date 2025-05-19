@@ -33,7 +33,8 @@ type LogState = {
   getLogsByDate(selectedDate: Date, types?: LogType[]): Log[];
   getByEnrollmentId: (enrollmentId: string) => EnrollmentLog | null;
   getByPurchaseId: (purchaseId: string) => PurchaseLog | null;
-  getLogsByMonth: (month: number) => Log[];
+  getLogsByMonth: (month: number, year?: number) => Log[];
+  getLogsByYear: (year: number) => Log[];
 };
 
 export const useLogStore = create<LogState>()(
@@ -70,12 +71,12 @@ export const useLogStore = create<LogState>()(
       },
       getAllEnrollmentLogs() {
         return get().logs.filter(
-          (log) => log.type === "enrollment",
+          (log) => log.type === "enrollment"
         ) as EnrollmentLog[];
       },
       getAllPlanDiaryLogs() {
         return get().logs.filter(
-          (log) => log.type === "plan-diary",
+          (log) => log.type === "plan-diary"
         ) as PlanDiaryLog[];
       },
       getAllPurchaseLogs() {
@@ -85,12 +86,12 @@ export const useLogStore = create<LogState>()(
       },
       getAllLossLogs() {
         return get().logs.filter(
-          (log) => log.type === "investment" || "expense",
+          (log) => log.type === "investment" || "expense"
         ) as LossLog[];
       },
       getAllAdhesionLogs() {
         return get().logs.filter(
-          (log) => log.type === "adhesion",
+          (log) => log.type === "adhesion"
         ) as AdhesionLog[];
       },
       getLogsByDate(selectedDate, types) {
@@ -105,7 +106,7 @@ export const useLogStore = create<LogState>()(
       getByEnrollmentId(enrollmentId) {
         const foundLog = get().logs.find(
           (log) =>
-            log.type === "enrollment" && log.enrollment.id === enrollmentId,
+            log.type === "enrollment" && log.enrollment.id === enrollmentId
         );
 
         if (!foundLog) return null;
@@ -114,18 +115,25 @@ export const useLogStore = create<LogState>()(
       },
       getByPurchaseId(purchaseId) {
         const foundLog = get().logs.find(
-          (log) => log.type === "purchase" && log.purchase.id === purchaseId,
+          (log) => log.type === "purchase" && log.purchase.id === purchaseId
         );
 
         if (!foundLog) return null;
 
         return foundLog as PurchaseLog;
       },
-      getLogsByMonth(month) {
-        const logMonths = get().logs.filter(
-          (log) => log.createdAt.getMonth() === month,
-        );
-        return logMonths;
+      getLogsByMonth(month, year) {
+        return get().logs.filter((log) => {
+          if (year)
+            return (
+              log.createdAt.getMonth() === month &&
+              log.createdAt.getFullYear() === year
+            );
+          return new Date(log.createdAt).getMonth() === month;
+        });
+      },
+      getLogsByYear(year) {
+        return get().logs.filter((log) => log.createdAt.getFullYear() === year);
       },
     }),
     {
@@ -139,6 +147,6 @@ export const useLogStore = create<LogState>()(
           }
         };
       },
-    },
-  ),
+    }
+  )
 );
