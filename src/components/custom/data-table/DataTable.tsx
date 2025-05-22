@@ -65,7 +65,7 @@ export default function DataTable<TData, TValue>({
     state: { sorting, columnFilters },
     initialState: {
       pagination: {
-        pageSize: startPageSize || 5,
+        pageSize: startPageSize || 10,
       },
     },
   });
