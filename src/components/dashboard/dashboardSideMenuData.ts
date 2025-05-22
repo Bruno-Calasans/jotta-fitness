@@ -13,11 +13,11 @@ import {
 
 export const DashboardSidebarItems = {
   Principal: [
-    {
-      title: "Registro Diário",
-      url: "diary-log",
-      icon: CalendarCheck,
-    },
+    // {
+    //   title: "Registro Diário",
+    //   url: "diary-log",
+    //   icon: CalendarCheck,
+    // },
     {
       title: "Resumo Mensal",
       url: "mothly-overview",
