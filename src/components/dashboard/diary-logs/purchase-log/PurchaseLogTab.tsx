@@ -26,10 +26,11 @@ export default function PurchaseLogTab() {
         </div>
         <DataTable
           loading={loading}
-          loadingMsg="Carregando registros de compra"
           columns={purchaseLogColumns}
           data={purchaseLogs}
           noResultMsg={<SelectedDateNotResultMsg />}
+          loadingMsg="Carregando registros de compra"
+          inputSearchPlaceholder="Procurar registro de compra"
         />
       </div>
     </div>

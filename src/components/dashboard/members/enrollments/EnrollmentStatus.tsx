@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { ENROLLMENT_STATUS, Enrollment } from "@/types/Enrollment.type";
+import { Enrollment, ENROLLMENT_STATUS } from "@/types/Enrollment.type";
 import classifyEnrollmentStatus from "@/utils/classifyEnrollmentStatus";
 
 type SubscriptionStatusProps = {

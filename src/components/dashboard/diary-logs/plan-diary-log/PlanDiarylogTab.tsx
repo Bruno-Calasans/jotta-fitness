@@ -28,10 +28,11 @@ export default function PlanDiaryLogTab() {
         </div>
         <DataTable
           loading={loading}
-          loadingMsg="Carregando registros de diária"
           columns={planDiaryColumns}
           data={planDiaryLogs}
           noResultMsg={<SelectedDateNotResultMsg />}
+          loadingMsg="Carregando registros de diária"
+          inputSearchPlaceholder="Procuar registro de diária"
         />
       </div>
     </div>

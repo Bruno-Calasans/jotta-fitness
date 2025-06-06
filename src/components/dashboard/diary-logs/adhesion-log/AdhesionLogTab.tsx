@@ -26,10 +26,11 @@ export default function AdhesionLogTab() {
         </div>
         <DataTable
           loading={loading}
-          loadingMsg="Carregando registros de adesão"
           columns={adhesionLogColumns}
           data={adhesionLogs}
           noResultMsg={<SelectedDateNotResultMsg />}
+          loadingMsg="Carregando registros de adesão"
+          inputSearchPlaceholder="Procurar registro de adesão"
         />
       </div>
     </div>

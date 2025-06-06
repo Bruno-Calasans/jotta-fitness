@@ -8,6 +8,7 @@ import defaultDateFormat from "@/utils/defaultDateFormat";
 
 export const investmentColumns: ColumnDef<Investment>[] = [
   {
+    id: "investmentName",
     accessorKey: "name",
     header: ({ column }) => (
       <DataTableSortableHeader column={column} headerName="Nome" />

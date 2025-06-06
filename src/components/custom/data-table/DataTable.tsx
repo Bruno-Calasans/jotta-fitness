@@ -36,6 +36,8 @@ type DataTableProps<TData, TValue> = {
   noResultMsg?: React.ReactNode;
   columnNameFilter?: string;
   startPageSize?: number;
+  inputSearchPlaceholder?: string;
+  noFoundRowsMsg?: string;
   onRowSelection?: (item: TData) => void;
 };
 
@@ -47,6 +49,8 @@ export default function DataTable<TData, TValue>({
   noResultMsg,
   columnNameFilter,
   startPageSize,
+  inputSearchPlaceholder,
+  noFoundRowsMsg,
   onRowSelection,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -77,6 +81,7 @@ export default function DataTable<TData, TValue>({
   };
 
   const tableHasRows = table.getRowModel().rows?.length > 0;
+  const tableHasFilteredRows = columnFilters.length > 0;
 
   return (
     <div className="flex flex-col gap-2">
@@ -85,6 +90,7 @@ export default function DataTable<TData, TValue>({
         <DataTableSearch
           table={table}
           columnName={columnNameFilter || "name"}
+          placeholder={inputSearchPlaceholder || "Filtrar colunas"}
         />
         {/* Table itself */}
         <Table>
@@ -101,7 +107,7 @@ export default function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -130,7 +136,7 @@ export default function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className={cn(
-                    "cursor-pointer hover:bg-stone-600 transition-all",
+                    "cursor-pointer hover:bg-stone-600 transition-all"
                     // row.id === selectedRow?.id && "bg-stone-700"
                   )}
                   onClick={() => selectionHandler(row)}
@@ -139,15 +145,35 @@ export default function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))}
 
+            {/* No loading and filtered rows */}
+            {!loading && !tableHasRows && tableHasFilteredRows && (
+              // No rows
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  {noFoundRowsMsg || (
+                    <p className="italic">
+                      Nenhum resultado para{" "}
+                      <span className="text-orange-500 font-bold">
+                        {columnFilters[0].value as string}
+                      </span>
+                    </p>
+                  )}
+                </TableCell>
+              </TableRow>
+            )}
+
             {/* No loading state without rows */}
-            {!loading && !tableHasRows && (
+            {!loading && !tableHasRows && !tableHasFilteredRows && (
               // No rows
               <TableRow>
                 <TableCell

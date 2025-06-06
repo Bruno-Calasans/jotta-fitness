@@ -18,10 +18,12 @@ export default function DashboardInvestments() {
 
       <DataTable
         loading={loading}
-        loadingMsg="Carregando Investimentos"
         columns={investmentColumns}
         data={investments}
-        noResultMsg="Nenhum investimento encontrada"
+        columnNameFilter="investmentName"
+        loadingMsg="Carregando Investimentos"
+        noResultMsg="Nenhum investimento encontrado"
+        inputSearchPlaceholder="Procurar investimento"
       />
     </ContentContainer>
   );

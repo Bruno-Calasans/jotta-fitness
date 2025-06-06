@@ -8,7 +8,9 @@ import defaultDateFormat from "@/utils/defaultDateFormat";
 
 export const adhesionColumns: ColumnDef<Adhesion>[] = [
   {
-    accessorKey: "year",
+    id: "year",
+    // accessorKey: "year",
+    accessorFn: (adhesion) => String(adhesion.year),
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}

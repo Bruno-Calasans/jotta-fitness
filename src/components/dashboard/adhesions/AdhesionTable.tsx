@@ -10,7 +10,7 @@ export default function AdhesionTable() {
   const { loading, adhesions } = useAdhesionStore();
 
   const currentYearAdhesion = adhesions.find(
-    (adhesion) => adhesion.year === new Date().getFullYear(),
+    (adhesion) => adhesion.year === new Date().getFullYear()
   );
 
   return (
@@ -26,11 +26,12 @@ export default function AdhesionTable() {
       )}
       <DataTable
         loading={loading}
-        loadingMsg="Carregando Adesões"
         columns={adhesionColumns}
         data={adhesions}
-        noResultMsg="Nenhuma adesão encontrada"
         columnNameFilter="year"
+        loadingMsg="Carregando Adesões"
+        noResultMsg="Nenhuma adesão encontrada"
+        inputSearchPlaceholder="Pesquisar adesão"
       />
     </>
   );

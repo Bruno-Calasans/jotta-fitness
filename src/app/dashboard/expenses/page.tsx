@@ -18,10 +18,12 @@ export default function DashboardExpenses() {
 
       <DataTable
         loading={loading}
-        loadingMsg="Carregando despesas"
         columns={expenseColumns}
         data={expenses}
+        columnNameFilter="expenseName"
+        loadingMsg="Carregando despesas"
         noResultMsg="Nenhuma despesa encontrada"
+        inputSearchPlaceholder="Pesquisar despesa"
       />
     </ContentContainer>
   );
