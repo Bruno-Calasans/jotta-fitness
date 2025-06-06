@@ -22,7 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DataTablePagination from "./DataTablePagination";
 import DataTableSearch from "./DataTableSearch";
 import { cn } from "@/lib/utils";
@@ -107,7 +107,7 @@ export default function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -136,7 +136,7 @@ export default function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className={cn(
-                    "cursor-pointer hover:bg-stone-600 transition-all",
+                    "cursor-pointer hover:bg-stone-600 transition-all"
                     // row.id === selectedRow?.id && "bg-stone-700"
                   )}
                   onClick={() => selectionHandler(row)}
@@ -145,7 +145,7 @@ export default function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}
