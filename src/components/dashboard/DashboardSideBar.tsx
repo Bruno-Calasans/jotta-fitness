@@ -18,7 +18,10 @@ import DashboardSideBarButton from "./DashboardSideBarButton";
 
 export default function DashboardSidebar() {
   return (
-    <SidebarProvider id="dashboard-side-bar" className="w-fit transition-all">
+    <SidebarProvider
+      id="dashboard-side-bar"
+      className="w-fit transition-all h-full"
+    >
       <Sidebar className="absolute" collapsible="icon">
         <DashboardSideBarButton />
         <SidebarContent>

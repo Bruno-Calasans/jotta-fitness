@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
-import { Enrollment } from "@/types/Enrollment.type";
-import calcEnrollmentLeftDays from "@/utils/calcEnrollmentLeftDays";
+import { Enrollment, ENROLLMENT_STATUS } from "@/types/Enrollment.type";
+import classifyEnrollmentStatus from "@/utils/classifyEnrollmentStatus";
 
 type SubscriptionStatusProps = {
   enrollment?: Enrollment | null;
@@ -9,11 +9,9 @@ type SubscriptionStatusProps = {
 export default function SubscriptionStatus({
   enrollment,
 }: SubscriptionStatusProps) {
-  const leftDays = enrollment && calcEnrollmentLeftDays(enrollment);
+  const enrollmentStatus = classifyEnrollmentStatus(enrollment);
 
-  if (!leftDays) return <Badge>Sem Plano</Badge>;
-
-  if (leftDays > 0) {
+  if (enrollmentStatus === ENROLLMENT_STATUS.ATIVO) {
     return (
       <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white transition-all cursor-pointer">
         Ativo
@@ -21,7 +19,7 @@ export default function SubscriptionStatus({
     );
   }
 
-  if (leftDays < 0) {
+  if (enrollmentStatus === ENROLLMENT_STATUS.VENCIDO) {
     return (
       <Badge className="bg-red-500 hover:bg-red-600 text-white transition-all cursor-pointer">
         Vencido
@@ -29,9 +27,5 @@ export default function SubscriptionStatus({
     );
   }
 
-  return (
-    <Badge className="bg-orange-500 hover:bg--600 text-white transition-all cursor-pointer">
-      Acabou
-    </Badge>
-  );
+  return <Badge>Sem Plano</Badge>;
 }

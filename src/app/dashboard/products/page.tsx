@@ -18,10 +18,11 @@ export default function DashboardProductss() {
 
       <DataTable
         loading={loading}
-        loadingMsg="Carregando produtos"
         columns={productColumns}
         data={products}
+        loadingMsg="Carregando produtos"
         noResultMsg="Nenhum produto encontrado"
+        inputSearchPlaceholder="Procurar produto"
       />
     </ContentContainer>
   );

@@ -4,6 +4,8 @@ import type { Log, PurchaseLog } from "@/types/Log.type";
 import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropdown";
 import EditPurchaseLogDialog from "./EditPurchaseLogDialog";
 import RemovePurchaseLogDialog from "./RemovePurchaseLog";
+import toRealFormat from "@/utils/toRealFormat";
+import calcPurchasePrice from "@/utils/calcPurchasePrice";
 
 export const purchaseLogColumns: ColumnDef<PurchaseLog>[] = [
   {
@@ -35,7 +37,6 @@ export const purchaseLogColumns: ColumnDef<PurchaseLog>[] = [
   },
   {
     id: "total",
-    // accessorKey: "purchase.createdAt",
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
@@ -45,7 +46,7 @@ export const purchaseLogColumns: ColumnDef<PurchaseLog>[] = [
     ),
     cell: ({ row }) => {
       const { purchase } = row.original;
-      return <p>{(purchase.product.price * purchase.amount).toFixed(2)}</p>;
+      return <p>{calcPurchasePrice(purchase).toFixed(2)}</p>;
     },
   },
   {

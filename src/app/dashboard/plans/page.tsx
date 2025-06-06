@@ -18,10 +18,11 @@ export default function DashboardPlans() {
 
       <DataTable
         loading={loading}
-        loadingMsg="Carregando planos"
         columns={planColumns}
         data={plans}
+        loadingMsg="Carregando planos"
         noResultMsg="Nenhum plano encontrado"
+        inputSearchPlaceholder="Procurar plano"
       />
     </ContentContainer>
   );

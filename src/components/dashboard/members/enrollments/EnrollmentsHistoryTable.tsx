@@ -1,6 +1,5 @@
 import { enrollmentColumns } from "./EnrollmentHistoryTableColumns";
 import { useMemberStore } from "@/store/memberStore";
-import { useLogStore } from "@/store/logStore";
 import DataTable from "@/components/custom/data-table/DataTable";
 import CreateSubscriptionDialog from "./CreateEnrollmentDialog";
 
@@ -19,10 +18,12 @@ export default function EnrollmentsHistoryTable() {
       </div>
       <DataTable
         loading={loading}
-        loadingMsg="Carregando inscrições"
         columns={enrollmentColumns}
-        data={enrollments.length > 0 ? enrollments : []}
+        data={enrollments}
+        columnNameFilter="planName"
         noResultMsg="Nenhuma inscrição encontrada"
+        inputSearchPlaceholder="Procurar inscrição"
+        loadingMsg="Carregando inscrições"
       />
     </div>
   );

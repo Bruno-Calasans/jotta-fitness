@@ -4,7 +4,7 @@ import type { Log, PlanDiaryLog } from "@/types/Log.type";
 import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropdown";
 import EditPlanDiaryLogDialog from "./EditPlanDiaryLogDialog";
 import RemovePlanDiaryLogDialog from "./RemovePlanDiaryLog";
-import { format } from "date-fns";
+import defaultDateFormat from "@/utils/defaultDateFormat";
 
 export const planDiaryColumns: ColumnDef<PlanDiaryLog>[] = [
   {
@@ -69,7 +69,8 @@ export const planDiaryColumns: ColumnDef<PlanDiaryLog>[] = [
     ),
     cell: ({ row }) => {
       const { planDiary } = row.original;
-      return format(planDiary.expiresIn, "d/M/y");
+      return defaultDateFormat(planDiary.expiresIn);
+      // format(planDiary.expiresIn, "d/M/y");
     },
   },
   {

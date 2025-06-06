@@ -6,13 +6,14 @@ import RemoveEnrollmentDialog from "./RemoveEnrollmentDialog";
 import EditSubscriptionDialog from "./EditEnrollmentDialog";
 import PlanStatus from "./EnrollmentStatus";
 import defaultDateFormat from "@/utils/defaultDateFormat";
+import classifyEnrollmentStatus from "@/utils/classifyEnrollmentStatus";
 
 export const enrollmentColumns: ColumnDef<Enrollment>[] = [
   {
-    id: "name",
+    id: "planName",
     accessorKey: "plan.name",
     header: ({ column }) => (
-      <DataTableSortableHeader column={column} headerName="Nome" />
+      <DataTableSortableHeader column={column} headerName="Plano" />
     ),
   },
   {
@@ -25,17 +26,7 @@ export const enrollmentColumns: ColumnDef<Enrollment>[] = [
       />
     ),
   },
-  {
-    id: "status",
-    accessorKey: "plan",
-    header: ({ column }) => (
-      <DataTableSortableHeader column={column} headerName="Status" />
-    ),
-    cell: ({ row }) => {
-      const enrollment = row.original;
-      return <PlanStatus enrollment={enrollment} />;
-    },
-  },
+
   {
     accessorKey: "startsIn",
     header: ({ column }) => (
@@ -62,6 +53,17 @@ export const enrollmentColumns: ColumnDef<Enrollment>[] = [
     cell: ({ row }) => {
       const { expiresIn } = row.original;
       return <p>{defaultDateFormat(expiresIn)}</p>;
+    },
+  },
+  {
+    id: "planStatus",
+    accessorFn: (enrollment) => classifyEnrollmentStatus(enrollment),
+    header: ({ column }) => (
+      <DataTableSortableHeader column={column} headerName="Status" />
+    ),
+    cell: ({ row }) => {
+      const enrollment = row.original;
+      return <PlanStatus enrollment={enrollment} />;
     },
   },
   {

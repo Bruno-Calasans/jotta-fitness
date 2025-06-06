@@ -30,10 +30,11 @@ export default function EnrollmentLogTab() {
         </div>
         <DataTable
           loading={loading}
-          loadingMsg="Carregando registros de inscrição"
           columns={enrollmentLogColumns}
           data={enrollmentLogs}
           noResultMsg={<SelectedDateNotResultMsg />}
+          loadingMsg="Carregando registros de inscrição"
+          inputSearchPlaceholder="Procurar registro de inscrição"
         />
       </div>
     </div>

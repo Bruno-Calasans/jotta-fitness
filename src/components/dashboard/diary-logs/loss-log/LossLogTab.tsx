@@ -28,10 +28,11 @@ export default function LossLogTab() {
         </div>
         <DataTable
           loading={loading}
-          loadingMsg="Carregando registros de perda"
           columns={lossLogColumns}
           data={lossLogs}
           noResultMsg={<SelectedDateNotResultMsg />}
+          loadingMsg="Carregando registros de perda"
+          inputSearchPlaceholder="Procurar registro de perda"
         />
       </div>
     </div>

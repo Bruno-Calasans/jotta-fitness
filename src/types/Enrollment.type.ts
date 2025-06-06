@@ -8,3 +8,9 @@ export type Enrollment = DB & {
   expiresIn: Date;
   lateFee: number;
 };
+
+export enum ENROLLMENT_STATUS {
+  ATIVO,
+  INATIVO,
+  VENCIDO,
+}

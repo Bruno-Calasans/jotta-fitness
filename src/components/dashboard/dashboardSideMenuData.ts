@@ -9,14 +9,15 @@ import {
   Package,
   ShieldUser,
   User,
+  Home
 } from "lucide-react";
 
 export const DashboardSidebarItems = {
   Principal: [
     {
-      title: "Registro Diário",
-      url: "diary-log",
-      icon: CalendarCheck,
+      title: "Página inicial",
+      url: "/",
+      icon: Home,
     },
     {
       title: "Resumo Mensal",
