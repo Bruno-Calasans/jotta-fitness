@@ -1,3 +1,6 @@
+import { DeepKeys } from "@tanstack/react-table";
+// import getValueByDeepKey from "./getDeepestKey";
+
 export default function groupBy<T, K extends keyof T>(
   items: T[],
   key: K,
@@ -6,6 +9,7 @@ export default function groupBy<T, K extends keyof T>(
 
   for (const item of items) {
     const value = String(item[key]);
+    // const value = String(getValueByDeepKey(item, key));
 
     if (!groupedItems[value]) {
       groupedItems[value] = [];
@@ -16,3 +20,7 @@ export default function groupBy<T, K extends keyof T>(
 
   return groupedItems;
 }
+
+// export default function groupBy() {
+//   return null;
+// }

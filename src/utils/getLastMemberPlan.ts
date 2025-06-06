@@ -3,6 +3,5 @@ import type { Member } from "@/types/Member.type";
 
 export default function getLastMemberPlan(member: Member) {
   const lastEnrollment = getLastMemberEnrollment(member);
-  if (!lastEnrollment) return null;
-  return lastEnrollment.plan;
+  return lastEnrollment ? lastEnrollment.plan : null;
 }

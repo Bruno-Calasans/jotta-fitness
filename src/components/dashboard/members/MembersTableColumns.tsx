@@ -4,10 +4,12 @@ import type { ColumnDef } from "@tanstack/react-table";
 import EditMemberDialog from "./EditMemberDialog";
 import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropdown";
 import RemoveMemberDialog from "./RemoveMemberDialog";
-import { Badge } from "@/components/ui/badge";
 import phoneMask from "@/utils/phoneMask";
 import PlanStatus from "./enrollments/EnrollmentStatus";
 import MoreDetails from "./MoreDetails";
+import defaultDateFormat from "@/utils/defaultDateFormat";
+import getLastMemberEnrollment from "@/utils/getLastMemberEnrollment";
+import classifyEnrollmentStatus from "@/utils/classifyEnrollmentStatus";
 
 export const membersColumns: ColumnDef<Member>[] = [
   {
@@ -21,53 +23,53 @@ export const membersColumns: ColumnDef<Member>[] = [
     header: ({ column }) => (
       <DataTableSortableHeader column={column} headerName="Celular" />
     ),
-    cell: ({ row }) => {
-      const member = row.original;
-      return <p>{phoneMask(member.phone)}</p>;
+    cell: ({ getValue }) => {
+      return <p>{phoneMask(getValue<string>())}</p>;
     },
   },
   {
-    accessorKey: "role",
-    header: ({ column }) => (
-      <DataTableSortableHeader column={column} headerName="Staff" />
-    ),
-    cell: ({ row }) => {
-      const member = row.original;
-      if (member.role)
-        return (
-          <Badge
-            className="bg-emerald-500 border-emerald-500 text-white"
-            variant="outline"
-          >
-            Sim
-          </Badge>
-        );
-
-      return (
-        <Badge
-          className="bg-red-500 border-red-500 text-white"
-          variant="outline"
-        >
-          Não
-        </Badge>
-      );
-    },
-  },
-  {
-    accessorKey: "planPayments",
+    id: "planName",
+    accessorFn: (member) => getLastMemberEnrollment(member)?.plan.name,
     header: ({ column }) => (
       <DataTableSortableHeader column={column} headerName="Plano" />
     ),
+    cell: ({ getValue }) => {
+      const planName = getValue<string | undefined>();
+      return <p>{planName ? planName : "Nenhum"}</p>;
+    },
+  },
+  {
+    id: "planStatus",
+    accessorFn: (member) =>
+      classifyEnrollmentStatus(getLastMemberEnrollment(member)),
+    header: ({ column }) => (
+      <DataTableSortableHeader column={column} headerName="Status" />
+    ),
     cell: ({ row }) => {
-      const { enrollments } = row.original;
-      return <PlanStatus enrollment={enrollments[enrollments.length - 1]} />;
+      const member = row.original;
+      const lastEnrollment = getLastMemberEnrollment(member);
+      return <PlanStatus enrollment={lastEnrollment} />;
+    },
+  },
+  {
+    id: "planExpiresIn",
+    header: ({ column }) => (
+      <DataTableSortableHeader
+        column={column}
+        headerName="Data vencimento"
+        type="date"
+      />
+    ),
+    accessorFn: (member) => getLastMemberEnrollment(member)?.expiresIn,
+    cell: ({ getValue }) => {
+      const expireIn = getValue<Date | undefined>();
+      return <p>{expireIn ? defaultDateFormat(expireIn) : "Nenhum"}</p>;
     },
   },
   {
     id: "actions",
     cell: ({ row }) => {
       const member = row.original;
-
       return (
         <MoreOptionsDropdown>
           <div className="flex flex-col gap-1">
