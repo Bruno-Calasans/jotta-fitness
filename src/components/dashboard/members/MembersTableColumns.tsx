@@ -73,7 +73,7 @@ export const membersColumns: ColumnDef<Member>[] = [
       return (
         <MoreOptionsDropdown>
           <div className="flex flex-col gap-1">
-            <MoreDetails member={member} />
+            {/* <MoreDetails member={member} /> */}
             <EditMemberDialog member={member} />
             <RemoveMemberDialog member={member} />
           </div>

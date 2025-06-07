@@ -50,7 +50,7 @@ export default function EnrollmentForm({
   const { lateFee } = useEnrollmentResume();
   const { successToast, errorToast } = useCustomToast();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(
-    enrollment?.plan || null
+    enrollment?.plan || null,
   );
   const [manualExpireDate, setManualExpireDate] = useState(false);
   const [minMaxDates, setMinMaxDates] = useState({
@@ -85,7 +85,7 @@ export default function EnrollmentForm({
             plan: selectedPlan,
             months: input.months,
             expiresIn,
-          }
+          },
         );
 
         // Update enrollment log
@@ -102,7 +102,7 @@ export default function EnrollmentForm({
 
         successToast(
           "Atualização de Plano",
-          "Atualização realizada com sucesso"
+          "Atualização realizada com sucesso",
         );
         onSubmit(true);
       } catch (error) {
