@@ -18,6 +18,8 @@ export default function MonthSelector({
     item: month,
   }));
 
+  const currentMonth = MONTHS.find((m) => m.value === new Date().getMonth());
+
   return (
     <Selector
       data={monthData}
@@ -26,7 +28,7 @@ export default function MonthSelector({
       onItemSelect={onItemSelected}
       itemAcessorKey="shortName"
       placeholder="Escolha um mês"
-      defaultValue="Jan"
+      defaultValue={currentMonth?.shortName}
     />
   );
 }

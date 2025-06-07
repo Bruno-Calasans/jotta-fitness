@@ -13,7 +13,9 @@ export default function MonthlyOverviewPage() {
     <ContentContainer>
       <div className="flex justify-between text-4xl border-b-2 border-b-orange-500 py-2 flex-row">
         <p>Resumo Mensal</p>
-        <MonthSelector onItemSelected={setMonthData} />
+        <div>
+          <MonthSelector onItemSelected={setMonthData} />
+        </div>
       </div>
       <MonthlyChart monthData={monthData} />
     </ContentContainer>
