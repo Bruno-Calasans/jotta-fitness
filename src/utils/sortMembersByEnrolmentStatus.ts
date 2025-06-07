@@ -6,6 +6,6 @@ export default function sortMembersByEnrollmentStatus(members: Member[]) {
   return members.sort(
     (a, b) =>
       classifyEnrollmentStatus(getLastMemberEnrollment(a)) -
-      classifyEnrollmentStatus(getLastMemberEnrollment(b))
+      classifyEnrollmentStatus(getLastMemberEnrollment(b)),
   );
 }
