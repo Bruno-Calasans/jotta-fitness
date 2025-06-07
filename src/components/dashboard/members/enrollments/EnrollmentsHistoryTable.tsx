@@ -1,7 +1,7 @@
 import { enrollmentColumns } from "./EnrollmentHistoryTableColumns";
 import { useMemberStore } from "@/store/memberStore";
 import DataTable from "@/components/custom/data-table/DataTable";
-import CreateSubscriptionDialog from "./CreateEnrollmentDialog";
+import CreateEnrollmentDialog from "./CreateEnrollmentDialog";
 
 export default function EnrollmentsHistoryTable() {
   const { loading, selectedMember } = useMemberStore();
@@ -14,7 +14,7 @@ export default function EnrollmentsHistoryTable() {
     <div>
       <div className="flex justify-between text-4xl border-b-2 border-b-orange-500 py-2 mb-3">
         <p>Histórico de Inscrições</p>
-        <CreateSubscriptionDialog />
+        <CreateEnrollmentDialog />
       </div>
       <DataTable
         loading={loading}

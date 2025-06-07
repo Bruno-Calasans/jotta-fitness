@@ -1,35 +1,27 @@
-import { addDays, differenceInDays } from "date-fns";
-import getActiveEnrollmentsLeftDays from "./getActiveEnrollmentsLeftDays";
 import type { Member } from "@/types/Member.type";
 import type { Enrollment } from "@/types/Enrollment.type";
+import type { CreateEnrollmentInput } from "./createEnrollment";
+import calcEnrollmentExpireDate from "./calcEnrollmentExpireDate";
+
+export type UpdateEnrollmentInput = Partial<CreateEnrollmentInput>;
 
 export default function updateEnrollment(
   oldEnrollment: Enrollment,
   member: Member,
-  input: Partial<
-    Enrollment & {
-      createdBy: Member;
-    }
-  >,
+  input: UpdateEnrollmentInput
 ): Enrollment {
-  const currentDate = new Date();
-  const isMonthsDiff = !!input.months && input.months != oldEnrollment.months;
-  const pastDays = differenceInDays(oldEnrollment.startsIn, new Date());
-  const activeEnrollmentsLeftDays = getActiveEnrollmentsLeftDays(
-    member.enrollments,
-    [oldEnrollment.id],
-  );
+  const startsIn = input.startsIn || oldEnrollment.startsIn;
+  const months = input.months || oldEnrollment.months;
+  const expiresIn =
+    input.expiresIn ||
+    calcEnrollmentExpireDate(startsIn, months, member.enrollments, [
+      oldEnrollment.id,
+    ]);
 
   return {
     ...oldEnrollment,
     ...input,
-    startsIn: isMonthsDiff ? currentDate : oldEnrollment.startsIn,
-    expiresIn:
-      input.months && isMonthsDiff
-        ? addDays(
-            currentDate,
-            input.months * 30 + activeEnrollmentsLeftDays - pastDays,
-          )
-        : oldEnrollment.expiresIn,
+    startsIn,
+    expiresIn,
   };
 }

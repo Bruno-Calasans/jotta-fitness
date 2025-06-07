@@ -56,7 +56,7 @@ export default function Selector<ItemType>({
 
   return (
     <Select value={value || innerValue} onValueChange={changeHandler}>
-      <SelectTrigger className="w-fit">
+      <SelectTrigger className="w-full">
         <SelectValue placeholder={placeholder || "Selecione um item"} />
       </SelectTrigger>
       <SelectContent className="w-full">

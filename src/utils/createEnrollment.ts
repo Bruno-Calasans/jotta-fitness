@@ -1,21 +1,28 @@
 import generateDefaultDbFields from "./generateDefaultDbFields";
-import { addDays } from "date-fns";
-import getActivePlansLeftDays from "./getActiveEnrollmentsLeftDays";
+import calcEnrollmentExpireDate from "./calcEnrollmentExpireDate";
 import type { Enrollment } from "@/types/Enrollment.type";
 import type { DB } from "@/types/Db.type";
-import { Member } from "@/types/Member.type";
+import type { Member } from "@/types/Member.type";
+import type { Optional } from "@/types/Optional.type";
+
+export type CreateEnrollmentInput = Optional<
+  Omit<Enrollment, keyof DB>,
+  "startsIn" | "expiresIn"
+>;
 
 export default function createEnrollment(
   member: Member,
-  input: Omit<Enrollment, keyof DB | "expiresIn" | "startsIn">,
+  input: CreateEnrollmentInput
 ): Enrollment {
+  const startsIn = input.startsIn || new Date();
+  const expiresIn =
+    input.expiresIn ||
+    calcEnrollmentExpireDate(startsIn, input.months, member.enrollments);
+
   return {
-    ...input,
     ...generateDefaultDbFields(),
-    startsIn: new Date(),
-    expiresIn: addDays(
-      new Date(),
-      input.months * 30 + getActivePlansLeftDays(member.enrollments),
-    ),
+    ...input,
+    startsIn,
+    expiresIn,
   };
 }

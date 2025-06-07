@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { useMemberStore } from "@/store/memberStore";
 import PlanSelector from "../PlanSelector";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plan } from "@/types/Plan.type";
 import EnrollmentPaymentResume from "./EnrollmentPaymentResume";
 import { Enrollment } from "@/types/Enrollment.type";
@@ -24,10 +24,14 @@ import ConfirmButton from "@/components/custom/buttons/ConfirmButton";
 import RequiredFieldTooltip from "@/components/custom/others/RequiredFieldTooltip";
 import { useLogStore } from "@/store/logStore";
 import { STAFF } from "@/data/MEMBERS_DATA";
+import { Checkbox } from "@/components/ui/checkbox";
+import DatePicker from "@/components/custom/others/DatePicker";
+import { addDays, addMonths, lastDayOfMonth } from "date-fns";
 
 const enrollmentFormSchema = z.object({
   plan: z.string().min(1, "Plano é obrigatório"),
   months: z.coerce.number().min(1, "Meses deve ser maior ou igual a 1"),
+  expiresIn: z.coerce.date().optional(),
 });
 
 type EnrollFormInputs = z.infer<typeof enrollmentFormSchema>;
@@ -46,8 +50,13 @@ export default function EnrollmentForm({
   const { lateFee } = useEnrollmentResume();
   const { successToast, errorToast } = useCustomToast();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(
-    enrollment?.plan || null,
+    enrollment?.plan || null
   );
+  const [manualExpireDate, setManualExpireDate] = useState(false);
+  const [minMaxDates, setMinMaxDates] = useState({
+    min: new Date(),
+    max: new Date(),
+  });
 
   const form = useForm<EnrollFormInputs>({
     resolver: zodResolver(enrollmentFormSchema),
@@ -56,6 +65,9 @@ export default function EnrollmentForm({
       months: enrollment?.months || 1,
     },
   });
+
+  const months = useWatch({ name: "months", control: form.control });
+  const expiresIn = useWatch({ name: "expiresIn", control: form.control });
 
   const submitHandler = (input: EnrollFormInputs) => {
     if (!selectedPlan || !selectedMember) return;
@@ -72,7 +84,8 @@ export default function EnrollmentForm({
           {
             plan: selectedPlan,
             months: input.months,
-          },
+            expiresIn,
+          }
         );
 
         // Update enrollment log
@@ -89,7 +102,7 @@ export default function EnrollmentForm({
 
         successToast(
           "Atualização de Plano",
-          "Atualização realizada com sucesso",
+          "Atualização realizada com sucesso"
         );
         onSubmit(true);
       } catch (error) {
@@ -105,6 +118,7 @@ export default function EnrollmentForm({
           months: input.months,
           plan: selectedPlan,
           lateFee,
+          expiresIn,
         });
 
         // Log enrollment
@@ -125,7 +139,17 @@ export default function EnrollmentForm({
     }
   };
 
-  const months = useWatch({ name: "months", control: form.control });
+  useEffect(() => {
+    if (months > 0) {
+      const minDate = addDays(new Date(), months * 30);
+      minDate.setDate(1);
+
+      const maxDate = lastDayOfMonth(minDate);
+      setMinMaxDates({ min: minDate, max: maxDate });
+
+      form.setValue("expiresIn", minDate);
+    }
+  }, [months]);
 
   if (!selectedMember) return null;
 
@@ -169,6 +193,41 @@ export default function EnrollmentForm({
             </FormItem>
           )}
         />
+
+        <div>
+          <label>
+            <Checkbox
+              checked={manualExpireDate}
+              onCheckedChange={(value) => setManualExpireDate(!!value)}
+            />{" "}
+            Data de Vencimento Manual
+          </label>
+        </div>
+
+        {manualExpireDate && (
+          <FormField
+            control={form.control}
+            name="expiresIn"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <RequiredFieldTooltip>
+                    Data de Vencimento
+                  </RequiredFieldTooltip>
+                </FormLabel>
+                <FormControl>
+                  <DatePicker
+                    className="w-full"
+                    value={field.value}
+                    onSelect={field.onChange}
+                    minDate={minMaxDates.min}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         {/* enrollment resume */}
         {selectedMember && selectedPlan && months > 0 && (

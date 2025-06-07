@@ -6,10 +6,10 @@ import {
   CircleDollarSign,
   Dumbbell,
   HandCoins,
+  Home,
   Package,
   ShieldUser,
   User,
-  Home
 } from "lucide-react";
 
 export const DashboardSidebarItems = {

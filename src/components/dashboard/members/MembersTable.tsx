@@ -16,10 +16,11 @@ export default function MembersTable() {
       </div>
       <DataTable
         loading={loading}
-        loadingMsg="Carregando membros"
         columns={membersColumns}
         data={members}
+        loadingMsg="Carregando membros"
         noResultMsg="Nenhum membro encontrado"
+        inputSearchPlaceholder="Procurar membro"
         // onRowSelection={clickMemberRowHandler}
       />
     </div>
