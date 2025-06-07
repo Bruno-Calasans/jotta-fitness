@@ -5,6 +5,8 @@ import EditProductDialog from "./EditProductDialog";
 import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropdown";
 import RemoveProductDialog from "./RemoveProductDialog";
 import defaultDateFormat from "@/utils/defaultDateFormat";
+import classifyProductStatus from "@/utils/classifyProductStatus";
+import ProductStatus from "./ProductStatus";
 
 export const productColumns: ColumnDef<Product>[] = [
   {
@@ -34,33 +36,49 @@ export const productColumns: ColumnDef<Product>[] = [
     ),
   },
   {
-    accessorKey: "createdAt",
+    id: "productStatus",
+    accessorFn: (product) => classifyProductStatus(product),
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
-        headerName="Data de Criação"
-        type="date"
+        headerName="Status"
+        type="numeral"
       />
     ),
     cell: ({ row }) => {
       const product = row.original;
-      return <p>{defaultDateFormat(product.createdAt)}</p>;
+      return <ProductStatus product={product} />;
     },
+    sortDescFirst: true,
   },
-  {
-    accessorKey: "updatedAt",
-    header: ({ column }) => (
-      <DataTableSortableHeader
-        column={column}
-        headerName="Data de Atualização"
-        type="date"
-      />
-    ),
-    cell: ({ row }) => {
-      const product = row.original;
-      return <p>{defaultDateFormat(product.updatedAt)}</p>;
-    },
-  },
+  // {
+  //   accessorKey: "createdAt",
+  //   header: ({ column }) => (
+  //     <DataTableSortableHeader
+  //       column={column}
+  //       headerName="Data de Criação"
+  //       type="date"
+  //     />
+  //   ),
+  //   cell: ({ row }) => {
+  //     const product = row.original;
+  //     return <p>{defaultDateFormat(product.createdAt)}</p>;
+  //   },
+  // },
+  // {
+  //   accessorKey: "updatedAt",
+  //   header: ({ column }) => (
+  //     <DataTableSortableHeader
+  //       column={column}
+  //       headerName="Data de Atualização"
+  //       type="date"
+  //     />
+  //   ),
+  //   cell: ({ row }) => {
+  //     const product = row.original;
+  //     return <p>{defaultDateFormat(product.updatedAt)}</p>;
+  //   },
+  // },
   {
     id: "actions",
     cell: ({ row }) => {

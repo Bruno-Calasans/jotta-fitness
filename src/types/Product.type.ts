@@ -5,3 +5,9 @@ export type Product = DB & {
   price: number;
   amount: number;
 };
+
+export enum PRODUCT_STATUS {
+  UNAVALIABLE,
+  EXPIRED,
+  AVALIABLE,
+}
