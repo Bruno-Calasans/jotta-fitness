@@ -1,4 +1,4 @@
-import { PRODUCT_STATUS, Product } from "@/types/Product.type";
+import { Product, PRODUCT_STATUS } from "@/types/Product.type";
 
 export default function classifyProductStatus({ amount }: Product) {
   if (amount === 0) return PRODUCT_STATUS.UNAVALIABLE;

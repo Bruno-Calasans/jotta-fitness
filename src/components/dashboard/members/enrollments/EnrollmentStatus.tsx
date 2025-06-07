@@ -11,7 +11,7 @@ export default function EnrollmentStatus({
 }: EnrollmentStatusProps) {
   const enrollmentStatus = classifyEnrollmentStatus(enrollment);
 
-  if (enrollmentStatus === ENROLLMENT_STATUS.ATIVO) {
+  if (enrollmentStatus === ENROLLMENT_STATUS.ACTIVE) {
     return (
       <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white transition-all cursor-pointer">
         Ativo
@@ -19,7 +19,7 @@ export default function EnrollmentStatus({
     );
   }
 
-  if (enrollmentStatus === ENROLLMENT_STATUS.VENCIDO) {
+  if (enrollmentStatus === ENROLLMENT_STATUS.EXPIRED) {
     return (
       <Badge className="bg-red-500 hover:bg-red-600 text-white transition-all cursor-pointer">
         Vencido

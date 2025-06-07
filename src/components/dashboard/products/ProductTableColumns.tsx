@@ -4,7 +4,6 @@ import type { ColumnDef } from "@tanstack/react-table";
 import EditProductDialog from "./EditProductDialog";
 import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropdown";
 import RemoveProductDialog from "./RemoveProductDialog";
-import defaultDateFormat from "@/utils/defaultDateFormat";
 import classifyProductStatus from "@/utils/classifyProductStatus";
 import ProductStatus from "./ProductStatus";
 
