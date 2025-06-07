@@ -5,6 +5,7 @@ import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropd
 import EditPlanDiaryLogDialog from "./EditPlanDiaryLogDialog";
 import RemovePlanDiaryLogDialog from "./RemovePlanDiaryLog";
 import defaultDateFormat from "@/utils/defaultDateFormat";
+import calcPlanDiaryPrice from "@/utils/calcPlanDiaryPrice";
 
 export const planDiaryColumns: ColumnDef<PlanDiaryLog>[] = [
   {
@@ -46,6 +47,7 @@ export const planDiaryColumns: ColumnDef<PlanDiaryLog>[] = [
   },
   {
     id: "total",
+    accessorFn: ({ planDiary }) => calcPlanDiaryPrice(planDiary),
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
@@ -53,9 +55,8 @@ export const planDiaryColumns: ColumnDef<PlanDiaryLog>[] = [
         type="numeral"
       />
     ),
-    cell: ({ row }) => {
-      const { planDiary } = row.original as Log & { type: "plan-diary" };
-      return <p>{(planDiary.plan.diary * planDiary.days).toFixed(2)}</p>;
+    cell: ({ getValue }) => {
+      return <p>{getValue<number>().toFixed(2)}</p>;
     },
   },
   {
@@ -70,14 +71,12 @@ export const planDiaryColumns: ColumnDef<PlanDiaryLog>[] = [
     cell: ({ row }) => {
       const { planDiary } = row.original;
       return defaultDateFormat(planDiary.expiresIn);
-      // format(planDiary.expiresIn, "d/M/y");
     },
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const planDiarylog = row.original as Log & { type: "plan-diary" };
-
+      const planDiarylog = row.original;
       return (
         <MoreOptionsDropdown>
           <div className="flex flex-col gap-1">

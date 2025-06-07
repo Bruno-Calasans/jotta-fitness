@@ -5,8 +5,7 @@ import EditMemberDialog from "./EditMemberDialog";
 import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropdown";
 import RemoveMemberDialog from "./RemoveMemberDialog";
 import phoneMask from "@/utils/phoneMask";
-import PlanStatus from "./enrollments/EnrollmentStatus";
-import MoreDetails from "./MoreDetails";
+import EnrollmentStatus from "./enrollments/EnrollmentStatus";
 import defaultDateFormat from "@/utils/defaultDateFormat";
 import getLastMemberEnrollment from "@/utils/getLastMemberEnrollment";
 import classifyEnrollmentStatus from "@/utils/classifyEnrollmentStatus";
@@ -39,7 +38,7 @@ export const membersColumns: ColumnDef<Member>[] = [
     },
   },
   {
-    id: "planStatus",
+    id: "enrollmentStatus",
     accessorFn: (member) =>
       classifyEnrollmentStatus(getLastMemberEnrollment(member)),
     header: ({ column }) => (
@@ -48,7 +47,7 @@ export const membersColumns: ColumnDef<Member>[] = [
     cell: ({ row }) => {
       const member = row.original;
       const lastEnrollment = getLastMemberEnrollment(member);
-      return <PlanStatus enrollment={lastEnrollment} />;
+      return <EnrollmentStatus enrollment={lastEnrollment} />;
     },
   },
   {

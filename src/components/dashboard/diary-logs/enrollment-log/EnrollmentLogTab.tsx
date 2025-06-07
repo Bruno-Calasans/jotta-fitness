@@ -10,16 +10,20 @@ import type { EnrollmentLog } from "@/types/Log.type";
 
 export default function EnrollmentLogTab() {
   const { selectedDate, loading, getLogsByDate } = useLogStore();
-  const [enrollmentLogs, setEnrollmentLogs] = useState<EnrollmentLog[]>([]);
+  // const [enrollmentLogs, setEnrollmentLogs] = useState<EnrollmentLog[]>([]);
 
-  useEffect(() => {
-    if (selectedDate) {
-      const logs = getLogsByDate(selectedDate, [
-        "enrollment",
-      ]) as EnrollmentLog[];
-      setEnrollmentLogs(logs);
-    }
-  }, [selectedDate]);
+  // useEffect(() => {
+  //   if (selectedDate) {
+  //     const logs = getLogsByDate(selectedDate, [
+  //       "enrollment",
+  //     ]) as EnrollmentLog[];
+  //     setEnrollmentLogs(logs);
+  //   }
+  // }, [selectedDate]);
+
+  const enrollmentLogs = getLogsByDate(selectedDate || new Date(), [
+    "enrollment",
+  ]) as EnrollmentLog[];
 
   return (
     <div>

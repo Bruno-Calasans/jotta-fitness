@@ -2,13 +2,13 @@ import { Badge } from "@/components/ui/badge";
 import { Enrollment, ENROLLMENT_STATUS } from "@/types/Enrollment.type";
 import classifyEnrollmentStatus from "@/utils/classifyEnrollmentStatus";
 
-type SubscriptionStatusProps = {
+type EnrollmentStatusProps = {
   enrollment?: Enrollment | null;
 };
 
-export default function SubscriptionStatus({
+export default function EnrollmentStatus({
   enrollment,
-}: SubscriptionStatusProps) {
+}: EnrollmentStatusProps) {
   const enrollmentStatus = classifyEnrollmentStatus(enrollment);
 
   if (enrollmentStatus === ENROLLMENT_STATUS.ATIVO) {
