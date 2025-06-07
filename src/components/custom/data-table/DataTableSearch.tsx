@@ -22,7 +22,7 @@ export default function DataTableSearch<TData>({
         onChange={(event) =>
           table.getColumn(columnName)?.setFilterValue(event.target.value)
         }
-        className="flex border-none"
+        className="flex border-none bg-stone-100 m-1 text-black font-semibold placeholder:text-stone-600 placeholder:font-normal"
       />
       <Search />
     </div>
