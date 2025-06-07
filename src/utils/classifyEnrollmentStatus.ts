@@ -2,7 +2,7 @@ import { Enrollment, ENROLLMENT_STATUS } from "@/types/Enrollment.type";
 import calcEnrollmentLeftDays from "./calcEnrollmentLeftDays";
 
 export default function classifyEnrollmentStatus(
-  enrollment: Enrollment | undefined | null
+  enrollment: Enrollment | undefined | null,
 ): ENROLLMENT_STATUS {
   if (!enrollment) return ENROLLMENT_STATUS.INACTIVE;
 

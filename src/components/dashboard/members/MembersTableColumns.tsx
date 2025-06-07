@@ -38,19 +38,6 @@ export const membersColumns: ColumnDef<Member>[] = [
     },
   },
   {
-    id: "enrollmentStatus",
-    accessorFn: (member) =>
-      classifyEnrollmentStatus(getLastMemberEnrollment(member)),
-    header: ({ column }) => (
-      <DataTableSortableHeader column={column} headerName="Status" />
-    ),
-    cell: ({ row }) => {
-      const member = row.original;
-      const lastEnrollment = getLastMemberEnrollment(member);
-      return <EnrollmentStatus enrollment={lastEnrollment} />;
-    },
-  },
-  {
     id: "planExpiresIn",
     header: ({ column }) => (
       <DataTableSortableHeader
@@ -63,6 +50,19 @@ export const membersColumns: ColumnDef<Member>[] = [
     cell: ({ getValue }) => {
       const expireIn = getValue<Date | undefined>();
       return <p>{expireIn ? defaultDateFormat(expireIn) : "Nenhum"}</p>;
+    },
+  },
+  {
+    id: "enrollmentStatus",
+    accessorFn: (member) =>
+      classifyEnrollmentStatus(getLastMemberEnrollment(member)),
+    header: ({ column }) => (
+      <DataTableSortableHeader column={column} headerName="Status" />
+    ),
+    cell: ({ row }) => {
+      const member = row.original;
+      const lastEnrollment = getLastMemberEnrollment(member);
+      return <EnrollmentStatus enrollment={lastEnrollment} />;
     },
   },
   {

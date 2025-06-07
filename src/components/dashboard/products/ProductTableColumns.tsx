@@ -50,34 +50,6 @@ export const productColumns: ColumnDef<Product>[] = [
     },
     sortDescFirst: true,
   },
-  // {
-  //   accessorKey: "createdAt",
-  //   header: ({ column }) => (
-  //     <DataTableSortableHeader
-  //       column={column}
-  //       headerName="Data de Criação"
-  //       type="date"
-  //     />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const product = row.original;
-  //     return <p>{defaultDateFormat(product.createdAt)}</p>;
-  //   },
-  // },
-  // {
-  //   accessorKey: "updatedAt",
-  //   header: ({ column }) => (
-  //     <DataTableSortableHeader
-  //       column={column}
-  //       headerName="Data de Atualização"
-  //       type="date"
-  //     />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const product = row.original;
-  //     return <p>{defaultDateFormat(product.updatedAt)}</p>;
-  //   },
-  // },
   {
     id: "actions",
     cell: ({ row }) => {
