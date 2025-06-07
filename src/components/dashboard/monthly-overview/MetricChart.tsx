@@ -1,4 +1,4 @@
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -70,16 +70,24 @@ export default function MetricChart({
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="metric"
-              tickLine={false}
               tickMargin={10}
-              axisLine={false}
+              tickLine={true}
+              axisLine={true}
               tickFormatter={(value) => value}
+            />
+            <YAxis
+              dataKey="value"
+              tickMargin={10}
+              tickLine={true}
+              axisLine={true}
+              tickFormatter={(value) => value}
+              allowDecimals={false}
+              tickCount={10}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="line" />}
             />
-
             <Bar dataKey="value" fill="var(--color-value)" radius={4} />
             <Bar dataKey="amount" fill="var(--color-amount)" radius={4} />
           </BarChart>
