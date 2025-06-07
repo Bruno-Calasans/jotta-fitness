@@ -55,6 +55,7 @@ export default function EnrollmentForm({
     defaultValues: {
       plan: enrollment?.plan.name || "",
       months: enrollment?.months || 1,
+      expiresIn: enrollment?.expiresIn,
     },
   });
 

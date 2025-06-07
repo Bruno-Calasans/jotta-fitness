@@ -1,4 +1,4 @@
-import { addDays, lastDayOfMonth } from "date-fns";
+import { addDays, addMonths, lastDayOfMonth } from "date-fns";
 import { useEffect, useState } from "react";
 import DatePicker from "@/components/custom/others/DatePicker";
 
@@ -26,7 +26,7 @@ export default function ExpireDatePicker({
   useEffect(() => {
     if (months > 0) {
       // Go to first day of the month
-      const minDate = addDays(new Date(), months * 30);
+      const minDate = addDays(new Date(), months * 31);
       minDate.setDate(1);
 
       // Go to last day of the month
@@ -45,7 +45,7 @@ export default function ExpireDatePicker({
   return (
     <DatePicker
       className="w-full"
-      value={value}
+      value={value || addMonths(new Date(), 1)}
       onSelect={onChange}
       minDate={minMaxDates.min}
       maxDate={minMaxDates.max}
