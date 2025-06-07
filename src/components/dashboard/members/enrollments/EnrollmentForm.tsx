@@ -14,8 +14,7 @@ import { Input } from "@/components/ui/input";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { useMemberStore } from "@/store/memberStore";
 import PlanSelector from "../PlanSelector";
-import { useEffect, useState } from "react";
-import { Plan } from "@/types/Plan.type";
+import { useState } from "react";
 import EnrollmentPaymentResume from "./EnrollmentPaymentResume";
 import { Enrollment } from "@/types/Enrollment.type";
 import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
@@ -25,8 +24,7 @@ import RequiredFieldTooltip from "@/components/custom/others/RequiredFieldToolti
 import { useLogStore } from "@/store/logStore";
 import { STAFF } from "@/data/MEMBERS_DATA";
 import { Checkbox } from "@/components/ui/checkbox";
-import DatePicker from "@/components/custom/others/DatePicker";
-import { addDays, addMonths, lastDayOfMonth } from "date-fns";
+import ExpireDatePicker from "../../ExpireDatePicker";
 
 const enrollmentFormSchema = z.object({
   plan: z.string().min(1, "Plano é obrigatório"),
@@ -45,18 +43,12 @@ export default function EnrollmentForm({
   enrollment,
   onSubmit,
 }: EnrollmentFormProps) {
-  const { selectedMember, updateEnrollment, addEnrollment } = useMemberStore();
   const logDb = useLogStore();
+  const { selectedMember, updateEnrollment, addEnrollment } = useMemberStore();
   const { lateFee } = useEnrollmentResume();
   const { successToast, errorToast } = useCustomToast();
-  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(
-    enrollment?.plan || null,
-  );
-  const [manualExpireDate, setManualExpireDate] = useState(false);
-  const [minMaxDates, setMinMaxDates] = useState({
-    min: new Date(),
-    max: new Date(),
-  });
+  const [selectedPlan, setSelectedPlan] = useState(enrollment?.plan || null);
+  const [isManualExpireDate, setIsManualExpireDate] = useState(false);
 
   const form = useForm<EnrollFormInputs>({
     resolver: zodResolver(enrollmentFormSchema),
@@ -85,7 +77,7 @@ export default function EnrollmentForm({
             plan: selectedPlan,
             months: input.months,
             expiresIn,
-          },
+          }
         );
 
         // Update enrollment log
@@ -102,7 +94,7 @@ export default function EnrollmentForm({
 
         successToast(
           "Atualização de Plano",
-          "Atualização realizada com sucesso",
+          "Atualização realizada com sucesso"
         );
         onSubmit(true);
       } catch (error) {
@@ -138,18 +130,6 @@ export default function EnrollmentForm({
       }
     }
   };
-
-  useEffect(() => {
-    if (months > 0) {
-      const minDate = addDays(new Date(), months * 30);
-      minDate.setDate(1);
-
-      const maxDate = lastDayOfMonth(minDate);
-      setMinMaxDates({ min: minDate, max: maxDate });
-
-      form.setValue("expiresIn", minDate);
-    }
-  }, [months]);
 
   if (!selectedMember) return null;
 
@@ -193,18 +173,19 @@ export default function EnrollmentForm({
             </FormItem>
           )}
         />
+
         {/* Select expire date */}
         <div>
           <label>
             <Checkbox
-              checked={manualExpireDate}
-              onCheckedChange={(value) => setManualExpireDate(!!value)}
+              checked={isManualExpireDate}
+              onCheckedChange={(value) => setIsManualExpireDate(!!value)}
             />{" "}
             Quero selecionar a data da vencimento
           </label>
         </div>
 
-        {manualExpireDate && (
+        {isManualExpireDate && (
           <FormField
             control={form.control}
             name="expiresIn"
@@ -216,11 +197,10 @@ export default function EnrollmentForm({
                   </RequiredFieldTooltip>
                 </FormLabel>
                 <FormControl>
-                  <DatePicker
-                    className="w-full"
+                  <ExpireDatePicker
+                    months={months}
                     value={field.value}
-                    onSelect={field.onChange}
-                    minDate={minMaxDates.min}
+                    onChange={field.onChange}
                   />
                 </FormControl>
                 <FormMessage />
