@@ -13,7 +13,7 @@ import { adminItems, mainItems, socialItems } from "./headerMenuData";
 
 export default function MainSideMenuContent() {
   return (
-    <SheetContent className="flex flex-col gap-2 w-[300px]">
+    <SheetContent className="flex flex-col gap-2 w-[300px] overflow-scroll">
       <SheetHeader>
         <SheetTitle asChild className="flex items-center flex-1 gap-1 ">
           <div>

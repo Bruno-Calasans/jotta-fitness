@@ -26,7 +26,7 @@ export default function MonthlyOverviewPage() {
           <MonthSelector onItemSelected={setMonthData} />
         </div>
       </div>
-      <MonthlyChart monthData={monthData} year={year}/>
+      <MonthlyChart monthData={monthData} year={year} />
     </ContentContainer>
   );
 }
