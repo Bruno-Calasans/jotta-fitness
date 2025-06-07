@@ -7,6 +7,7 @@ import { useLogStore } from "@/store/logStore";
 import { useMemberStore } from "@/store/memberStore";
 import calcAdhesionPrice from "@/utils/calcAdhesionPrice";
 import { Check } from "lucide-react";
+import RemoveDialog from "@/components/custom/dialogs/RemoveDialog";
 
 export default function AdhesionInfo() {
   const logDb = useLogStore();
@@ -25,7 +26,7 @@ export default function AdhesionInfo() {
     try {
       const adhesionPayment = addAdhesionPayment(
         selectedMember.id,
-        currentAdhesion.year,
+        currentAdhesion.year
       );
       if (adhesionPayment) {
         logDb.add({
@@ -63,14 +64,20 @@ export default function AdhesionInfo() {
             : currentAdhesion.veteranDiscount}
           %) de desconto
         </p>
-        <Button
-          size="sm"
-          className="bg-emerald-500 hover:bg-emerald-600"
-          onClick={payAdhesionHandler}
+
+        <RemoveDialog
+          title="Confirmar pagamento de adesão"
+          removeBtnTitle="Confirmar"
+          onRemove={payAdhesionHandler}
+          removeBtn={
+            <Button size="sm" className="bg-emerald-500 hover:bg-emerald-600">
+              <Check />
+              Marcar como pago
+            </Button>
+          }
         >
-          <Check />
-          Marcar como pago
-        </Button>
+          <div>Esta ação irreversível. Tem certeza que deseja continuar?</div>
+        </RemoveDialog>
       </div>
     </ErrorMsg>
   );

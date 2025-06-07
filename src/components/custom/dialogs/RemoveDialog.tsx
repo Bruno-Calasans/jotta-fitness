@@ -15,11 +15,13 @@ type RemoveDialogProps = {
   title?: React.ReactNode;
   removeBtnTitle?: React.ReactNode;
   cancelBtnTitle?: React.ReactNode;
+  removeBtn?: React.ReactNode;
   children: React.ReactNode;
 };
 
 export default function RemoveDialog({
   title,
+  removeBtn,
   children,
   removeBtnTitle,
   cancelBtnTitle,
@@ -28,19 +30,23 @@ export default function RemoveDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          className="w-full flex items-center justify-start gap-1"
-        >
-          <Trash className="h-4 w-4" />
-          Remover
-        </Button>
+        {removeBtn || (
+          <Button
+            variant="ghost"
+            className="w-full flex items-center justify-start gap-1"
+          >
+            <Trash className="h-4 w-4" />
+            Remover
+          </Button>
+        )}
       </DialogTrigger>
+
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           {children}
         </DialogHeader>
+
         <DialogFooter>
           {/* Cancel button */}
           <DialogClose asChild>
