@@ -6,10 +6,10 @@ export default function calcEnrollmentExpireDate(
   startsIn: Date,
   months: number,
   enrollments: Enrollment[] = [],
-  excludeEnrollments: string[] = []
+  excludeEnrollments: string[] = [],
 ) {
   return addDays(
     startsIn,
-    months * 30 + getActivePlansLeftDays(enrollments, excludeEnrollments)
+    months * 30 + getActivePlansLeftDays(enrollments, excludeEnrollments),
   );
 }

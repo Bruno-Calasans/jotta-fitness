@@ -17,12 +17,12 @@ export default function RequiredFieldTooltip({
   return (
     <TooltipProvider>
       <Tooltip>
-        <p className="flex items-center">
+        <div className="flex items-center">
           {children}
           <TooltipTrigger>
             <Asterisk size={16} className="font-bold text-red-500" />
           </TooltipTrigger>
-        </p>
+        </div>
 
         <TooltipContent>
           <p>Campo obrigatório</p>

@@ -193,14 +193,14 @@ export default function EnrollmentForm({
             </FormItem>
           )}
         />
-
+        {/* Select expire date */}
         <div>
           <label>
             <Checkbox
               checked={manualExpireDate}
               onCheckedChange={(value) => setManualExpireDate(!!value)}
             />{" "}
-            Data de Vencimento Manual
+            Quero selecionar a data da vencimento
           </label>
         </div>
 
@@ -229,7 +229,7 @@ export default function EnrollmentForm({
           />
         )}
 
-        {/* enrollment resume */}
+        {/* Enrollment resume */}
         {selectedMember && selectedPlan && months > 0 && (
           <EnrollmentPaymentResume
             data={{

@@ -12,7 +12,7 @@ export type CreateEnrollmentInput = Optional<
 
 export default function createEnrollment(
   member: Member,
-  input: CreateEnrollmentInput
+  input: CreateEnrollmentInput,
 ): Enrollment {
   const startsIn = input.startsIn || new Date();
   const expiresIn =

@@ -8,7 +8,7 @@ export type UpdateEnrollmentInput = Partial<CreateEnrollmentInput>;
 export default function updateEnrollment(
   oldEnrollment: Enrollment,
   member: Member,
-  input: UpdateEnrollmentInput
+  input: UpdateEnrollmentInput,
 ): Enrollment {
   const startsIn = input.startsIn || oldEnrollment.startsIn;
   const months = input.months || oldEnrollment.months;

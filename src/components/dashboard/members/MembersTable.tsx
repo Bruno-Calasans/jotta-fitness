@@ -21,7 +21,7 @@ export default function MembersTable() {
         loadingMsg="Carregando membros"
         noResultMsg="Nenhum membro encontrado"
         inputSearchPlaceholder="Procurar membro"
-        // onRowSelection={clickMemberRowHandler}
+        onRowSelection={console.log}
       />
     </div>
   );
