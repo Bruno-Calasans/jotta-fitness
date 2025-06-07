@@ -44,7 +44,7 @@ export const adhesionColumns: ColumnDef<Adhesion>[] = [
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
-        headerName="Válida até"
+        headerName="Disconto válido até"
         type="date"
       />
     ),
