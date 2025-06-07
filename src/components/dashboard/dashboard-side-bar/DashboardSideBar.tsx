@@ -17,8 +17,10 @@ import Link from "next/link";
 import DashboardSideBarButton from "./DashboardSideBarButton";
 
 export default function DashboardSidebar() {
+  const defaultOpenSidebar = !!localStorage.getItem('side-bar')
   return (
     <SidebarProvider
+      defaultOpen={defaultOpenSidebar}
       id="dashboard-side-bar"
       className="w-fit transition-all h-full"
     >

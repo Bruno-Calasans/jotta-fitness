@@ -7,7 +7,6 @@ import {
 import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useEffect } from "react";
 
 export default function DashboardSideBarButton() {
   const { open, toggleSidebar, setOpen } = useSidebar();
@@ -22,16 +21,12 @@ export default function DashboardSideBarButton() {
     toggleSidebar();
   };
 
-  useEffect(() => {
-    setOpen(!!localStorage.getItem("side-bar"));
-  }, []);
-
   return (
     <button
       id="trigger"
       className={cn(
         "flex justify-end p-1 transition-all",
-        !open && "justify-center",
+        !open && "justify-center"
       )}
     >
       {open ? (
