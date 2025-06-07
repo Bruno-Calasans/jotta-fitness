@@ -78,7 +78,7 @@ export default function EnrollmentForm({
             plan: selectedPlan,
             months: input.months,
             expiresIn,
-          }
+          },
         );
 
         // Update enrollment log
@@ -95,7 +95,7 @@ export default function EnrollmentForm({
 
         successToast(
           "Atualização de Plano",
-          "Atualização realizada com sucesso"
+          "Atualização realizada com sucesso",
         );
         onSubmit(true);
       } catch (error) {

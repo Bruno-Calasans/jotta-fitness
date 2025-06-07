@@ -29,6 +29,7 @@ export default function DashboardSidebar() {
             // Category
             <SidebarGroup key={category}>
               <SidebarGroupLabel>{category}</SidebarGroupLabel>
+
               <SidebarGroupContent>
                 {/* Category's items */}
                 <SidebarMenu>
@@ -36,7 +37,7 @@ export default function DashboardSidebar() {
                     category as keyof typeof DashboardSidebarItems
                   ].map((item) => (
                     <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild>
+                      <SidebarMenuButton asChild tooltip={item.title}>
                         <Link href={`/dashboard/` + item.url}>
                           <item.icon />
                           <span>{item.title}</span>

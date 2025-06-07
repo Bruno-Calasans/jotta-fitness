@@ -1,7 +1,7 @@
 import { LayoutDashboard } from "lucide-react";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import DashboardSideMenuContent from "../dashboard/DashboardSideMenuContent";
+import DashboardSideMenuContent from "../dashboard/dashboard-side-bar/DashboardSideMenuContent";
 
 export default function DashboardSideMenu() {
   return (
