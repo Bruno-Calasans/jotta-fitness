@@ -49,6 +49,7 @@ export const membersColumns: ColumnDef<Member>[] = [
       const lastEnrollment = getLastMemberEnrollment(member);
       return <EnrollmentStatus enrollment={lastEnrollment} />;
     },
+    sortDescFirst: true,
   },
   {
     id: "planExpiresIn",

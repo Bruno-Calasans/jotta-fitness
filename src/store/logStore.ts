@@ -30,7 +30,7 @@ type LogState = {
   getAllPurchaseLogs: () => PurchaseLog[];
   getAllLossLogs: () => LossLog[];
   getAllAdhesionLogs: () => AdhesionLog[];
-  getLogsByDate(selectedDate: Date, types?: LogType[]): Log[];
+  getLogsByDate(selectedDate?: Date, types?: LogType[]): Log[];
   getByEnrollmentId: (enrollmentId: string) => EnrollmentLog | null;
   getByPurchaseId: (purchaseId: string) => PurchaseLog | null;
   getLogsByMonth: (month: number, year?: number) => Log[];
@@ -71,12 +71,12 @@ export const useLogStore = create<LogState>()(
       },
       getAllEnrollmentLogs() {
         return get().logs.filter(
-          (log) => log.type === "enrollment",
+          (log) => log.type === "enrollment"
         ) as EnrollmentLog[];
       },
       getAllPlanDiaryLogs() {
         return get().logs.filter(
-          (log) => log.type === "plan-diary",
+          (log) => log.type === "plan-diary"
         ) as PlanDiaryLog[];
       },
       getAllPurchaseLogs() {
@@ -86,17 +86,20 @@ export const useLogStore = create<LogState>()(
       },
       getAllLossLogs() {
         return get().logs.filter(
-          (log) => log.type === "investment" || "expense",
+          (log) => log.type === "investment" || "expense"
         ) as LossLog[];
       },
       getAllAdhesionLogs() {
         return get().logs.filter(
-          (log) => log.type === "adhesion",
+          (log) => log.type === "adhesion"
         ) as AdhesionLog[];
       },
       getLogsByDate(selectedDate, types) {
         return get().logs.filter((log) => {
-          const isSelectedDate = isDateEqual(log.createdAt, selectedDate);
+          const isSelectedDate = isDateEqual(
+            log.createdAt,
+            selectedDate || new Date()
+          );
           if (types && types.length > 0) {
             return types.includes(log.type) && isSelectedDate;
           }
@@ -106,7 +109,7 @@ export const useLogStore = create<LogState>()(
       getByEnrollmentId(enrollmentId) {
         const foundLog = get().logs.find(
           (log) =>
-            log.type === "enrollment" && log.enrollment.id === enrollmentId,
+            log.type === "enrollment" && log.enrollment.id === enrollmentId
         );
 
         if (!foundLog) return null;
@@ -115,7 +118,7 @@ export const useLogStore = create<LogState>()(
       },
       getByPurchaseId(purchaseId) {
         const foundLog = get().logs.find(
-          (log) => log.type === "purchase" && log.purchase.id === purchaseId,
+          (log) => log.type === "purchase" && log.purchase.id === purchaseId
         );
 
         if (!foundLog) return null;
@@ -147,6 +150,6 @@ export const useLogStore = create<LogState>()(
           }
         };
       },
-    },
-  ),
+    }
+  )
 );
