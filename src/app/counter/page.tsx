@@ -1,14 +1,13 @@
 "use client";
 
 import ContentContainer from "@/components/custom/others/ContentContainer";
-import WorkoutSearchBar from "@/components/counter/SearchBar";
+import WorkoutSearchBar from "@/components/counter/workout-search-bar/WorkoutSearchBar";
 import WorkoutList from "@/components/counter/WorkoutList";
-import EditWorkoutDialog from "@/components/counter/dialogs/EditWorkoutDialog";
-import CreateWorkoutDialog from "@/components/counter/dialogs/CreateWorkoutDialog";
-import workoutStore from "@/store/workoutStore";
+import CreateWorkoutDialog from "@/components/counter/CreateWorkoutDialog";
+import { useWorkoutStore } from "@/store/workoutStore";
 
 export default function Counter() {
-  const { searchWorkouts } = workoutStore();
+  const { searchWorkouts } = useWorkoutStore();
   const onGoingWorkouts = searchWorkouts("ongoing");
   const finishedWorkouts = searchWorkouts("finished");
 
@@ -23,7 +22,8 @@ export default function Counter() {
 
         {/* Content */}
         <WorkoutSearchBar />
-        <EditWorkoutDialog />
+
+        {/* Workouts Area */}
         <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-10 mt-4">
           {/* in progress workouts */}
           <WorkoutList

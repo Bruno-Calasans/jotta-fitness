@@ -2,44 +2,37 @@
 
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
-import type { Workout } from "@/types/Workout";
 import {
   compareByDateAsc,
   compareByDateDesc,
   compareByTimeAsc,
   compareByTimeDesc,
 } from "./workoutStoreUtils";
+import type { Workout } from "@/types/Workout";
+import createWorkout from "@/utils/createWorkout";
 
 interface WorkoutState {
   running: boolean;
   searchedWorkout: string;
   selectedWorkout: Workout | null;
   workouts: Workout[];
-  selectWorkout(workout: Workout): void;
-  unselectWorkout(): void;
-  addWorkout(workout: Workout): void;
-  removeWorkout(workout: Workout): void;
+  addWorkout(input: Partial<Workout>): void;
+  removeWorkout(workoutId: string): void;
   editWorkout(workout: Workout, data: Partial<Workout>): void;
-  finishWorkout(workout: Workout): void;
+  updateWorkout(id: string, input: Partial<Workout>): void;
+  finishWorkout(workoutId: string): void;
   clearWorkouts(): void;
-  clearFinishedWorkouts(): void;
   getGoingOnWorkouts(): Workout[];
   getFinishedWorkouts(): Workout[];
-  updateWorkout(
-    id: string,
-    property: keyof Workout,
-    newValue: Workout[keyof Workout]
-  ): void;
   sortWorkoutsByDate(order: "asc" | "desc"): void;
   sortWorkoutsByTime(order: "asc" | "desc"): void;
-  updateWorkoutTime(id: string, time: number): void;
-  updateSearchedWorkout(keyword: string): void;
+  setSearchedWorkout(keyword: string): void;
   searchWorkouts(type: "ongoing" | "finished" | "all"): Workout[];
   playWorkout(id: string): void;
   stopWorkout(id: string): void;
 }
 
-const workoutStore = create<WorkoutState>()(
+export const useWorkoutStore = create<WorkoutState>()(
   devtools(
     persist(
       (set, get) => ({
@@ -47,13 +40,13 @@ const workoutStore = create<WorkoutState>()(
         searchedWorkout: "",
         selectedWorkout: null,
         workouts: [],
-        addWorkout(workout) {
-          const sortedWorkouts = [...get().workouts, workout];
-          set(() => ({ workouts: sortedWorkouts }));
+        addWorkout(input) {
+          const workout = createWorkout(input);
+          set(() => ({ workouts: [...get().workouts, workout] }));
         },
-        removeWorkout(workout) {
+        removeWorkout(workoutId) {
           const filtedWorkouts = get().workouts.filter(
-            (w) => w.id != workout.id
+            (w) => w.id != workoutId
           );
           set(() => ({ workouts: filtedWorkouts }));
         },
@@ -76,19 +69,10 @@ const workoutStore = create<WorkoutState>()(
         getFinishedWorkouts() {
           return get().workouts.filter((w) => w.finished);
         },
-        clearFinishedWorkouts() {
-          set(() => ({ workouts: get().getGoingOnWorkouts() }));
-        },
-        selectWorkout(workout) {
-          set(() => ({ selectedWorkout: workout }));
-        },
-        unselectWorkout() {
-          set(() => ({ selectedWorkout: null }));
-        },
-        updateWorkout(id, property, newValue) {
+        updateWorkout(id, input) {
           const updatedWorkouts = get().workouts.map((w) => {
             if (w.id === id) {
-              return { ...w, [property]: newValue };
+              return { ...w, ...input };
             }
             return w;
           });
@@ -112,46 +96,30 @@ const workoutStore = create<WorkoutState>()(
             set(() => ({ workouts: sortedWorkouts }));
           }
         },
-        finishWorkout(workout) {
+        finishWorkout(workoutId) {
           const updatedWorkouts = get().workouts.map((w) => {
-            if (w.id === workout.id) {
+            if (w.id === workoutId) {
               return { ...w, finished: true };
             }
             return w;
           });
           set(() => ({ workouts: updatedWorkouts }));
         },
-        updateWorkoutTime(id, time) {
-          get().updateWorkout(id, "time", time);
-        },
-        updateSearchedWorkout(keyword) {
+        setSearchedWorkout(keyword) {
           set(() => ({ searchedWorkout: keyword }));
         },
         searchWorkouts(type) {
           const keyword = get().searchedWorkout;
+          let workouts = get().workouts;
 
-          if (type == "ongoing") {
-            const ongoingWorkouts = get().getGoingOnWorkouts();
-            return keyword != ""
-              ? ongoingWorkouts.filter((w) =>
-                  w.name.toLowerCase().includes(keyword.toLowerCase())
-                )
-              : ongoingWorkouts;
-          } else if (type == "finished") {
-            const finishedWorkouts = get().getFinishedWorkouts();
-            return keyword != ""
-              ? finishedWorkouts.filter((w) =>
-                  w.name.toLowerCase().includes(keyword.toLowerCase())
-                )
-              : finishedWorkouts;
-          } else {
-            const workouts = get().workouts;
-            return keyword != ""
-              ? workouts.filter((w) =>
-                  w.name.toLowerCase().includes(keyword.toLowerCase())
-                )
-              : workouts;
-          }
+          if (type == "ongoing") workouts = get().getGoingOnWorkouts();
+          if (type === "finished") workouts = get().getFinishedWorkouts();
+
+          return keyword != ""
+            ? workouts.filter((w) =>
+                w.name.toLowerCase().includes(keyword.toLowerCase())
+              )
+            : workouts;
         },
         playWorkout(id) {
           const updatedWorkouts = get().workouts.map((w) => {
@@ -180,5 +148,3 @@ const workoutStore = create<WorkoutState>()(
     )
   )
 );
-
-export default workoutStore;
