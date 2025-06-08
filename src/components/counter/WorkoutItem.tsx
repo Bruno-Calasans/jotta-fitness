@@ -13,21 +13,13 @@ import type { Workout } from "@/types/Workout";
 import { useStore } from "zustand";
 import workoutStore from "@/store/workoutStore";
 import { cn } from "@/lib/utils";
+import { BUSINESS_RULES } from "@/config/BusinessRules";
 
 type WorkoutProps = {
   workout: Workout;
-  minTimeToTimeout?: number;
-  maxTimeAfterTimeout?: number;
 };
 
-const msToMinute = 60000;
-const minTimeToWarning = 5;
-
-export default function WorkoutItem({
-  workout,
-  minTimeToTimeout = 0,
-  maxTimeAfterTimeout = 6,
-}: WorkoutProps) {
+export default function WorkoutItem({ workout }: WorkoutProps) {
   const {
     selectedWorkout,
     finishWorkout,
@@ -47,7 +39,7 @@ export default function WorkoutItem({
     if (selectedWorkout && selectedWorkout.id === workout.id) return;
 
     // Timeout
-    if (workout.time <= minTimeToTimeout && !workout.finished) {
+    if (workout.time <= BUSINESS_RULES.minTimeToTimeout && !workout.finished) {
       finishWorkout(workout);
       playSound({
         playbackRate: 1.1,
@@ -55,7 +47,7 @@ export default function WorkoutItem({
     }
 
     // Remover workout automatically
-    if (workout.finished && workout.time === maxTimeAfterTimeout)
+    if (workout.finished && workout.time === BUSINESS_RULES.maxTimeAfterTimeout)
       removeWorkout(workout);
 
     const timer = setInterval(() => {
@@ -72,7 +64,7 @@ export default function WorkoutItem({
       }
 
       updateWorkoutTime(workout.id, newTime);
-    }, msToMinute);
+    }, BUSINESS_RULES.workoutTick);
 
     return () => clearInterval(timer);
   }, [workout.time, selectedWorkout, workout.running]);
@@ -81,7 +73,8 @@ export default function WorkoutItem({
     <div
       className={cn(
         "flex gap-1 bg-black text-orange-500 justify-between rounded-md p-2 hover:bg-black/60 group transition-all cursor-pointer mr-2 items-center delay-75",
-        !workout.running && "border-2 border-red-500",
+        // When workout is paused
+        !workout.running && "border-2 border-red-500"
       )}
     >
       {/* Name */}
@@ -99,7 +92,9 @@ export default function WorkoutItem({
         <p
           className={cn(
             "text-emerald-500 group-hover:text-white flex-1 text-end text-lg uppercase",
-            workout.time <= minTimeToWarning && "text-red-500",
+            // When workout is about to end
+            workout.time <= BUSINESS_RULES.timeToWarningBeforeFinishes &&
+              "text-red-500"
           )}
         >
           {workout.time} min restantes

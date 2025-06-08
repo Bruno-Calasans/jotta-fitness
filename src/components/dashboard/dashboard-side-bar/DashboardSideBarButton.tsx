@@ -26,7 +26,7 @@ export default function DashboardSideBarButton() {
       id="trigger"
       className={cn(
         "flex justify-end p-1 transition-all",
-        !open && "justify-center"
+        !open && "justify-center",
       )}
     >
       {open ? (

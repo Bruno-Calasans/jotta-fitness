@@ -5,11 +5,10 @@ import WorkoutSearchBar from "@/components/counter/SearchBar";
 import WorkoutList from "@/components/counter/WorkoutList";
 import EditWorkoutDialog from "@/components/counter/dialogs/EditWorkoutDialog";
 import CreateWorkoutDialog from "@/components/counter/dialogs/CreateWorkoutDialog";
-import { useStore } from "zustand";
 import workoutStore from "@/store/workoutStore";
 
 export default function Counter() {
-  const { searchWorkouts } = useStore(workoutStore);
+  const { searchWorkouts } = workoutStore();
   const onGoingWorkouts = searchWorkouts("ongoing");
   const finishedWorkouts = searchWorkouts("finished");
 
