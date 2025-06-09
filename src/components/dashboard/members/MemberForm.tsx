@@ -108,9 +108,7 @@ export default function MemberForm({ member, onSubmit }: MemberFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                <FormDescription>
-                  <RequiredFieldTooltip>Celular</RequiredFieldTooltip>
-                </FormDescription>
+                <RequiredFieldTooltip>Celular</RequiredFieldTooltip>
               </FormLabel>
               <FormControl>
                 <Input

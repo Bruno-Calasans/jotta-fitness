@@ -1,7 +1,7 @@
 "use client";
 
 import type { Workout } from "@/types/Workout";
-import WorkoutItem from "./WorkoutItem";
+import WorkoutItem from "./workout-item/WorkoutItem";
 
 type WorkoutListProps = {
   title: string;
@@ -18,7 +18,7 @@ export default function WorkoutList({ title, workouts }: WorkoutListProps) {
         {workouts.length > 0 &&
           workouts.map((workout, index) => (
             // Content
-            <WorkoutItem key={workout.name + index} workout={workout} />
+            <WorkoutItem key={workout.id + index} workout={workout} />
           ))}
       </div>
     </div>

@@ -8,14 +8,18 @@ import type { PurchaseLog } from "@/types/Log.type";
 
 export default function PurchaseLogTab() {
   const { loading, selectedDate, getLogsByDate } = useLogStore();
-  const [purchaseLogs, setPurchaseLogs] = useState<PurchaseLog[]>([]);
+  // const [purchaseLogs, setPurchaseLogs] = useState<PurchaseLog[]>([]);
 
-  useEffect(() => {
-    if (selectedDate) {
-      const logs = getLogsByDate(selectedDate, ["purchase"]) as PurchaseLog[];
-      setPurchaseLogs(logs);
-    }
-  }, [selectedDate]);
+  // useEffect(() => {
+  //   if (selectedDate) {
+  //     const logs = getLogsByDate(selectedDate, ["purchase"]) as PurchaseLog[];
+  //     setPurchaseLogs(logs);
+  //   }
+  // }, [selectedDate]);
+
+  const purchaseLogs = getLogsByDate(selectedDate || new Date(), [
+    "purchase",
+  ]) as PurchaseLog[];
 
   return (
     <div>

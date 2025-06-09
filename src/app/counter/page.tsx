@@ -1,17 +1,20 @@
 "use client";
 
 import ContentContainer from "@/components/custom/others/ContentContainer";
-import WorkoutSearchBar from "@/components/counter/SearchBar";
+import WorkoutSearchBar from "@/components/counter/workout-search-bar/WorkoutSearchBar";
 import WorkoutList from "@/components/counter/WorkoutList";
-import EditWorkoutDialog from "@/components/counter/dialogs/EditWorkoutDialog";
-import CreateWorkoutDialog from "@/components/counter/dialogs/CreateWorkoutDialog";
-import { useStore } from "zustand";
-import workoutStore from "@/store/workoutStore";
+import CreateWorkoutDialog from "@/components/counter/CreateWorkoutDialog";
+import { useWorkoutStore } from "@/store/workoutStore";
+import { useEffect } from "react";
 
-export default function Counter() {
-  const { searchWorkouts } = useStore(workoutStore);
+export default function CounterPage() {
+  const { searchWorkouts } = useWorkoutStore();
+
+  // Hydration error
   const onGoingWorkouts = searchWorkouts("ongoing");
   const finishedWorkouts = searchWorkouts("finished");
+  // const onGoingWorkouts = [];
+  // const finishedWorkouts = [];
 
   return (
     <ContentContainer>
@@ -24,7 +27,8 @@ export default function Counter() {
 
         {/* Content */}
         <WorkoutSearchBar />
-        <EditWorkoutDialog />
+
+        {/* Workouts Area */}
         <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-10 mt-4">
           {/* in progress workouts */}
           <WorkoutList

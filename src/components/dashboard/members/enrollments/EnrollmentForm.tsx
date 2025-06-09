@@ -15,7 +15,6 @@ import useCustomToast from "@/hooks/use-custom-toast";
 import { useMemberStore } from "@/store/memberStore";
 import PlanSelector from "../PlanSelector";
 import { useState } from "react";
-import { Plan } from "@/types/Plan.type";
 import EnrollmentPaymentResume from "./EnrollmentPaymentResume";
 import { Enrollment } from "@/types/Enrollment.type";
 import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
@@ -24,10 +23,13 @@ import ConfirmButton from "@/components/custom/buttons/ConfirmButton";
 import RequiredFieldTooltip from "@/components/custom/others/RequiredFieldTooltip";
 import { useLogStore } from "@/store/logStore";
 import { STAFF } from "@/data/MEMBERS_DATA";
+import { Checkbox } from "@/components/ui/checkbox";
+import ExpireDatePicker from "../../ExpireDatePicker";
 
 const enrollmentFormSchema = z.object({
   plan: z.string().min(1, "Plano é obrigatório"),
   months: z.coerce.number().min(1, "Meses deve ser maior ou igual a 1"),
+  expiresIn: z.coerce.date().optional(),
 });
 
 type EnrollFormInputs = z.infer<typeof enrollmentFormSchema>;
@@ -41,21 +43,24 @@ export default function EnrollmentForm({
   enrollment,
   onSubmit,
 }: EnrollmentFormProps) {
-  const { selectedMember, updateEnrollment, addEnrollment } = useMemberStore();
   const logDb = useLogStore();
+  const { selectedMember, updateEnrollment, addEnrollment } = useMemberStore();
   const { lateFee } = useEnrollmentResume();
   const { successToast, errorToast } = useCustomToast();
-  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(
-    enrollment?.plan || null,
-  );
+  const [selectedPlan, setSelectedPlan] = useState(enrollment?.plan || null);
+  const [isManualExpireDate, setIsManualExpireDate] = useState(false);
 
   const form = useForm<EnrollFormInputs>({
     resolver: zodResolver(enrollmentFormSchema),
     defaultValues: {
       plan: enrollment?.plan.name || "",
       months: enrollment?.months || 1,
+      expiresIn: enrollment?.expiresIn,
     },
   });
+
+  const months = useWatch({ name: "months", control: form.control });
+  const expiresIn = useWatch({ name: "expiresIn", control: form.control });
 
   const submitHandler = (input: EnrollFormInputs) => {
     if (!selectedPlan || !selectedMember) return;
@@ -72,6 +77,7 @@ export default function EnrollmentForm({
           {
             plan: selectedPlan,
             months: input.months,
+            expiresIn,
           },
         );
 
@@ -105,6 +111,7 @@ export default function EnrollmentForm({
           months: input.months,
           plan: selectedPlan,
           lateFee,
+          expiresIn,
         });
 
         // Log enrollment
@@ -124,8 +131,6 @@ export default function EnrollmentForm({
       }
     }
   };
-
-  const months = useWatch({ name: "months", control: form.control });
 
   if (!selectedMember) return null;
 
@@ -170,7 +175,42 @@ export default function EnrollmentForm({
           )}
         />
 
-        {/* enrollment resume */}
+        {/* Select expire date */}
+        <div>
+          <label>
+            <Checkbox
+              checked={isManualExpireDate}
+              onCheckedChange={(value) => setIsManualExpireDate(!!value)}
+            />{" "}
+            Quero selecionar a data da vencimento
+          </label>
+        </div>
+
+        {isManualExpireDate && (
+          <FormField
+            control={form.control}
+            name="expiresIn"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <RequiredFieldTooltip>
+                    Data de Vencimento
+                  </RequiredFieldTooltip>
+                </FormLabel>
+                <FormControl>
+                  <ExpireDatePicker
+                    months={months}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
+        {/* Enrollment resume */}
         {selectedMember && selectedPlan && months > 0 && (
           <EnrollmentPaymentResume
             data={{

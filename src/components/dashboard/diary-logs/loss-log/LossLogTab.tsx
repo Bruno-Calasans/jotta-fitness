@@ -8,17 +8,23 @@ import type { LossLog } from "@/types/Log.type";
 
 export default function LossLogTab() {
   const { loading, selectedDate, getLogsByDate } = useLogStore();
-  const [lossLogs, setLossLogs] = useState<LossLog[]>([]);
+  // const [lossLogs, setLossLogs] = useState<LossLog[]>([]);
 
-  useEffect(() => {
-    if (selectedDate) {
-      const logs = getLogsByDate(selectedDate, [
-        "expense",
-        "investment",
-      ]) as LossLog[];
-      setLossLogs(logs);
-    }
-  }, [selectedDate]);
+  // useEffect(() => {
+  //   if (selectedDate) {
+  //     const logs = getLogsByDate(selectedDate, [
+  //       "expense",
+  //       "investment",
+  //     ]) as LossLog[];
+  //     setLossLogs(logs);
+  //   }
+  // }, [selectedDate]);
+
+  const lossLogs = getLogsByDate(selectedDate || new Date(), [
+    "expense",
+    "investment",
+  ]) as LossLog[];
+
   return (
     <div>
       <div>

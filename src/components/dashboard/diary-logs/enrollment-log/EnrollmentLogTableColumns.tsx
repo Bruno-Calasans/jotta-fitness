@@ -6,6 +6,9 @@ import EditEnrollmentLogDialog from "./EditEnrollmentLogDialog";
 import RemoveEnrollmentLogDialog from "./RemoveEnrollmentLogDialog";
 import calcEnrollmentPrice from "@/utils/calcEnrollmentPrice";
 import defaultDateFormat from "@/utils/defaultDateFormat";
+import classifyEnrollmentStatus from "@/utils/classifyEnrollmentStatus";
+import getLastMemberEnrollment from "@/utils/getLastMemberEnrollment";
+import EnrollmentStatus from "../../members/enrollments/EnrollmentStatus";
 
 export const enrollmentLogColumns: ColumnDef<EnrollmentLog>[] = [
   {
@@ -26,14 +29,14 @@ export const enrollmentLogColumns: ColumnDef<EnrollmentLog>[] = [
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
-        headerName="Mese(s)"
+        headerName="Meses"
         type="numeral"
       />
     ),
   },
   {
     id: "total",
-    accessorKey: "enrollment.months",
+    accessorFn: ({ enrollment }) => calcEnrollmentPrice(enrollment).toFixed(2),
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
@@ -41,9 +44,8 @@ export const enrollmentLogColumns: ColumnDef<EnrollmentLog>[] = [
         type="numeral"
       />
     ),
-    cell: ({ row }) => {
-      const { enrollment } = row.original;
-      return <p>{calcEnrollmentPrice(enrollment).toFixed(2)}</p>;
+    cell: ({ getValue }) => {
+      return <p>{getValue<number>()}</p>;
     },
   },
   {
@@ -51,7 +53,7 @@ export const enrollmentLogColumns: ColumnDef<EnrollmentLog>[] = [
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
-        headerName="Data de Inscrição"
+        headerName="Inscrição"
         type="date"
       />
     ),
@@ -65,13 +67,26 @@ export const enrollmentLogColumns: ColumnDef<EnrollmentLog>[] = [
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
-        headerName="Data de Término"
+        headerName="Vencimento"
         type="date"
       />
     ),
     cell: ({ row }) => {
       const { enrollment } = row.original;
       return <p>{defaultDateFormat(enrollment.expiresIn)}</p>;
+    },
+  },
+  {
+    id: "planStatus",
+    accessorFn: ({ enrollment }) => {
+      return classifyEnrollmentStatus(enrollment);
+    },
+    header: ({ column }) => (
+      <DataTableSortableHeader column={column} headerName="Status" />
+    ),
+    cell: ({ row }) => {
+      const { enrollment } = row.original;
+      return <EnrollmentStatus enrollment={enrollment} />;
     },
   },
   {

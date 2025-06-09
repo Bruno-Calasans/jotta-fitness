@@ -3,7 +3,6 @@
 import { MEMBERS_DATA } from "@/data/MEMBERS_DATA";
 import { create } from "zustand";
 import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
-import type { Plan } from "@/types/Plan.type";
 import type { Purchase } from "@/types/Purchase.type";
 import type { AdhesionPayment } from "@/types/AdhesionPayment.type";
 import type { PlanDiary } from "@/types/PlanDiary.type";
@@ -12,8 +11,12 @@ import type { Enrollment } from "@/types/Enrollment.type";
 import type { DB } from "@/types/Db.type";
 import createAdhesionPayment from "@/utils/createAdhesionPayment";
 import createPurchase from "@/utils/createPurchase";
-import createEnrollment from "@/utils/createEnrollment";
-import updateEnrollment from "@/utils/updateEnrollment";
+import createEnrollment, {
+  CreateEnrollmentInput,
+} from "@/utils/createEnrollment";
+import updateEnrollment, {
+  UpdateEnrollmentInput,
+} from "@/utils/updateEnrollment";
 import createPlanDiary from "@/utils/createPlanDiary";
 import updatePlanDiary from "@/utils/updatePlanDiary";
 import updatePurchase from "@/utils/updatePurchase";
@@ -42,13 +45,13 @@ type MemberState = {
   ) => Member | null;
   addEnrollment: (
     memberId: string,
-    input: Omit<Enrollment, keyof DB | "startsIn" | "expiresIn">,
+    input: CreateEnrollmentInput,
   ) => Enrollment | null;
   removeEnrollment: (memberId: string, enrollmentId: string) => void;
   updateEnrollment: (
     memberId: string,
     enrollmentId: string,
-    input: Partial<{ plan: Plan; months: number }>,
+    input: UpdateEnrollmentInput,
   ) => Enrollment | null;
   addPurchase: (
     memberId: string,
@@ -138,13 +141,14 @@ export const useMemberStore = create<MemberState>()(
         set((state) => ({ ...state, members: updatedMembers }), true);
       },
       addEnrollment(memberId, input) {
-        // Check if members exists
+        // Find member
         const member = get().getMemberById(memberId);
         if (!member) return null;
 
         // Create enrollment
         const enrollment = createEnrollment(member, input);
 
+        // Update member
         const updatedMember = get().update(memberId, {
           ...member,
           enrollments: [...member.enrollments, enrollment],
@@ -156,7 +160,7 @@ export const useMemberStore = create<MemberState>()(
         return enrollment;
       },
       updateEnrollment(memberId, enrollmentId, input) {
-        // Found member
+        // Find member
         const foundMember = get().getMemberById(memberId);
         if (!foundMember) return null;
 

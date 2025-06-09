@@ -10,7 +10,7 @@ export type Enrollment = DB & {
 };
 
 export enum ENROLLMENT_STATUS {
-  ATIVO,
-  INATIVO,
-  VENCIDO,
+  INACTIVE,
+  EXPIRED,
+  ACTIVE,
 }

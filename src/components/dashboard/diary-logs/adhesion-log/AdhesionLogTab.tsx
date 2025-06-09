@@ -8,14 +8,18 @@ import { useEffect, useState } from "react";
 
 export default function AdhesionLogTab() {
   const { loading, selectedDate, getLogsByDate } = useLogStore();
-  const [adhesionLogs, setadhesionLogs] = useState<AdhesionLog[]>([]);
+  // const [adhesionLogs, setadhesionLogs] = useState<AdhesionLog[]>([]);
 
-  useEffect(() => {
-    if (selectedDate) {
-      const logs = getLogsByDate(selectedDate, ["adhesion"]) as AdhesionLog[];
-      setadhesionLogs(logs);
-    }
-  }, [selectedDate]);
+  // useEffect(() => {
+  //   if (selectedDate) {
+  //     const logs = getLogsByDate(selectedDate, ["adhesion"]) as AdhesionLog[];
+  //     setadhesionLogs(logs);
+  //   }
+  // }, [selectedDate]);
+
+  const adhesionLogs = getLogsByDate(selectedDate || new Date(), [
+    "adhesion",
+  ]) as AdhesionLog[];
 
   return (
     <div>

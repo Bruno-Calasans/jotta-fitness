@@ -32,8 +32,8 @@ const adhesionFormSchema = z.object({
       "Ano da adesão não pode ser inferior ao ano atual",
     ),
   discountMaxDate: z.string(),
-  newbieDiscount: z.coerce.number().min(0, "Disconto não pode ser negativo"),
-  veteranDiscount: z.coerce.number().min(0, "Disconto não pode ser negativo"),
+  newbieDiscount: z.coerce.number().min(0, "Desconto não pode ser negativo"),
+  veteranDiscount: z.coerce.number().min(0, "Desconto não pode ser negativo"),
 });
 
 type AdhesionFormInputs = z.infer<typeof adhesionFormSchema>;

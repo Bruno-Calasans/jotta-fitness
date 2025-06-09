@@ -18,20 +18,22 @@ import useCustomToast from "@/hooks/use-custom-toast";
 import { useMemberStore } from "@/store/memberStore";
 import PlanSelector from "@/components/dashboard/members/PlanSelector";
 import { useState } from "react";
-import type { Plan } from "@/types/Plan.type";
 import { useEnrollmentResume } from "@/hooks/use-enrollment-resume";
 import EnrollmentPaymentResume from "@/components/dashboard/members/enrollments/EnrollmentPaymentResume";
 import type { EnrollmentLog } from "@/types/Log.type";
 import MemberSelector from "../MemberSelector";
-import type { Member } from "@/types/Member.type";
 import { useLogStore } from "@/store/logStore";
 import { STAFF } from "@/data/MEMBERS_DATA";
 import RequiredFieldPopover from "@/components/custom/others/RequiredFieldTooltip";
+import { Checkbox } from "@/components/ui/checkbox";
+import RequiredFieldTooltip from "@/components/custom/others/RequiredFieldTooltip";
+import ExpireDatePicker from "../../ExpireDatePicker";
 
 const enrollmentLogFormSchema = z.object({
   member: z.string().min(1, "Membro é obrigatório"),
   plan: z.string().min(1, "Plano é obrigatório"),
   months: z.coerce.number().min(1, "Meses deve ser maior ou igual a 1"),
+  expiresIn: z.coerce.date().optional(),
 });
 
 type SubscribePlanFormInputs = z.infer<typeof enrollmentLogFormSchema>;
@@ -49,12 +51,13 @@ export default function EnrollmentLogForm({
   const memberDb = useMemberStore();
   const { lateFee } = useEnrollmentResume();
   const { successToast, errorToast } = useCustomToast();
-  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(
+  const [selectedPlan, setSelectedPlan] = useState(
     enrollmentLog?.enrollment.plan || null,
   );
-  const [selectedMember, setSelectedMember] = useState<Member | null>(
+  const [selectedMember, setSelectedMember] = useState(
     enrollmentLog?.member || null,
   );
+  const [isManualExpireDate, setIsManualExpireDate] = useState(false);
 
   const form = useForm<SubscribePlanFormInputs>({
     resolver: zodResolver(enrollmentLogFormSchema),
@@ -62,10 +65,12 @@ export default function EnrollmentLogForm({
       member: enrollmentLog?.member.name || "",
       plan: enrollmentLog?.enrollment.plan.name || "",
       months: enrollmentLog?.enrollment.months || 1,
+      expiresIn: enrollmentLog?.enrollment.expiresIn,
     },
   });
 
   const months = useWatch({ name: "months", control: form.control });
+  const expiresIn = useWatch({ name: "expiresIn", control: form.control });
 
   const submitHandler = (input: SubscribePlanFormInputs) => {
     if (!selectedPlan || !selectedMember) return;
@@ -82,6 +87,7 @@ export default function EnrollmentLogForm({
           {
             plan: selectedPlan,
             months,
+            expiresIn,
           },
         );
 
@@ -112,6 +118,7 @@ export default function EnrollmentLogForm({
           plan: selectedPlan,
           months,
           lateFee,
+          expiresIn,
         });
 
         // create enrollment log
@@ -193,6 +200,41 @@ export default function EnrollmentLogForm({
             </FormItem>
           )}
         />
+
+        {/* Select expire date */}
+        <div>
+          <label>
+            <Checkbox
+              checked={isManualExpireDate}
+              onCheckedChange={(value) => setIsManualExpireDate(!!value)}
+            />{" "}
+            Quero selecionar a data da vencimento
+          </label>
+        </div>
+
+        {isManualExpireDate && (
+          <FormField
+            control={form.control}
+            name="expiresIn"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <RequiredFieldTooltip>
+                    Data de Vencimento
+                  </RequiredFieldTooltip>
+                </FormLabel>
+                <FormControl>
+                  <ExpireDatePicker
+                    months={months}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         {/* Payment resume */}
         {selectedPlan && months > 0 && selectedMember && (

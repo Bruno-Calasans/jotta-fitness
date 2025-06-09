@@ -5,8 +5,7 @@ import EditMemberDialog from "./EditMemberDialog";
 import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropdown";
 import RemoveMemberDialog from "./RemoveMemberDialog";
 import phoneMask from "@/utils/phoneMask";
-import PlanStatus from "./enrollments/EnrollmentStatus";
-import MoreDetails from "./MoreDetails";
+import EnrollmentStatus from "./enrollments/EnrollmentStatus";
 import defaultDateFormat from "@/utils/defaultDateFormat";
 import getLastMemberEnrollment from "@/utils/getLastMemberEnrollment";
 import classifyEnrollmentStatus from "@/utils/classifyEnrollmentStatus";
@@ -39,19 +38,6 @@ export const membersColumns: ColumnDef<Member>[] = [
     },
   },
   {
-    id: "planStatus",
-    accessorFn: (member) =>
-      classifyEnrollmentStatus(getLastMemberEnrollment(member)),
-    header: ({ column }) => (
-      <DataTableSortableHeader column={column} headerName="Status" />
-    ),
-    cell: ({ row }) => {
-      const member = row.original;
-      const lastEnrollment = getLastMemberEnrollment(member);
-      return <PlanStatus enrollment={lastEnrollment} />;
-    },
-  },
-  {
     id: "planExpiresIn",
     header: ({ column }) => (
       <DataTableSortableHeader
@@ -67,13 +53,26 @@ export const membersColumns: ColumnDef<Member>[] = [
     },
   },
   {
+    id: "enrollmentStatus",
+    accessorFn: (member) =>
+      classifyEnrollmentStatus(getLastMemberEnrollment(member)),
+    header: ({ column }) => (
+      <DataTableSortableHeader column={column} headerName="Status" />
+    ),
+    cell: ({ row }) => {
+      const member = row.original;
+      const lastEnrollment = getLastMemberEnrollment(member);
+      return <EnrollmentStatus enrollment={lastEnrollment} />;
+    },
+  },
+  {
     id: "actions",
     cell: ({ row }) => {
       const member = row.original;
       return (
         <MoreOptionsDropdown>
           <div className="flex flex-col gap-1">
-            <MoreDetails member={member} />
+            {/* <MoreDetails member={member} /> */}
             <EditMemberDialog member={member} />
             <RemoveMemberDialog member={member} />
           </div>

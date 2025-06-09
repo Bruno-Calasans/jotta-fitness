@@ -30,7 +30,7 @@ type LogState = {
   getAllPurchaseLogs: () => PurchaseLog[];
   getAllLossLogs: () => LossLog[];
   getAllAdhesionLogs: () => AdhesionLog[];
-  getLogsByDate(selectedDate: Date, types?: LogType[]): Log[];
+  getLogsByDate(selectedDate?: Date, types?: LogType[]): Log[];
   getByEnrollmentId: (enrollmentId: string) => EnrollmentLog | null;
   getByPurchaseId: (purchaseId: string) => PurchaseLog | null;
   getLogsByMonth: (month: number, year?: number) => Log[];
@@ -96,7 +96,10 @@ export const useLogStore = create<LogState>()(
       },
       getLogsByDate(selectedDate, types) {
         return get().logs.filter((log) => {
-          const isSelectedDate = isDateEqual(log.createdAt, selectedDate);
+          const isSelectedDate = isDateEqual(
+            log.createdAt,
+            selectedDate || new Date(),
+          );
           if (types && types.length > 0) {
             return types.includes(log.type) && isSelectedDate;
           }
@@ -126,8 +129,8 @@ export const useLogStore = create<LogState>()(
         return get().logs.filter((log) => {
           if (year)
             return (
-              log.createdAt.getMonth() === month &&
-              log.createdAt.getFullYear() === year
+              new Date(log.createdAt).getMonth() === month &&
+              new Date(log.createdAt).getFullYear() === year
             );
           return new Date(log.createdAt).getMonth() === month;
         });

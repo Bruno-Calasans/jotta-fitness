@@ -5,21 +5,26 @@ import { enrollmentLogColumns } from "./EnrollmentLogTableColumns";
 import { useLogStore } from "@/store/logStore";
 import CreateEnrollmentLogDialog from "./CreateEnrollmentLogDialog";
 import SelectedDateNotResultMsg from "../SelectedDateNotResultMsg";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { EnrollmentLog } from "@/types/Log.type";
 
 export default function EnrollmentLogTab() {
   const { selectedDate, loading, getLogsByDate } = useLogStore();
-  const [enrollmentLogs, setEnrollmentLogs] = useState<EnrollmentLog[]>([]);
+  // const [enrollmentLogs, setEnrollmentLogs] = useState<EnrollmentLog[]>([]);
 
-  useEffect(() => {
-    if (selectedDate) {
-      const logs = getLogsByDate(selectedDate, [
-        "enrollment",
-      ]) as EnrollmentLog[];
-      setEnrollmentLogs(logs);
-    }
-  }, [selectedDate]);
+  // useEffect(() => {
+  //   if (selectedDate) {
+  //     const logs = getLogsByDate(selectedDate, [
+  //       "enrollment",
+  //     ]) as EnrollmentLog[];
+  //     setEnrollmentLogs(logs);
+  //   }
+  // }, [selectedDate]);
+
+  // Hydration error
+  const enrollmentLogs = getLogsByDate(selectedDate, [
+    "enrollment",
+  ]) as EnrollmentLog[];
 
   return (
     <div>

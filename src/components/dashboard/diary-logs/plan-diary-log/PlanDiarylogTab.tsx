@@ -3,21 +3,16 @@ import { useLogStore } from "@/store/logStore";
 import { planDiaryColumns } from "./PlanDiaryTableColumns";
 import CreatePlanDiaryLogDialog from "./CreatePlanDiaryLogDialog";
 import SelectedDateNotResultMsg from "../SelectedDateNotResultMsg";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PlanDiaryLog } from "@/types/Log.type";
 
 export default function PlanDiaryLogTab() {
   const { loading, selectedDate, getLogsByDate } = useLogStore();
-  const [planDiaryLogs, setPlanDiaryLogs] = useState<PlanDiaryLog[]>([]);
+  // const [planDiaryLogs, setPlanDiaryLogs] = useState<PlanDiaryLog[]>([]);
 
-  useEffect(() => {
-    if (selectedDate) {
-      const logs = getLogsByDate(selectedDate, [
-        "plan-diary",
-      ]) as PlanDiaryLog[];
-      setPlanDiaryLogs(logs);
-    }
-  }, [selectedDate]);
+  const planDiaryLogs = getLogsByDate(selectedDate || new Date(), [
+    "plan-diary",
+  ]) as PlanDiaryLog[];
 
   return (
     <div>
@@ -32,7 +27,7 @@ export default function PlanDiaryLogTab() {
           data={planDiaryLogs}
           noResultMsg={<SelectedDateNotResultMsg />}
           loadingMsg="Carregando registros de diária"
-          inputSearchPlaceholder="Procuar registro de diária"
+          inputSearchPlaceholder="Procurar registro de diária"
         />
       </div>
     </div>
