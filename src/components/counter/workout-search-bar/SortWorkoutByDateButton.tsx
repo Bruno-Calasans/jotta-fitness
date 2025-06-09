@@ -31,7 +31,7 @@ export default function SortWorkoutByDateButton() {
       size="icon"
       className={cn(
         "bg-orange-500 hover:bg-orange-600",
-        dateSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600"
+        dateSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600",
       )}
     >
       {dateSortType === "asc" ? <CalendarArrowDown /> : <CalendarArrowUp />}

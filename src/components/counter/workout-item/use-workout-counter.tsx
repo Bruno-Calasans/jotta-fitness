@@ -1,9 +1,8 @@
-import { useEffect } from "react";
 import useSound from "use-sound";
-import type { Workout } from "@/types/Workout";
-import { useStore } from "zustand";
+import { useEffect } from "react";
 import { useWorkoutStore } from "@/store/workoutStore";
 import { BUSINESS_RULES } from "@/config/BusinessRules";
+import type { Workout } from "@/types/Workout";
 
 type UseWorkoutCounterProps = {
   workout: Workout;

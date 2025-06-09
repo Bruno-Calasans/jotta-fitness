@@ -31,7 +31,7 @@ export default function MoreOptionsDropdown({
           variant="ghost"
           className={cn(
             "h-8 w-8 p-0 hover:bg-orange-500 text-white group transition-all",
-            classNames?.trigger
+            classNames?.trigger,
           )}
         >
           <span className="sr-only">Open menu</span>

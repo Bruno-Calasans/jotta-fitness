@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import type { Workout } from "@/types/Workout";
 
@@ -12,6 +14,7 @@ export default function WorkoutItemContainer({
 }: WorkoutItemContainerProps) {
   return (
     <div
+      id="workout-container"
       className={cn(
         "flex gap-1 bg-black text-orange-500 justify-between rounded-md p-2 hover:bg-black/60 group transition-all cursor-pointer mr-2 items-center delay-75",
         // When workout is paused

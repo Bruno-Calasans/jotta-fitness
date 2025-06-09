@@ -27,7 +27,7 @@ export default function WorkoutItemContent({
             "text-emerald-500 group-hover:text-white flex-1 text-end text-lg uppercase",
             // When workout is about to end
             workout.time <= BUSINESS_RULES.timeToWarningBeforeFinishes &&
-              "text-red-500"
+              "text-red-500",
           )}
         >
           {workout.time} min restantes
