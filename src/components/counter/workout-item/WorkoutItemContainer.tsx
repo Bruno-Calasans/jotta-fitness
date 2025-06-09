@@ -18,7 +18,7 @@ export default function WorkoutItemContainer({
       className={cn(
         "flex gap-1 bg-black text-orange-500 justify-between rounded-md p-2 hover:bg-black/60 group transition-all cursor-pointer mr-2 items-center delay-75",
         // When workout is paused
-        !workout.running && "border-2 border-red-500"
+        !workout.running && "border-2 border-red-500",
       )}
     >
       {children}
