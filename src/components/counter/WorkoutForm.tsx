@@ -61,13 +61,13 @@ export default function WorkoutForm({ onSubmit }: WorkoutFormProps) {
         updateWorkout(selectedWorkout.id, { ...selectedWorkout, ...input });
         successToast(
           "Atualização de Treinamento",
-          "Treinamento atualizado com sucesso"
+          "Treinamento atualizado com sucesso",
         );
         onSubmit(true);
       } catch (error) {
         errorToast(
           "Atualização de Treinamento",
-          "Erro ao atualizar treinamento"
+          "Erro ao atualizar treinamento",
         );
         onSubmit(false);
       }

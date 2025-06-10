@@ -23,7 +23,7 @@ export default function RemoveWorkoutDialog({
       sortWorkoutsByTime("asc");
       successToast(
         "Exclusão de treinamento",
-        "Treinamento removido com sucesso!"
+        "Treinamento removido com sucesso!",
       );
     } catch (error) {
       errorToast("Exclusão de treinamento", "Erro ao remover treinamento");

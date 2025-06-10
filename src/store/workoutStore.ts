@@ -76,7 +76,7 @@ export const useWorkoutStore = create<WorkoutState>()(
           set(() => ({ workouts: updatedWorkouts }));
         },
         clearWorkouts() {
-          set(() => ({ workouts: [] }));
+          set((state) => ({ workouts: [], updates: state.updates + 1 }));
         },
         getGoingOnWorkouts() {
           return get().workouts.filter((w) => !w.finished);
