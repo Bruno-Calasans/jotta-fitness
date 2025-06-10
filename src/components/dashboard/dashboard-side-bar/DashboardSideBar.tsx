@@ -1,7 +1,5 @@
 "use client";
 
-
-
 import {
   Sidebar,
   SidebarContent,

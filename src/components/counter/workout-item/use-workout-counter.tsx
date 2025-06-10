@@ -1,5 +1,5 @@
 import useSound from "use-sound";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useWorkoutStore } from "@/store/workoutStore";
 import { BUSINESS_RULES } from "@/config/BusinessRules";
 import type { Workout } from "@/types/Workout";
@@ -8,12 +8,13 @@ type UseWorkoutCounterProps = {
   workout: Workout;
 };
 
-export default function useWorkoutCounter({ workout }: UseWorkoutCounterProps) {
+export default function useWorkoutCounter(workout: Workout) {
   const [playSound] = useSound("/sounds/timeout.wav", { volume: 1 });
-  const { finishWorkout, removeWorkout, updateWorkout } = useWorkoutStore();
+  const { selectedWorkout, finishWorkout, removeWorkout, updateWorkout } =
+    useWorkoutStore();
 
   useEffect(() => {
-    if (!workout.running) return;
+    if (!workout.running || workout.id === selectedWorkout?.id) return;
 
     // Timeout
     if (workout.time <= BUSINESS_RULES.minTimeToTimeout && !workout.finished) {
@@ -45,7 +46,7 @@ export default function useWorkoutCounter({ workout }: UseWorkoutCounterProps) {
     }, BUSINESS_RULES.workoutTick);
 
     return () => clearInterval(timer);
-  }, [workout.time, workout.running]);
+  }, [workout.time, workout.running, selectedWorkout]);
 
   return null;
 }

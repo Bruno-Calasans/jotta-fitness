@@ -2,6 +2,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -9,14 +10,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { DialogTrigger } from "@/components/ui/dialog";
 import { Trash } from "lucide-react";
+import { useState } from "react";
 
 type RemoveDialogProps = {
-  onRemove: () => void;
   title?: React.ReactNode;
   removeBtnTitle?: React.ReactNode;
   cancelBtnTitle?: React.ReactNode;
   removeBtn?: React.ReactNode;
   children: React.ReactNode;
+  onRemove: () => void;
+  onOpenChange?: (open: boolean) => void;
 };
 
 export default function RemoveDialog({
@@ -26,9 +29,18 @@ export default function RemoveDialog({
   removeBtnTitle,
   cancelBtnTitle,
   onRemove,
+  onOpenChange,
 }: RemoveDialogProps) {
+  const [open, setOpen] = useState(false);
+
+  const openChangeHandler = (value: boolean) => {
+    setOpen(value);
+    if (onOpenChange) onOpenChange(value);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={openChangeHandler}>
+      {/* Trigger */}
       <DialogTrigger asChild>
         {removeBtn || (
           <Button
@@ -42,11 +54,15 @@ export default function RemoveDialog({
       </DialogTrigger>
 
       <DialogContent>
+        {/* Title */}
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          {children}
         </DialogHeader>
 
+        {/* Descsription Content */}
+        <DialogDescription asChild>{children}</DialogDescription>
+
+        {/* Actions */}
         <DialogFooter>
           {/* Cancel button */}
           <DialogClose asChild>
@@ -56,13 +72,14 @@ export default function RemoveDialog({
             >
               {cancelBtnTitle || "Cancelar"}
             </Button>
-            {/* Confirm Button */}
           </DialogClose>
+          {/* Confirm button */}
           <DialogClose asChild>
             <Button
               onClick={onRemove}
+              type="button"
+              // onClick={onRemove}
               className="bg-red-500 hover:bg-red-600 transition-all"
-              type="submit"
             >
               {removeBtnTitle || "Excluir"}
             </Button>

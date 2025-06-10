@@ -24,13 +24,13 @@ export default function SortWorkoutByTimeButton() {
       onClick={toggleTimeSortType}
       title={
         timeSortType === "asc"
-          ? "Ordenar tempo crescente"
-          : "Ordenar tempo decrescente"
+          ? "Ordenar maior tempo restante"
+          : "Ordenar menor tempo restante"
       }
       size="icon"
       className={cn(
         "bg-orange-500 hover:bg-orange-600",
-        timeSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600",
+        timeSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600"
       )}
     >
       {timeSortType === "asc" ? <ClockArrowDown /> : <ClockArrowUp />}

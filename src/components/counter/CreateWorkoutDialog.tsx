@@ -11,12 +11,17 @@ import {
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import WorkoutForm from "./WorkoutForm";
+import { useWorkoutStore } from "@/store/workoutStore";
 
 export default function CreateWorkoutDialog() {
   const [open, setOpen] = useState(false);
+  const { sortWorkoutsByTime } = useWorkoutStore();
 
   const submitFormHandler = (success: boolean) => {
-    if (success) setOpen(false);
+    if (success) {
+      setOpen(false);
+      sortWorkoutsByTime("asc");
+    }
   };
 
   return (

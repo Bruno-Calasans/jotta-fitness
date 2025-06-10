@@ -10,12 +10,14 @@ import {
 } from "./workoutStoreUtils";
 import type { Workout } from "@/types/Workout";
 import createWorkout from "@/utils/createWorkout";
+import updateWorkout from "@/utils/updateWorkout";
 
 interface WorkoutState {
   running: boolean;
   searchedWorkout: string;
   selectedWorkout: Workout | null;
   workouts: Workout[];
+  updates: number;
   addWorkout(input: Partial<Workout>): void;
   removeWorkout(workoutId: string): void;
   editWorkout(workout: Workout, data: Partial<Workout>): void;
@@ -30,6 +32,7 @@ interface WorkoutState {
   searchWorkouts(type: "ongoing" | "finished" | "all"): Workout[];
   playWorkout(id: string): void;
   stopWorkout(id: string): void;
+  setSelectedWorkout: (workout: Workout | null) => void;
 }
 
 export const useWorkoutStore = create<WorkoutState>()(
@@ -40,15 +43,27 @@ export const useWorkoutStore = create<WorkoutState>()(
         searchedWorkout: "",
         selectedWorkout: null,
         workouts: [],
+        updates: 0,
+        setSelectedWorkout(workout) {
+          set(() => ({
+            selectedWorkout: workout,
+          }));
+        },
         addWorkout(input) {
           const workout = createWorkout(input);
-          set(() => ({ workouts: [...get().workouts, workout] }));
+          set((state) => ({
+            workouts: [...get().workouts, workout],
+            updates: state.updates + 1,
+          }));
         },
         removeWorkout(workoutId) {
           const filtedWorkouts = get().workouts.filter(
-            (w) => w.id != workoutId,
+            (w) => w.id != workoutId
           );
-          set(() => ({ workouts: filtedWorkouts }));
+          set((state) => ({
+            workouts: filtedWorkouts,
+            updates: state.updates + 1,
+          }));
         },
         editWorkout(workout, data) {
           const updatedWorkouts = get().workouts.map((w) => {
@@ -61,7 +76,7 @@ export const useWorkoutStore = create<WorkoutState>()(
           set(() => ({ workouts: updatedWorkouts }));
         },
         clearWorkouts() {
-          set(() => ({ workouts: [] }));
+          set((state) => ({ workouts: [], updates: state.updates + 1 }));
         },
         getGoingOnWorkouts() {
           return get().workouts.filter((w) => !w.finished);
@@ -70,30 +85,45 @@ export const useWorkoutStore = create<WorkoutState>()(
           return get().workouts.filter((w) => w.finished);
         },
         updateWorkout(id, input) {
-          const updatedWorkouts = get().workouts.map((w) => {
-            if (w.id === id) {
-              return { ...w, ...input };
+          const updatedWorkouts = get().workouts.map((workout) => {
+            if (workout.id === id) {
+              return updateWorkout(workout, input);
             }
-            return w;
+            return workout;
           });
-          set(() => ({ workouts: updatedWorkouts }));
+          set((state) => ({
+            workouts: updatedWorkouts,
+            updates: state.updates + 1,
+          }));
         },
         sortWorkoutsByDate(order) {
           if (order == "asc") {
             const sortedWorkouts = get().workouts.sort(compareByDateAsc);
-            set(() => ({ workouts: sortedWorkouts }));
+            set((state) => ({
+              workouts: sortedWorkouts,
+              updates: state.updates + 1,
+            }));
           } else {
             const sortedWorkouts = get().workouts.sort(compareByDateDesc);
-            set(() => ({ workouts: sortedWorkouts }));
+            set((state) => ({
+              workouts: sortedWorkouts,
+              updates: state.updates + 1,
+            }));
           }
         },
         sortWorkoutsByTime(order) {
           if (order == "asc") {
             const sortedWorkouts = get().workouts.sort(compareByTimeAsc);
-            set(() => ({ workouts: sortedWorkouts }));
+            set((state) => ({
+              workouts: sortedWorkouts,
+              updates: state.updates + 1,
+            }));
           } else {
             const sortedWorkouts = get().workouts.sort(compareByTimeDesc);
-            set(() => ({ workouts: sortedWorkouts }));
+            set((state) => ({
+              workouts: sortedWorkouts,
+              updates: state.updates + 1,
+            }));
           }
         },
         finishWorkout(workoutId) {
@@ -117,7 +147,7 @@ export const useWorkoutStore = create<WorkoutState>()(
 
           return keyword != ""
             ? workouts.filter((w) =>
-                w.name.toLowerCase().includes(keyword.toLowerCase()),
+                w.name.toLowerCase().includes(keyword.toLowerCase())
               )
             : workouts;
         },
@@ -128,23 +158,28 @@ export const useWorkoutStore = create<WorkoutState>()(
             }
             return w;
           });
-          set(() => ({ workouts: updatedWorkouts }));
+          set((state) => ({
+            workouts: updatedWorkouts,
+            updates: state.updates + 1,
+          }));
         },
         stopWorkout(id) {
           const updatedWorkouts = get().workouts.map((w) => {
             if (w.id === id) {
-              console.log(get().running);
               return { ...w, running: false };
             }
             return w;
           });
-          set(() => ({ workouts: updatedWorkouts }));
+          set((state) => ({
+            workouts: updatedWorkouts,
+            updates: state.updates + 1,
+          }));
         },
       }),
       {
         name: "workout-storage",
-        storage: createJSONStorage(() => sessionStorage),
-      },
-    ),
-  ),
+        storage: createJSONStorage(() => localStorage),
+      }
+    )
+  )
 );

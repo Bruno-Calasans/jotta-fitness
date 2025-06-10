@@ -24,7 +24,8 @@ export default function MoreOptionsDropdown({
   classNames,
 }: MoreOptionsDropdownProps) {
   return (
-    <DropdownMenu>
+    // modal prop is set to false to prevent modal behavior
+    <DropdownMenu modal={false}>
       {/* Open dropdown */}
       <DropdownMenuTrigger asChild>
         <Button

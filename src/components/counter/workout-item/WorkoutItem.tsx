@@ -11,7 +11,7 @@ type WorkoutProps = {
 };
 
 export default function WorkoutItem({ workout }: WorkoutProps) {
-  useWorkoutCounter({ workout });
+  useWorkoutCounter(workout);
   return (
     <WorkoutItemContainer workout={workout}>
       <WorkoutItemContent workout={workout} />
