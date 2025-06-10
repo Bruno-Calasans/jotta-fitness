@@ -18,10 +18,14 @@ type EditWorkoutModalProps = {
 
 export default function EditWorkoutDialog({ workout }: EditWorkoutModalProps) {
   const [open, setOpen] = useState(false);
-  const { playWorkout, stopWorkout, setSelectedWorkout } = useWorkoutStore();
+  const { playWorkout, stopWorkout, setSelectedWorkout, sortWorkoutsByTime } =
+    useWorkoutStore();
 
   const submitFormHandler = (success: boolean) => {
-    if (success) setOpen(false);
+    if (success) {
+      setOpen(false);
+      sortWorkoutsByTime("asc");
+    }
   };
 
   const openChangeHandler = (value: boolean) => {

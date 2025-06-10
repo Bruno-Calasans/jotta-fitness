@@ -14,11 +14,13 @@ export default function RemoveWorkoutDialog({
   workout,
 }: RemoveWorkoutDialogProps) {
   const { successToast, errorToast } = useCustomToast();
-  const { removeWorkout, playWorkout, stopWorkout } = useWorkoutStore();
+  const { removeWorkout, playWorkout, stopWorkout, sortWorkoutsByTime } =
+    useWorkoutStore();
 
   const removeWorkoutHandler = () => {
     try {
       removeWorkout(workout.id);
+      sortWorkoutsByTime("asc");
       successToast(
         "Exclusão de treinamento",
         "Treinamento removido com sucesso!"

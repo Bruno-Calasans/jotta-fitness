@@ -8,7 +8,7 @@ type UseWorkoutCounterProps = {
   workout: Workout;
 };
 
-export default function useWorkoutCounter(workout : Workout) {
+export default function useWorkoutCounter(workout: Workout) {
   const [playSound] = useSound("/sounds/timeout.wav", { volume: 1 });
   const { selectedWorkout, finishWorkout, removeWorkout, updateWorkout } =
     useWorkoutStore();
