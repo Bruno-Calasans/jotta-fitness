@@ -5,16 +5,19 @@ import WorkoutSearchBar from "@/components/counter/workout-search-bar/WorkoutSea
 import WorkoutList from "@/components/counter/WorkoutList";
 import CreateWorkoutDialog from "@/components/counter/CreateWorkoutDialog";
 import { useWorkoutStore } from "@/store/workoutStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Workout } from "@/types/Workout";
 
 export default function CounterPage() {
-  const { searchWorkouts } = useWorkoutStore();
+  const { updates, searchWorkouts } = useWorkoutStore();
+  const [onGoingWorkouts, setOnGoingWorkouts] = useState<Workout[]>([]);
+  const [finishedWorkouts, setFinishedWorkouts] = useState<Workout[]>([]);
 
   // Hydration error
-  const onGoingWorkouts = searchWorkouts("ongoing");
-  const finishedWorkouts = searchWorkouts("finished");
-  // const onGoingWorkouts = [];
-  // const finishedWorkouts = [];
+  useEffect(() => {
+    setOnGoingWorkouts(searchWorkouts("ongoing"));
+    setFinishedWorkouts(searchWorkouts("finished"));
+  }, [updates]);
 
   return (
     <ContentContainer>

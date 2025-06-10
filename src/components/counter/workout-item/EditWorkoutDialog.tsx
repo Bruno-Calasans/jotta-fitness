@@ -18,7 +18,7 @@ type EditWorkoutModalProps = {
 
 export default function EditWorkoutDialog({ workout }: EditWorkoutModalProps) {
   const [open, setOpen] = useState(false);
-  const { playWorkout, stopWorkout } = useWorkoutStore();
+  const { playWorkout, stopWorkout, setSelectedWorkout } = useWorkoutStore();
 
   const submitFormHandler = (success: boolean) => {
     if (success) setOpen(false);
@@ -26,8 +26,13 @@ export default function EditWorkoutDialog({ workout }: EditWorkoutModalProps) {
 
   const openChangeHandler = (value: boolean) => {
     setOpen(value);
-    if (value) stopWorkout(workout.id);
-    else playWorkout(workout.id);
+    if (value) {
+      setSelectedWorkout(workout);
+      stopWorkout(workout.id);
+    } else {
+      playWorkout(workout.id);
+      setSelectedWorkout(null);
+    }
   };
 
   return (
@@ -45,7 +50,7 @@ export default function EditWorkoutDialog({ workout }: EditWorkoutModalProps) {
         <DialogHeader>
           <DialogTitle>Editar Treinamento</DialogTitle>
         </DialogHeader>
-        <WorkoutForm workout={workout} onSubmit={submitFormHandler} />
+        <WorkoutForm onSubmit={submitFormHandler} />
       </DialogContent>
     </Dialog>
   );

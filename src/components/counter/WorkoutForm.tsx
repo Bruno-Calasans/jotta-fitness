@@ -1,4 +1,5 @@
-import type { Workout } from "@/types/Workout";
+"use client";
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +19,7 @@ import { useWorkoutStore } from "@/store/workoutStore";
 import useCustomToast from "@/hooks/use-custom-toast";
 import DefaultWorkoutTimeButtons from "./default-workout-time/DefaultWorkoutTimeButtons";
 import clearFieldOnFirstFocus from "@/utils/clearFieldOnFirstFocus";
+import ResetButton from "@/components/custom/buttons/ResetButton";
 
 const workoutFormSchema = z.object({
   name: z.string().min(1, "Campo obrigatório"),
@@ -27,19 +29,18 @@ const workoutFormSchema = z.object({
 type WorkoutFormInputs = z.infer<typeof workoutFormSchema>;
 
 type WorkoutFormProps = {
-  workout?: Workout;
   onSubmit: (success: boolean) => void;
 };
 
-export default function WorkoutForm({ onSubmit, workout }: WorkoutFormProps) {
-  const { addWorkout, updateWorkout } = useWorkoutStore();
+export default function WorkoutForm({ onSubmit }: WorkoutFormProps) {
+  const { selectedWorkout, addWorkout, updateWorkout } = useWorkoutStore();
   const { successToast, errorToast } = useCustomToast();
 
   const form = useForm<WorkoutFormInputs>({
     resolver: zodResolver(workoutFormSchema),
     defaultValues: {
-      name: workout?.name || "",
-      time: workout?.time || 60,
+      name: selectedWorkout?.name || "",
+      time: selectedWorkout?.time || 0,
     },
   });
 
@@ -54,19 +55,19 @@ export default function WorkoutForm({ onSubmit, workout }: WorkoutFormProps) {
   };
 
   const submitHandler = (input: WorkoutFormInputs) => {
-    if (workout) {
+    if (selectedWorkout) {
       // Update workout
       try {
-        updateWorkout(workout.id, { ...workout, ...input });
+        updateWorkout(selectedWorkout.id, { ...selectedWorkout, ...input });
         successToast(
           "Atualização de Treinamento",
-          "Treinamento atualizado com sucesso",
+          "Treinamento atualizado com sucesso"
         );
         onSubmit(true);
       } catch (error) {
         errorToast(
           "Atualização de Treinamento",
-          "Erro ao atualizar treinamento",
+          "Erro ao atualizar treinamento"
         );
         onSubmit(false);
       }
@@ -96,7 +97,12 @@ export default function WorkoutForm({ onSubmit, workout }: WorkoutFormProps) {
                 <RequiredFieldTooltip>Nome do Aluno</RequiredFieldTooltip>
               </FormLabel>
               <FormControl>
-                <Input type="text" placeholder="Nome do aluno" {...field} />
+                <Input
+                  type="text"
+                  placeholder="Nome do aluno"
+                  autoComplete="on"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -134,9 +140,12 @@ export default function WorkoutForm({ onSubmit, workout }: WorkoutFormProps) {
         />
 
         {/* Form Actions */}
-        <div className="flex justify-end gap-1">
-          <CancelButton />
-          <ConfirmButton isEditing={!!workout} />
+        <div className="flex justify-end gap-5">
+          <ResetButton onReset={() => form.reset()} />
+          <div className="flex gap-1">
+            <CancelButton />
+            <ConfirmButton isEditing={!!selectedWorkout} />
+          </div>
         </div>
       </form>
     </Form>

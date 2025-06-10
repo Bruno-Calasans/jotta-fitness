@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 
 const DashboardSidebarNoSSR = dynamic(
   () => import("@/components/dashboard/dashboard-side-bar/DashboardSideBar"),
-  { ssr: false }
+  { ssr: false },
 );
 
 type DashboardLayoutProps = {
