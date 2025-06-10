@@ -13,7 +13,7 @@ export const BUSINESS_RULES = {
 
   // Workout counter speed in ms (don't change it)
   // 1 min = 60000 ms
-  workoutTick: 6000,
+  workoutTick: 60000,
 
   // Workout changes state to finished when time is
   minTimeToTimeout: 0,
