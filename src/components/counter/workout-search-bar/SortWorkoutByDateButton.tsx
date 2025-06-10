@@ -25,13 +25,13 @@ export default function SortWorkoutByDateButton() {
       onClick={toggleDateSortTpe}
       title={
         dateSortType === "asc"
-          ? "Ordenar data de crescente"
-          : "Ordenar data de decrescente"
+          ? "Ordenar mais antigos"
+          : "Ordenar mais recentes"
       }
       size="icon"
       className={cn(
         "bg-orange-500 hover:bg-orange-600",
-        dateSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600",
+        dateSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600"
       )}
     >
       {dateSortType === "asc" ? <CalendarArrowDown /> : <CalendarArrowUp />}

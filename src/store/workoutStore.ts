@@ -99,19 +99,31 @@ export const useWorkoutStore = create<WorkoutState>()(
         sortWorkoutsByDate(order) {
           if (order == "asc") {
             const sortedWorkouts = get().workouts.sort(compareByDateAsc);
-            set(() => ({ workouts: sortedWorkouts }));
+            set((state) => ({
+              workouts: sortedWorkouts,
+              updates: state.updates + 1,
+            }));
           } else {
             const sortedWorkouts = get().workouts.sort(compareByDateDesc);
-            set(() => ({ workouts: sortedWorkouts }));
+            set((state) => ({
+              workouts: sortedWorkouts,
+              updates: state.updates + 1,
+            }));
           }
         },
         sortWorkoutsByTime(order) {
           if (order == "asc") {
             const sortedWorkouts = get().workouts.sort(compareByTimeAsc);
-            set(() => ({ workouts: sortedWorkouts }));
+            set((state) => ({
+              workouts: sortedWorkouts,
+              updates: state.updates + 1,
+            }));
           } else {
             const sortedWorkouts = get().workouts.sort(compareByTimeDesc);
-            set(() => ({ workouts: sortedWorkouts }));
+            set((state) => ({
+              workouts: sortedWorkouts,
+              updates: state.updates + 1,
+            }));
           }
         },
         finishWorkout(workoutId) {
