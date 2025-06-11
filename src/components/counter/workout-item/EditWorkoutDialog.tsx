@@ -25,6 +25,7 @@ export default function EditWorkoutDialog({ workout }: EditWorkoutModalProps) {
     if (success) {
       setOpen(false);
       sortWorkoutsByTime("asc");
+      setSelectedWorkout(null);
     }
   };
 

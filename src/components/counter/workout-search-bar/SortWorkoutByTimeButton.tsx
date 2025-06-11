@@ -30,7 +30,7 @@ export default function SortWorkoutByTimeButton() {
       size="icon"
       className={cn(
         "bg-orange-500 hover:bg-orange-600",
-        timeSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600"
+        timeSortType === "asc" && "bg-emerald-500 hover:bg-emerald-600",
       )}
     >
       {timeSortType === "asc" ? <ClockArrowDown /> : <ClockArrowUp />}
