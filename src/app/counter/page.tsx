@@ -12,12 +12,13 @@ export default function CounterPage() {
   const { updates, searchWorkouts } = useWorkoutStore();
   const [onGoingWorkouts, setOnGoingWorkouts] = useState<Workout[]>([]);
   const [finishedWorkouts, setFinishedWorkouts] = useState<Workout[]>([]);
+  const [searchWorkout, setSearchWorkout] = useState<string>("");
 
   // Hydration error
   useEffect(() => {
-    setOnGoingWorkouts(searchWorkouts("ongoing"));
-    setFinishedWorkouts(searchWorkouts("finished"));
-  }, [updates]);
+    setOnGoingWorkouts(searchWorkouts(searchWorkout, "ongoing"));
+    setFinishedWorkouts(searchWorkouts(searchWorkout, "finished"));
+  }, [updates, searchWorkout]);
 
   return (
     <ContentContainer>
@@ -29,7 +30,7 @@ export default function CounterPage() {
         </div>
 
         {/* Content */}
-        <WorkoutSearchBar />
+        <WorkoutSearchBar onSearch={setSearchWorkout} />
 
         {/* Workouts Area */}
         <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-10 mt-4">

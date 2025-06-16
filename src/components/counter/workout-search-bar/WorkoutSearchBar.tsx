@@ -1,16 +1,20 @@
 import { Input } from "@/components/ui/input";
-import { ChangeEvent } from "react";
-import { useWorkoutStore } from "@/store/workoutStore";
+import { ChangeEvent, useState } from "react";
 import ClearWorkoutsDialog from "./ClearWorkoutsDialog";
 import SortWorkoutByDateButton from "./SortWorkoutByDateButton";
 import SortWorkoutByTimeButton from "./SortWorkoutByTimeButton";
 
-export default function WorkoutSearchBar() {
-  const { searchedWorkout, setSearchedWorkout } = useWorkoutStore();
+type WorkoutSearchBaProps = {
+  onSearch: (keyword: string) => void;
+};
+
+export default function WorkoutSearchBar({ onSearch }: WorkoutSearchBaProps) {
+  const [keyword, setKeyword] = useState("");
 
   const searchHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setSearchedWorkout(value);
+    setKeyword(value);
+    onSearch(value);
   };
 
   return (
@@ -19,8 +23,8 @@ export default function WorkoutSearchBar() {
         <Input
           className="bg-white text-orange-600 font-bold"
           type="search"
-          placeholder="Pesquise por um nome"
-          value={searchedWorkout}
+          placeholder="Pesquise por um treino"
+          value={keyword}
           onChange={searchHandler}
         />
 
@@ -33,10 +37,10 @@ export default function WorkoutSearchBar() {
       </div>
 
       {/* Search Result */}
-      {searchedWorkout && (
+      {keyword && (
         <div>
           <p className="text text-stone-400 italic">
-            Resultados para &#34;{searchedWorkout}&#34;
+            Resultados para &#34;{keyword}&#34;
           </p>
         </div>
       )}
