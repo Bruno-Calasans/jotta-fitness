@@ -11,6 +11,7 @@ import {
 import { useProductStore } from "@/store/productStore";
 import { Product } from "@/types/Product.type";
 import { cn } from "@/lib/utils";
+import calcProductAvaliableAmount from "@/utils/calcProductAvaliableAmount";
 
 type ProductSelectorProps = {
   value: string;
@@ -42,16 +43,19 @@ export default function ProductSelector({
             <SelectItem
               key={product.id}
               value={product.name}
-              disabled={product.amount === 0}
+              disabled={calcProductAvaliableAmount(product) === 0}
             >
               <p
-                className={cn(product.amount === 0 && "text-red-500 font-bold")}
+                className={cn(
+                  calcProductAvaliableAmount(product) === 0 &&
+                    "text-red-500 font-bold"
+                )}
               >
                 {product.name}{" "}
-                {product.amount === 0 ? (
+                {calcProductAvaliableAmount(product) === 0 ? (
                   <span>(Sem estoque)</span>
                 ) : (
-                  `(${product.amount})`
+                  `(${calcProductAvaliableAmount(product)})`
                 )}
               </p>
             </SelectItem>

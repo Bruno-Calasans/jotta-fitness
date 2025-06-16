@@ -20,6 +20,7 @@ import RequiredFieldTooltip from "@/components/custom/others/RequiredFieldToolti
 import clearFieldOnFirstFocus from "@/utils/clearFieldOnFirstFocus";
 import CancelButton from "@/components/custom/buttons/CancelButton";
 import ConfirmButton from "@/components/custom/buttons/ConfirmButton";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const productFormSchema = z.object({
   name: z.string().min(1, "Nome do produto é obrigatório"),
@@ -64,7 +65,7 @@ export default function ProductForm({ product, onSubmit }: ProductFormProps) {
         // Result
         successToast(
           "Atualização de Produto",
-          "Produto atualizado com sucesso!",
+          "Produto atualizado com sucesso!"
         );
         onSubmit(true);
       } catch (error) {
