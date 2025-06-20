@@ -26,8 +26,8 @@ export default function ProductStatus({ product }: ProductStatusProps) {
   }
 
   return (
-    <Badge className="bg-indigo-500 hover:bg-indigo-600 text-white transition-all cursor-pointer">
-      Indisponível
+    <Badge className="bg-orange-500 hover:bg-orange-600 text-white transition-all cursor-pointer">
+      Expirado
     </Badge>
   );
 }

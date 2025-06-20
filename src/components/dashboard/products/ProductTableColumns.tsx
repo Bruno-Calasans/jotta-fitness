@@ -6,6 +6,7 @@ import MoreOptionsDropdown from "@/components/custom/data-table/MoreOptionsDropd
 import RemoveProductDialog from "./RemoveProductDialog";
 import classifyProductStatus from "@/utils/classifyProductStatus";
 import ProductStatus from "./ProductStatus";
+import EditProductExpireAmountDialog from "./EditProductExpireAmountDialog";
 
 export const productColumns: ColumnDef<Product>[] = [
   {
@@ -25,11 +26,21 @@ export const productColumns: ColumnDef<Product>[] = [
     ),
   },
   {
+    accessorKey: "expiredAmount",
+    header: ({ column }) => (
+      <DataTableSortableHeader
+        column={column}
+        headerName="Expirados"
+        type="numeral"
+      />
+    ),
+  },
+  {
     accessorKey: "amount",
     header: ({ column }) => (
       <DataTableSortableHeader
         column={column}
-        headerName="Quantidade"
+        headerName="Disponíveis"
         type="numeral"
       />
     ),
@@ -59,6 +70,9 @@ export const productColumns: ColumnDef<Product>[] = [
         <MoreOptionsDropdown>
           <div className="flex flex-col gap-1">
             <EditProductDialog product={product} />
+            {product.amount > 0 && (
+              <EditProductExpireAmountDialog product={product} />
+            )}
             <RemoveProductDialog product={product} />
           </div>
         </MoreOptionsDropdown>

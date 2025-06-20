@@ -2,16 +2,18 @@
 
 import { PRODUCTS_DATA } from "@/data/PRODUCTS_DATA";
 import { create } from "zustand";
-import generateDefaultDbFields from "@/utils/generateDefaultDbFields";
+import { persist } from "zustand/middleware";
 import type { DB } from "@/types/Db.type";
 import type { Product } from "@/types/Product.type";
-import { persist } from "zustand/middleware";
+import type { Optional } from "@/types/Optional.type";
+import createProduct from "@/utils/createProduct";
+import updateProduct from "@/utils/updateProduct";
 
 type ProductState = {
   products: Product[];
   loading: boolean;
   setLoading: (value: boolean) => void;
-  add: (input: Omit<Product, keyof DB>) => void;
+  add: (input: Optional<Omit<Product, keyof DB>, "expiredAmount">) => void;
   remove: (productId: string) => void;
   update: (productId: string, input: Partial<Omit<Product, keyof DB>>) => void;
   getById: (productId: string) => Product | null;
@@ -30,22 +32,19 @@ export const useProductStore = create<ProductState>()(
       },
       add(input) {
         set((state) => ({
-          products: [
-            ...state.products,
-            { ...generateDefaultDbFields(), ...input },
-          ],
+          products: [...state.products, createProduct(input)],
         }));
       },
       remove(id) {
         const updatedProducts = get().products.filter(
-          (product) => product.id !== id,
+          (product) => product.id !== id
         );
         set((state) => ({ ...state, products: updatedProducts }), true);
       },
       update(id, input) {
         const updatedProducts = get().products.map((product) => {
           if (product.id === id) {
-            return { ...product, updatedAt: new Date(), ...input };
+            return updateProduct(product, input);
           }
           return product;
         });
@@ -56,14 +55,14 @@ export const useProductStore = create<ProductState>()(
         const foundProduct = get().products.find(
           (product) =>
             product.name.trim().toLowerCase() ===
-            productName.trim().toLowerCase(),
+            productName.trim().toLowerCase()
         );
         if (!foundProduct) return null;
         return foundProduct;
       },
       getById(productId) {
         const foundProduct = get().products.find(
-          (product) => product.id === productId,
+          (product) => product.id === productId
         );
 
         if (!foundProduct) return null;
@@ -98,6 +97,6 @@ export const useProductStore = create<ProductState>()(
           }
         };
       },
-    },
-  ),
+    }
+  )
 );
