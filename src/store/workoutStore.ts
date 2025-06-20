@@ -55,7 +55,7 @@ export const useWorkoutStore = create<WorkoutState>()(
         },
         removeWorkout(workoutId) {
           const filtedWorkouts = get().workouts.filter(
-            (w) => w.id != workoutId
+            (w) => w.id != workoutId,
           );
           set((state) => ({
             workouts: filtedWorkouts,
@@ -140,7 +140,7 @@ export const useWorkoutStore = create<WorkoutState>()(
 
           return keyword && keyword != ""
             ? workouts.filter((w) =>
-                w.name.toLowerCase().includes(keyword.toLowerCase())
+                w.name.toLowerCase().includes(keyword.toLowerCase()),
               )
             : workouts;
         },
@@ -172,7 +172,7 @@ export const useWorkoutStore = create<WorkoutState>()(
       {
         name: "workout-storage",
         storage: createJSONStorage(() => localStorage),
-      }
-    )
-  )
+      },
+    ),
+  ),
 );
