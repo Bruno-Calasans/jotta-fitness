@@ -14,7 +14,6 @@ import updateWorkout from "@/utils/updateWorkout";
 
 interface WorkoutState {
   running: boolean;
-  searchedWorkout: string;
   selectedWorkout: Workout | null;
   workouts: Workout[];
   updates: number;
@@ -28,8 +27,7 @@ interface WorkoutState {
   getFinishedWorkouts(): Workout[];
   sortWorkoutsByDate(order: "asc" | "desc"): void;
   sortWorkoutsByTime(order: "asc" | "desc"): void;
-  setSearchedWorkout(keyword: string): void;
-  searchWorkouts(type: "ongoing" | "finished" | "all"): Workout[];
+  searchWorkouts(keyword?: string, type?: "ongoing" | "finished"): Workout[];
   playWorkout(id: string): void;
   stopWorkout(id: string): void;
   setSelectedWorkout: (workout: Workout | null) => void;
@@ -40,7 +38,6 @@ export const useWorkoutStore = create<WorkoutState>()(
     persist(
       (set, get) => ({
         running: false,
-        searchedWorkout: "",
         selectedWorkout: null,
         workouts: [],
         updates: 0,
@@ -135,17 +132,13 @@ export const useWorkoutStore = create<WorkoutState>()(
           });
           set(() => ({ workouts: updatedWorkouts }));
         },
-        setSearchedWorkout(keyword) {
-          set(() => ({ searchedWorkout: keyword }));
-        },
-        searchWorkouts(type) {
-          const keyword = get().searchedWorkout;
+        searchWorkouts(keyword, type) {
           let workouts = get().workouts;
 
           if (type == "ongoing") workouts = get().getGoingOnWorkouts();
           if (type === "finished") workouts = get().getFinishedWorkouts();
 
-          return keyword != ""
+          return keyword && keyword != ""
             ? workouts.filter((w) =>
                 w.name.toLowerCase().includes(keyword.toLowerCase()),
               )
